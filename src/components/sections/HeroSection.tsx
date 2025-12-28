@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { CheckCircle2, ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroStudent from "@/assets/hero-student.png";
+import ParticleBackground from "@/components/ui/ParticleBackground";
 
 const HeroSection = () => {
   const highlights = [
@@ -13,16 +14,18 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-hero-gradient" />
-      <div className="absolute inset-0 bg-mesh-gradient" />
+      {/* Animated Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-secondary via-navy to-secondary" />
+      <ParticleBackground />
+      <div className="absolute inset-0 bg-mesh-gradient opacity-50" />
       
-      {/* Floating geometric shapes */}
-      <div className="absolute top-1/4 left-10 w-20 h-20 rounded-full bg-primary/20 blur-xl float-animation" />
-      <div className="absolute top-1/3 right-20 w-32 h-32 rounded-full bg-accent/15 blur-2xl float-animation-delayed" />
-      <div className="absolute bottom-1/4 left-1/4 w-16 h-16 rounded-2xl bg-emerald/15 blur-xl float-animation-slow rotate-45" />
+      {/* Floating geometric shapes with glow */}
+      <div className="absolute top-1/4 left-10 w-24 h-24 rounded-full bg-primary/30 blur-2xl float-animation animate-pulse" />
+      <div className="absolute top-1/3 right-20 w-36 h-36 rounded-full bg-accent/20 blur-3xl float-animation-delayed" />
+      <div className="absolute bottom-1/4 left-1/4 w-20 h-20 rounded-2xl bg-emerald/20 blur-2xl float-animation-slow rotate-45" />
+      <div className="absolute top-1/2 right-1/4 w-16 h-16 rounded-full bg-primary/25 blur-xl float-animation" />
       
-      <div className="container relative mx-auto px-4 py-12 lg:py-20">
+      <div className="container relative mx-auto px-4 py-12 lg:py-20 z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left Content */}
           <div className="text-center lg:text-left space-y-8 animate-fade-in">
