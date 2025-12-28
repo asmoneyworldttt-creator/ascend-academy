@@ -1,52 +1,64 @@
-import { useState, useEffect } from "react";
-import { Star, Quote, ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Star, Quote, ChevronLeft, ChevronRight, BadgeCheck, Play } from "lucide-react";
+import { VerifiedBadge } from "@/components/ui/PremiumIcons";
 
 const reviews = [
   {
     name: "Priya Sharma",
     role: "Digital Marketing Freelancer",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
     rating: 5,
     review: "Skill Learners completely transformed my career. Within 3 months of completing the Digital Marketing course, I landed my first freelance client and now earn more than my previous full-time job!",
     earnings: "₹45,000/month",
+    course: "Digital Marketing Mastery",
+    verified: true,
   },
   {
     name: "Rahul Verma",
     role: "E-commerce Entrepreneur",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop",
     rating: 5,
     review: "The E-commerce course gave me the confidence to start my own dropshipping business. The step-by-step guidance and community support were invaluable. Highly recommended!",
     earnings: "₹1.2L/month",
+    course: "E-commerce & Dropshipping",
+    verified: true,
   },
   {
     name: "Ananya Patel",
     role: "AI Content Creator",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
+    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop",
     rating: 5,
     review: "The AI & Prompt Engineering course opened doors I never knew existed. I now help businesses automate their content creation and command premium rates for my services.",
     earnings: "₹60,000/month",
+    course: "AI & Prompt Engineering",
+    verified: true,
   },
   {
     name: "Vikram Singh",
     role: "Full-Stack Developer",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop",
     rating: 5,
     review: "Coming from a non-tech background, I was skeptical. But the Web Development Bootcamp is so well-structured that I went from zero to landing a remote job in just 6 months!",
     earnings: "₹80,000/month",
+    course: "Web Development Bootcamp",
+    verified: true,
   },
   {
     name: "Meera Krishnan",
     role: "Crypto Investor & Educator",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop",
     rating: 5,
     review: "The Cryptocurrency course helped me understand the market properly. I not only invested wisely but now also teach others through my YouTube channel that I monetized!",
     earnings: "₹35,000/month",
+    course: "Cryptocurrency Fundamentals",
+    verified: true,
   },
 ];
 
 const ReviewsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isAutoPlaying) return;
@@ -71,12 +83,16 @@ const ReviewsSection = () => {
   return (
     <section className="py-20 lg:py-32 relative overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-background" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/30 to-background" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-96 bg-gradient-to-b from-primary/5 to-transparent" />
 
       <div className="container relative mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 lg:mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald/10 border border-emerald/20 text-sm font-medium text-emerald mb-6">
+            <BadgeCheck className="w-4 h-4" />
+            Verified Success Stories
+          </div>
           <h2 className="text-3xl lg:text-5xl font-bold font-display mb-4">
             Success <span className="text-gradient-gold">Stories</span>
           </h2>
@@ -85,106 +101,206 @@ const ReviewsSection = () => {
           </p>
         </div>
 
-        {/* Reviews Carousel */}
-        <div className="max-w-4xl mx-auto">
-          <div className="relative">
-            {/* Main Review Card */}
-            <div className="glass-card p-8 lg:p-12 rounded-3xl">
-              <Quote className="w-12 h-12 text-primary/30 mb-6" />
+        {/* Netflix-Style Slider */}
+        <div className="relative">
+          {/* Main Featured Review */}
+          <div className="hidden lg:grid lg:grid-cols-5 gap-6 mb-8">
+            {reviews.map((review, index) => {
+              const isCurrent = index === currentIndex;
+              const isAdjacent = Math.abs(index - currentIndex) === 1 || 
+                               (currentIndex === 0 && index === reviews.length - 1) ||
+                               (currentIndex === reviews.length - 1 && index === 0);
               
-              <p className="text-xl lg:text-2xl text-foreground leading-relaxed mb-8">
-                "{reviews[currentIndex].review}"
-              </p>
+              return (
+                <button
+                  key={review.name}
+                  onClick={() => {
+                    setIsAutoPlaying(false);
+                    setCurrentIndex(index);
+                  }}
+                  className={`relative group transition-all duration-500 ${
+                    isCurrent 
+                      ? 'lg:col-span-3 z-20' 
+                      : 'lg:col-span-1 opacity-60 hover:opacity-100'
+                  }`}
+                >
+                  <div 
+                    className={`glass-card rounded-3xl overflow-hidden transition-all duration-500 ${
+                      isCurrent 
+                        ? 'shadow-elevated ring-2 ring-primary/30' 
+                        : 'hover:shadow-lg'
+                    }`}
+                  >
+                    {isCurrent ? (
+                      /* Full Featured Card */
+                      <div className="p-8">
+                        <Quote className="w-10 h-10 text-primary/30 mb-4" />
+                        
+                        <p className="text-lg lg:text-xl text-foreground leading-relaxed mb-6">
+                          "{review.review}"
+                        </p>
 
-              <div className="flex items-center justify-between flex-wrap gap-6">
-                <div className="flex items-center gap-4">
-                  <img
-                    src={reviews[currentIndex].avatar}
-                    alt={reviews[currentIndex].name}
-                    className="w-16 h-16 rounded-full object-cover ring-4 ring-primary/20"
-                  />
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-bold text-lg">{reviews[currentIndex].name}</h4>
-                      <CheckCircle className="w-5 h-5 text-emerald" />
+                        <div className="flex items-center justify-between flex-wrap gap-6">
+                          <div className="flex items-center gap-4">
+                            <div className="relative">
+                              <img
+                                src={review.avatar}
+                                alt={review.name}
+                                className="w-16 h-16 rounded-full object-cover ring-4 ring-primary/20"
+                              />
+                              {review.verified && (
+                                <div className="absolute -bottom-1 -right-1">
+                                  <VerifiedBadge className="w-6 h-6" />
+                                </div>
+                              )}
+                            </div>
+                            <div className="text-left">
+                              <div className="flex items-center gap-2">
+                                <h4 className="font-bold text-lg">{review.name}</h4>
+                              </div>
+                              <p className="text-muted-foreground text-sm">{review.role}</p>
+                              <div className="flex items-center gap-1 mt-1">
+                                {[...Array(review.rating)].map((_, i) => (
+                                  <Star key={i} className="w-4 h-4 text-primary fill-primary" />
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-4">
+                            <div className="glass-card px-4 py-2 rounded-xl text-left">
+                              <p className="text-xs text-muted-foreground">Course</p>
+                              <p className="text-sm font-medium text-foreground">{review.course}</p>
+                            </div>
+                            <div className="glass-card px-4 py-2 rounded-xl bg-emerald/10">
+                              <p className="text-xs text-muted-foreground">Earnings</p>
+                              <p className="text-lg font-bold text-emerald">{review.earnings}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      /* Mini Card */
+                      <div className="p-4 h-full flex flex-col items-center justify-center text-center">
+                        <div className="relative mb-3">
+                          <img
+                            src={review.avatar}
+                            alt={review.name}
+                            className="w-14 h-14 rounded-full object-cover ring-2 ring-muted"
+                          />
+                          {review.verified && (
+                            <div className="absolute -bottom-1 -right-1">
+                              <VerifiedBadge className="w-5 h-5" />
+                            </div>
+                          )}
+                        </div>
+                        <p className="font-medium text-sm mb-1">{review.name}</p>
+                        <div className="flex items-center gap-0.5 mb-2">
+                          {[...Array(review.rating)].map((_, i) => (
+                            <Star key={i} className="w-3 h-3 text-primary fill-primary" />
+                          ))}
+                        </div>
+                        <p className="text-xs text-emerald font-bold">{review.earnings}</p>
+                      </div>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Mobile Horizontal Scroll */}
+          <div className="lg:hidden" ref={scrollRef}>
+            <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+              {reviews.map((review, index) => (
+                <div
+                  key={review.name}
+                  className="snap-center flex-shrink-0 w-[85%]"
+                >
+                  <div className="glass-card p-6 rounded-3xl h-full">
+                    <Quote className="w-8 h-8 text-primary/30 mb-4" />
+                    
+                    <p className="text-foreground leading-relaxed mb-6 text-sm">
+                      "{review.review}"
+                    </p>
+
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="relative">
+                        <img
+                          src={review.avatar}
+                          alt={review.name}
+                          className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/20"
+                        />
+                        {review.verified && (
+                          <div className="absolute -bottom-1 -right-1">
+                            <VerifiedBadge className="w-5 h-5" />
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <h4 className="font-bold">{review.name}</h4>
+                        <p className="text-muted-foreground text-xs">{review.role}</p>
+                        <div className="flex items-center gap-0.5 mt-1">
+                          {[...Array(review.rating)].map((_, i) => (
+                            <Star key={i} className="w-3 h-3 text-primary fill-primary" />
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-muted-foreground">{reviews[currentIndex].role}</p>
-                    <div className="flex items-center gap-1 mt-1">
-                      {[...Array(reviews[currentIndex].rating)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 text-primary fill-primary" />
-                      ))}
+
+                    <div className="flex items-center gap-3">
+                      <div className="glass-card px-3 py-1.5 rounded-lg flex-1">
+                        <p className="text-xs text-muted-foreground">Course</p>
+                        <p className="text-xs font-medium truncate">{review.course}</p>
+                      </div>
+                      <div className="glass-card px-3 py-1.5 rounded-lg bg-emerald/10">
+                        <p className="text-xs text-muted-foreground">Earnings</p>
+                        <p className="text-sm font-bold text-emerald">{review.earnings}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="glass-card px-6 py-3 rounded-xl">
-                  <p className="text-sm text-muted-foreground">Current Earnings</p>
-                  <p className="text-xl font-bold text-emerald">{reviews[currentIndex].earnings}</p>
-                </div>
-              </div>
+              ))}
             </div>
+          </div>
 
-            {/* Navigation Arrows */}
+          {/* Navigation Arrows - Desktop */}
+          <div className="hidden lg:flex items-center justify-center gap-4 mt-8">
             <button
               onClick={goToPrevious}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-12 w-12 h-12 rounded-full bg-card shadow-elevated flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
+              className="w-12 h-12 rounded-full bg-card shadow-lg flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
               aria-label="Previous review"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
+            
+            {/* Dots */}
+            <div className="flex items-center gap-2">
+              {reviews.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    setIsAutoPlaying(false);
+                    setCurrentIndex(index);
+                  }}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    index === currentIndex
+                      ? "w-8 bg-primary"
+                      : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                  }`}
+                  aria-label={`Go to review ${index + 1}`}
+                />
+              ))}
+            </div>
+            
             <button
               onClick={goToNext}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-12 w-12 h-12 rounded-full bg-card shadow-elevated flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
+              className="w-12 h-12 rounded-full bg-card shadow-lg flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
               aria-label="Next review"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
           </div>
-
-          {/* Dots Indicator */}
-          <div className="flex items-center justify-center gap-2 mt-8">
-            {reviews.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  setIsAutoPlaying(false);
-                  setCurrentIndex(index);
-                }}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === currentIndex
-                    ? "w-8 bg-primary"
-                    : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
-                }`}
-                aria-label={`Go to review ${index + 1}`}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Mini Reviews Grid */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-5 gap-4">
-          {reviews.map((review, index) => (
-            <button
-              key={review.name}
-              onClick={() => {
-                setIsAutoPlaying(false);
-                setCurrentIndex(index);
-              }}
-              className={`p-4 rounded-xl transition-all duration-300 ${
-                index === currentIndex
-                  ? "glass-card ring-2 ring-primary"
-                  : "bg-muted/50 hover:bg-muted"
-              }`}
-            >
-              <img
-                src={review.avatar}
-                alt={review.name}
-                className="w-12 h-12 rounded-full mx-auto mb-2 object-cover"
-              />
-              <p className="text-sm font-medium truncate">{review.name}</p>
-              <p className="text-xs text-muted-foreground truncate">{review.role}</p>
-            </button>
-          ))}
         </div>
       </div>
     </section>
