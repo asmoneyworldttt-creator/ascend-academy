@@ -108,7 +108,7 @@ const PlansSection = () => {
 
       <div className="container relative mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 lg:mb-16">
           <h2 className="text-3xl lg:text-5xl font-bold font-display mb-4">
             Choose Your <span className="text-gradient-gold">Learning Path</span>
           </h2>
@@ -117,11 +117,19 @@ const PlansSection = () => {
           </p>
         </div>
 
-        {/* Plans Grid - Horizontal scroll on mobile */}
-        <div className="lg:hidden plans-scroll">
-          {plans.map((plan, index) => (
-            <PlanCard key={plan.name} plan={plan} index={index} />
-          ))}
+        {/* Plans Grid - Horizontal scroll on mobile with 2-column hint */}
+        <div className="lg:hidden">
+          <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide px-2">
+            {plans.map((plan, index) => (
+              <div key={plan.name} className="snap-center flex-shrink-0 w-[75%] sm:w-[45%]">
+                <PlanCard plan={plan} index={index} />
+              </div>
+            ))}
+          </div>
+          {/* Scroll hint */}
+          <p className="text-center text-sm text-muted-foreground mt-2">
+            ← Swipe to see all plans →
+          </p>
         </div>
 
         {/* Plans Grid - Desktop */}
@@ -131,26 +139,30 @@ const PlansSection = () => {
           ))}
         </div>
 
-        {/* Bonus Section */}
-        <div className="mt-16 glass-card p-8 rounded-3xl">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold font-display mb-2">
-              🎁 Special Bonuses with Every Plan
+        {/* Bonus Section - Horizontal Swipeable on Mobile */}
+        <div className="mt-16 glass-card p-6 lg:p-8 rounded-3xl">
+          <div className="text-center mb-6 lg:mb-8">
+            <h3 className="text-xl lg:text-2xl font-bold font-display mb-2">
+              Special Bonuses with Every Plan
             </h3>
-            <p className="text-muted-foreground">All plans include these exclusive perks</p>
+            <p className="text-muted-foreground text-sm lg:text-base">All plans include these exclusive perks</p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: "📚", title: "Free E-books", desc: "Digital marketing & AI guides" },
-              { icon: "👥", title: "Community Access", desc: "Connect with 10,000+ learners" },
-              { icon: "🎥", title: "Weekly Live Q&A", desc: "Direct expert interaction" },
-              { icon: "📱", title: "Mobile App", desc: "Learn on the go" },
-            ].map((bonus) => (
-              <div key={bonus.title} className="text-center p-4">
-                <span className="text-4xl mb-3 block">{bonus.icon}</span>
-                <h4 className="font-bold mb-1">{bonus.title}</h4>
-                <p className="text-sm text-muted-foreground">{bonus.desc}</p>
-              </div>
+          
+          {/* Mobile horizontal scroll */}
+          <div className="lg:hidden">
+            <div className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
+              {bonuses.map((bonus) => (
+                <div key={bonus.title} className="snap-center flex-shrink-0 w-[70%] sm:w-[45%]">
+                  <BonusCard bonus={bonus} />
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Desktop grid */}
+          <div className="hidden lg:grid lg:grid-cols-4 gap-6">
+            {bonuses.map((bonus) => (
+              <BonusCard key={bonus.title} bonus={bonus} />
             ))}
           </div>
         </div>
@@ -164,7 +176,7 @@ const PlanCard = ({ plan, index }: { plan: typeof plans[0]; index: number }) => 
   
   return (
     <div
-      className={`relative glass-card rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-2 ${
+      className={`relative glass-card rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-2 h-full ${
         plan.popular ? "ring-2 ring-primary shadow-glow-gold" : ""
       }`}
       style={{ animationDelay: `${index * 0.1}s` }}
@@ -235,5 +247,81 @@ const PlanCard = ({ plan, index }: { plan: typeof plans[0]; index: number }) => 
     </div>
   );
 };
+
+// Premium SVG Icons for bonuses
+const bonuses = [
+  { 
+    icon: () => (
+      <svg viewBox="0 0 48 48" className="w-10 h-10" fill="none">
+        <rect x="8" y="6" width="32" height="36" rx="4" fill="url(#book-fill)" />
+        <rect x="12" y="10" width="24" height="28" rx="2" fill="white" opacity="0.9" />
+        <path d="M16 16h16M16 22h12M16 28h8" stroke="#FBBF24" strokeWidth="2" strokeLinecap="round" />
+        <defs>
+          <linearGradient id="book-fill" x1="8" y1="6" x2="40" y2="42">
+            <stop stopColor="#FBBF24" /><stop offset="1" stopColor="#F59E0B" />
+          </linearGradient>
+        </defs>
+      </svg>
+    ),
+    title: "Free E-books", 
+    desc: "Digital marketing & AI guides" 
+  },
+  { 
+    icon: () => (
+      <svg viewBox="0 0 48 48" className="w-10 h-10" fill="none">
+        <circle cx="24" cy="18" r="8" fill="url(#comm-fill)" />
+        <circle cx="12" cy="26" r="6" fill="url(#comm-fill)" opacity="0.7" />
+        <circle cx="36" cy="26" r="6" fill="url(#comm-fill)" opacity="0.7" />
+        <path d="M24 26c8 0 14 6 14 14H10c0-8 6-14 14-14z" fill="url(#comm-fill)" />
+        <defs>
+          <linearGradient id="comm-fill" x1="10" y1="10" x2="38" y2="40">
+            <stop stopColor="#14B8A6" /><stop offset="1" stopColor="#0D9488" />
+          </linearGradient>
+        </defs>
+      </svg>
+    ),
+    title: "Community Access", 
+    desc: "Connect with 10,000+ learners" 
+  },
+  { 
+    icon: () => (
+      <svg viewBox="0 0 48 48" className="w-10 h-10" fill="none">
+        <rect x="6" y="12" width="36" height="24" rx="4" fill="url(#vid-fill)" />
+        <polygon points="20,18 20,30 32,24" fill="white" />
+        <defs>
+          <linearGradient id="vid-fill" x1="6" y1="12" x2="42" y2="36">
+            <stop stopColor="#8B5CF6" /><stop offset="1" stopColor="#7C3AED" />
+          </linearGradient>
+        </defs>
+      </svg>
+    ),
+    title: "Weekly Live Q&A", 
+    desc: "Direct expert interaction" 
+  },
+  { 
+    icon: () => (
+      <svg viewBox="0 0 48 48" className="w-10 h-10" fill="none">
+        <rect x="14" y="4" width="20" height="40" rx="4" fill="url(#mob-fill)" />
+        <rect x="18" y="8" width="12" height="28" rx="2" fill="white" opacity="0.9" />
+        <circle cx="24" cy="40" r="2" fill="white" opacity="0.9" />
+        <defs>
+          <linearGradient id="mob-fill" x1="14" y1="4" x2="34" y2="44">
+            <stop stopColor="#22C55E" /><stop offset="1" stopColor="#16A34A" />
+          </linearGradient>
+        </defs>
+      </svg>
+    ),
+    title: "Mobile App", 
+    desc: "Learn on the go" 
+  },
+];
+
+const BonusCard = ({ bonus }: { bonus: typeof bonuses[0] }) => (
+  <div className="text-center p-4 glass-card rounded-2xl hover:-translate-y-1 transition-all duration-300">
+    <div className="flex justify-center mb-3">{bonus.icon()}</div>
+    <h4 className="font-bold mb-1">{bonus.title}</h4>
+    <p className="text-sm text-muted-foreground">{bonus.desc}</p>
+  </div>
+);
 
 export default PlansSection;
