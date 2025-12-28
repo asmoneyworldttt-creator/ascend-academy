@@ -1,51 +1,77 @@
 import { useEffect, useState, useRef } from "react";
-import { Users, UserCheck, BookOpen, Trophy } from "lucide-react";
+import { Users, UserCheck, BookOpen, Trophy, TrendingUp, Award, Headphones } from "lucide-react";
 
 const stats = [
   {
     icon: Users,
     value: 10000,
+    maxValue: 15000,
     suffix: "+",
     label: "Total Students",
-    color: "from-primary to-gold-dark",
+    color: "#FBBF24", // Gold
+    bgGradient: "from-primary to-gold-dark",
   },
   {
     icon: UserCheck,
     value: 5000,
+    maxValue: 10000,
     suffix: "+",
     label: "Active Members",
-    color: "from-emerald to-emerald-light",
+    color: "#22C55E", // Emerald
+    bgGradient: "from-emerald to-emerald-light",
   },
   {
     icon: BookOpen,
     value: 50,
+    maxValue: 100,
     suffix: "+",
     label: "Expert Courses",
-    color: "from-accent to-teal-light",
+    color: "#14B8A6", // Teal
+    bgGradient: "from-accent to-teal-light",
   },
   {
     icon: Trophy,
     value: 100,
+    maxValue: 200,
     suffix: "K+",
     label: "Earnings Distributed",
-    color: "from-primary to-accent",
+    color: "#8B5CF6", // Purple
+    bgGradient: "from-purple-500 to-purple-600",
   },
 ];
 
-const useCountUp = (end: number, duration: number = 2000, isInView: boolean) => {
+// Circular Progress Component with 3D effects
+const CircularStatCard = ({ 
+  stat, 
+  index, 
+  isInView 
+}: { 
+  stat: typeof stats[0]; 
+  index: number; 
+  isInView: boolean 
+}) => {
   const [count, setCount] = useState(0);
-
+  const Icon = stat.icon;
+  
+  const percentage = (stat.value / stat.maxValue) * 100;
+  const strokeWidth = 8;
+  const radius = 55;
+  const circumference = 2 * Math.PI * radius;
+  
   useEffect(() => {
     if (!isInView) return;
-    
+
     let startTime: number;
     let animationFrame: number;
+    const duration = 2000;
 
     const animate = (currentTime: number) => {
       if (!startTime) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / duration, 1);
       
-      setCount(Math.floor(progress * end));
+      // Easing function - easeOutQuart
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      setCount(Math.floor(easeOutQuart * stat.value));
       
       if (progress < 1) {
         animationFrame = requestAnimationFrame(animate);
@@ -54,27 +80,101 @@ const useCountUp = (end: number, duration: number = 2000, isInView: boolean) => 
 
     animationFrame = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationFrame);
-  }, [end, duration, isInView]);
+  }, [stat.value, isInView]);
 
-  return count;
-};
-
-const StatCard = ({ stat, index, isInView }: { stat: typeof stats[0]; index: number; isInView: boolean }) => {
-  const count = useCountUp(stat.value, 2000, isInView);
-  const Icon = stat.icon;
+  const strokeDashoffset = circumference - (isInView ? (percentage / 100) * circumference : circumference);
 
   return (
     <div
-      className="glass-card p-8 rounded-3xl text-center group hover:-translate-y-2 transition-all duration-500"
-      style={{ animationDelay: `${index * 0.1}s` }}
+      className="relative group"
+      style={{ animationDelay: `${index * 0.15}s` }}
     >
-      <div className={`w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-        <Icon className="w-10 h-10 text-primary-foreground" />
+      {/* 3D Floating Card */}
+      <div className="glass-card p-6 lg:p-8 rounded-3xl transition-all duration-500 hover:-translate-y-3 hover:shadow-elevated relative overflow-hidden group-hover:scale-[1.02]">
+        {/* Glowing border effect on hover */}
+        <div 
+          className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          style={{
+            boxShadow: `0 0 30px ${stat.color}40, inset 0 0 20px ${stat.color}10`,
+          }}
+        />
+        
+        {/* Background glow */}
+        <div 
+          className="absolute -top-10 -right-10 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-500"
+          style={{ background: stat.color }}
+        />
+        
+        <div className="relative flex flex-col items-center">
+          {/* SVG Circle Progress */}
+          <div className="relative w-32 h-32 lg:w-40 lg:h-40 mb-4">
+            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 130 130">
+              {/* Background circle */}
+              <circle
+                cx="65"
+                cy="65"
+                r={radius}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={strokeWidth}
+                className="text-muted/20"
+              />
+              {/* Progress circle with glow */}
+              <circle
+                cx="65"
+                cy="65"
+                r={radius}
+                fill="none"
+                stroke={stat.color}
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+                strokeDasharray={circumference}
+                strokeDashoffset={strokeDashoffset}
+                className="transition-all duration-[2000ms] ease-out"
+                style={{
+                  filter: `drop-shadow(0 0 8px ${stat.color}80)`,
+                }}
+              />
+              {/* Inner decorative circle */}
+              <circle
+                cx="65"
+                cy="65"
+                r={radius - 15}
+                fill="none"
+                stroke={stat.color}
+                strokeWidth="1"
+                opacity="0.2"
+              />
+            </svg>
+            
+            {/* Center icon with 3D effect */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div 
+                className={`w-16 h-16 lg:w-20 lg:h-20 rounded-2xl bg-gradient-to-br ${stat.bgGradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                style={{
+                  boxShadow: `0 10px 30px ${stat.color}40`,
+                }}
+              >
+                <Icon className="w-8 h-8 lg:w-10 lg:h-10 text-white" />
+              </div>
+            </div>
+          </div>
+          
+          {/* Value with animation */}
+          <div className="text-center">
+            <h3 className="text-3xl lg:text-4xl xl:text-5xl font-bold font-display text-foreground mb-2">
+              <span style={{ color: stat.color }}>{count.toLocaleString()}</span>
+              <span className="text-foreground">{stat.suffix}</span>
+            </h3>
+            <p className="text-muted-foreground font-medium text-sm lg:text-base">{stat.label}</p>
+          </div>
+        </div>
+        
+        {/* Floating particles effect */}
+        <div className="absolute top-4 right-4 w-2 h-2 rounded-full opacity-40 animate-pulse" style={{ background: stat.color }} />
+        <div className="absolute bottom-6 left-6 w-1.5 h-1.5 rounded-full opacity-30 animate-pulse" style={{ background: stat.color, animationDelay: '0.5s' }} />
+        <div className="absolute top-1/2 right-6 w-1 h-1 rounded-full opacity-20 animate-pulse" style={{ background: stat.color, animationDelay: '1s' }} />
       </div>
-      <h3 className="text-4xl lg:text-5xl font-bold font-display text-foreground mb-2">
-        {count.toLocaleString()}{stat.suffix}
-      </h3>
-      <p className="text-muted-foreground font-medium">{stat.label}</p>
     </div>
   );
 };
@@ -101,14 +201,26 @@ const StatsSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-20 lg:py-32 relative overflow-hidden">
-      {/* Background */}
+    <section id="stats" ref={sectionRef} className="py-20 lg:py-32 relative overflow-hidden">
+      {/* Background with depth */}
       <div className="absolute inset-0 bg-muted/50" />
+      
+      {/* Decorative elements */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
       
+      {/* Floating blobs for depth */}
+      <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-10 w-80 h-80 bg-accent/5 rounded-full blur-3xl" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald/5 rounded-full blur-3xl" />
+      
       <div className="container relative mx-auto px-4">
+        {/* Header */}
         <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium text-primary mb-6">
+            <TrendingUp className="w-4 h-4" />
+            Growing Every Day
+          </div>
           <h2 className="text-3xl lg:text-5xl font-bold font-display mb-4">
             Our <span className="text-gradient-gold">Impact</span> in Numbers
           </h2>
@@ -117,10 +229,32 @@ const StatsSection = () => {
           </p>
         </div>
 
+        {/* Stats Grid with 3D Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {stats.map((stat, index) => (
-            <StatCard key={stat.label} stat={stat} index={index} isInView={isInView} />
+            <CircularStatCard 
+              key={stat.label} 
+              stat={stat} 
+              index={index} 
+              isInView={isInView} 
+            />
           ))}
+        </div>
+
+        {/* Additional Trust Badges */}
+        <div className="mt-16 flex flex-wrap items-center justify-center gap-8">
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <Award className="w-6 h-6 text-primary" />
+            <span className="text-sm font-medium">Industry Recognized Certificates</span>
+          </div>
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <Headphones className="w-6 h-6 text-accent" />
+            <span className="text-sm font-medium">24/7 Expert Support</span>
+          </div>
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <Trophy className="w-6 h-6 text-emerald" />
+            <span className="text-sm font-medium">Proven Success Track Record</span>
+          </div>
         </div>
       </div>
     </section>
