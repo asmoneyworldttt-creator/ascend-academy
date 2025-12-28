@@ -1,0 +1,132 @@
+import { useState } from "react";
+import { Eye, Target, Crosshair, X } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+
+const aboutCards = [
+  {
+    icon: Eye,
+    title: "Our Vision",
+    shortDesc: "To be a global leader in transforming lives through online education.",
+    fullDesc: `Our vision is to be a global leader in transforming lives through online education, empowering individuals worldwide to unlock their full potential, thrive in the digital age, and achieve fulfilling lives with financial freedom.
+
+We envision a world where quality education is accessible to everyone, regardless of their background or location. Through innovative learning experiences and cutting-edge technology, we aim to bridge the gap between ambition and achievement.
+
+Our commitment is to create pathways that lead to personal growth, professional success, and lasting prosperity for every member of our community.`,
+    color: "from-primary to-gold-dark",
+    bgColor: "bg-primary/10",
+  },
+  {
+    icon: Target,
+    title: "Our Mission",
+    shortDesc: "To empower individuals through quality education and practical training.",
+    fullDesc: `Our mission is to empower individuals to unlock their full potential and thrive in the digital age through our online courses. We aim to create a supportive community for learning and career growth, providing high-quality education, practical training, and expert guidance.
+
+We believe in:
+• Delivering world-class content created by industry experts
+• Providing hands-on, practical learning experiences
+• Building a supportive community of learners and mentors
+• Offering personalized guidance for career advancement
+• Creating multiple income opportunities through skill development
+
+Every course we offer is designed with real-world application in mind, ensuring our students graduate with skills that are immediately valuable in the marketplace.`,
+    color: "from-accent to-teal-dark",
+    bgColor: "bg-accent/10",
+  },
+  {
+    icon: Crosshair,
+    title: "Our Goal",
+    shortDesc: "To provide innovative courses tailored to future technologies.",
+    fullDesc: `Our main goal is to provide innovative online courses tailored to future technologies and market trends, developing practical skills essential for career advancement and creating income-generating opportunities.
+
+We focus on:
+• AI & Machine Learning expertise
+• Digital Marketing mastery
+• E-commerce & Dropshipping strategies
+• Cryptocurrency & Web3 knowledge
+• High-income skill development
+• Freelancing & Remote work opportunities
+
+By staying ahead of industry trends and continuously updating our curriculum, we ensure our students are always prepared for the jobs and opportunities of tomorrow, not yesterday.`,
+    color: "from-emerald to-emerald-light",
+    bgColor: "bg-emerald/10",
+  },
+];
+
+const AboutSection = () => {
+  const [selectedCard, setSelectedCard] = useState<typeof aboutCards[0] | null>(null);
+
+  return (
+    <section id="about" className="py-20 lg:py-32 relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-background" />
+      <div className="absolute top-1/4 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+
+      <div className="container relative mx-auto px-4">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h2 className="text-3xl lg:text-5xl font-bold font-display mb-6">
+            About <span className="text-gradient-gold">Skill Learners</span>
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            At Skill Learners, our mission is to help you unlock your potential in the digital world. 
+            We offer high-quality video courses created by industry experts in fields like AI and digital marketing. 
+            These courses provide practical, hands-on skills to advance your career and create new income streams.
+          </p>
+        </div>
+
+        {/* Cards Grid */}
+        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+          {aboutCards.map((card, index) => {
+            const Icon = card.icon;
+            return (
+              <div
+                key={card.title}
+                onClick={() => setSelectedCard(card)}
+                className="glass-card p-8 rounded-3xl cursor-pointer group hover:-translate-y-2 transition-all duration-500"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className={`w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br ${card.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                  <Icon className="w-8 h-8 text-primary-foreground" />
+                </div>
+                <h3 className="text-xl font-bold font-display mb-3 group-hover:text-primary transition-colors">
+                  {card.title}
+                </h3>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  {card.shortDesc}
+                </p>
+                <span className="inline-flex items-center text-primary font-medium group-hover:gap-2 transition-all">
+                  Learn More
+                  <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Modal */}
+      <Dialog open={!!selectedCard} onOpenChange={() => setSelectedCard(null)}>
+        <DialogContent className="max-w-2xl glass-card border-border/50">
+          <DialogHeader>
+            <div className="flex items-center gap-4 mb-4">
+              {selectedCard && (
+                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${selectedCard.color} flex items-center justify-center`}>
+                  <selectedCard.icon className="w-7 h-7 text-primary-foreground" />
+                </div>
+              )}
+              <DialogTitle className="text-2xl font-bold font-display">
+                {selectedCard?.title}
+              </DialogTitle>
+            </div>
+          </DialogHeader>
+          <div className="text-muted-foreground leading-relaxed whitespace-pre-line">
+            {selectedCard?.fullDesc}
+          </div>
+        </DialogContent>
+      </Dialog>
+    </section>
+  );
+};
+
+export default AboutSection;
