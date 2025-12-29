@@ -14,6 +14,7 @@ We envision a world where quality education is accessible to everyone, regardles
 Our commitment is to create pathways that lead to personal growth, professional success, and lasting prosperity for every member of our community.`,
     color: "from-primary to-gold-dark",
     bgColor: "bg-primary/10",
+    bannerImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=400&fit=crop",
   },
   {
     icon: Target,
@@ -31,6 +32,7 @@ We believe in:
 Every course we offer is designed with real-world application in mind, ensuring our students graduate with skills that are immediately valuable in the marketplace.`,
     color: "from-accent to-teal-dark",
     bgColor: "bg-accent/10",
+    bannerImage: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=400&fit=crop",
   },
   {
     icon: Crosshair,
@@ -49,6 +51,7 @@ We focus on:
 By staying ahead of industry trends and continuously updating our curriculum, we ensure our students are always prepared for the jobs and opportunities of tomorrow, not yesterday.`,
     color: "from-emerald to-emerald-light",
     bgColor: "bg-emerald/10",
+    bannerImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=400&fit=crop",
   },
 ];
 
@@ -105,23 +108,33 @@ const AboutSection = () => {
         </div>
       </div>
 
-      {/* Modal */}
+      {/* Premium Modal with Banner Image */}
       <Dialog open={!!selectedCard} onOpenChange={() => setSelectedCard(null)}>
-        <DialogContent className="max-w-2xl glass-card border-border/50">
-          <DialogHeader>
-            <div className="flex items-center gap-4 mb-4">
-              {selectedCard && (
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${selectedCard.color} flex items-center justify-center`}>
-                  <selectedCard.icon className="w-7 h-7 text-primary-foreground" />
-                </div>
-              )}
+        <DialogContent className="max-w-2xl p-0 glass-card border-border/50 overflow-hidden">
+          {/* Banner Image */}
+          {selectedCard && (
+            <div className="relative h-48 overflow-hidden">
+              <img 
+                src={selectedCard.bannerImage} 
+                alt={selectedCard.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
+              <div className={`absolute bottom-4 left-6 w-16 h-16 rounded-2xl bg-gradient-to-br ${selectedCard.color} flex items-center justify-center shadow-lg`}>
+                <selectedCard.icon className="w-8 h-8 text-primary-foreground" />
+              </div>
+            </div>
+          )}
+          
+          <div className="p-6 pt-4">
+            <DialogHeader>
               <DialogTitle className="text-2xl font-bold font-display">
                 {selectedCard?.title}
               </DialogTitle>
+            </DialogHeader>
+            <div className="text-muted-foreground leading-relaxed whitespace-pre-line mt-4">
+              {selectedCard?.fullDesc}
             </div>
-          </DialogHeader>
-          <div className="text-muted-foreground leading-relaxed whitespace-pre-line">
-            {selectedCard?.fullDesc}
           </div>
         </DialogContent>
       </Dialog>

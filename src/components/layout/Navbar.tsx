@@ -66,12 +66,13 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
+          {/* Logo with glow effect */}
+          <Link to="/" className="flex items-center gap-2 group relative">
+            <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <img
               src={logo}
               alt="Skill Learners"
-              className="h-12 w-auto transition-transform duration-300 group-hover:scale-105"
+              className="relative h-14 md:h-16 w-auto transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(251,191,36,0.4)]"
             />
           </Link>
 

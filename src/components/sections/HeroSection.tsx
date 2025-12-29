@@ -14,10 +14,10 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-secondary via-navy to-secondary" />
+      {/* Animated Background - Medium navy instead of pitch black */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(220,40%,15%)] via-[hsl(220,35%,20%)] to-[hsl(220,40%,18%)] dark:from-[hsl(220,35%,8%)] dark:via-[hsl(220,30%,12%)] dark:to-[hsl(220,35%,10%)]" />
       <ParticleBackground />
-      <div className="absolute inset-0 bg-mesh-gradient opacity-50" />
+      <div className="absolute inset-0 bg-mesh-gradient opacity-60" />
       
       {/* Floating geometric shapes with glow */}
       <div className="absolute top-1/4 left-10 w-24 h-24 rounded-full bg-primary/30 blur-2xl float-animation animate-pulse" />
