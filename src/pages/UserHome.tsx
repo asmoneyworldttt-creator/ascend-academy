@@ -19,7 +19,8 @@ import {
   Gem,
   Trophy,
   Sparkles,
-  ShoppingCart
+  ShoppingCart,
+  Lock
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -28,11 +29,13 @@ import DailyWelcomePopup from "@/components/DailyWelcomePopup";
 import { packages } from "@/data/packages";
 
 // Mock user data (would come from PHP backend)
+// Toggle hasPurchased to false to test locked state
 const userData = {
   name: "John Doe",
   agentId: "3T123456",
   email: "john@example.com",
   plan: "Gold",
+  hasPurchased: true, // Set to false to test locked affiliate features
   purchasedPackages: ["Creator Pack", "Social Media Mastery", "Business & Commerce"],
   walletBalance: 2500,
   totalEarnings: 15000,
@@ -74,10 +77,10 @@ const announcements = [
 ];
 
 const quickActions = [
-  { icon: User, label: "Profile", href: "/dashboard/profile", color: "from-primary to-gold-dark", desc: "View & edit" },
-  { icon: Wallet, label: "Affiliate Wallet", href: "/dashboard/affiliate", color: "from-accent to-teal-dark", desc: "Your earnings" },
-  { icon: BookOpen, label: "My Courses", href: "/dashboard/courses", color: "from-purple-500 to-purple-600", desc: "Continue learning" },
-  { icon: ShoppingCart, label: "Available Courses", href: "/dashboard/courses", color: "from-emerald to-emerald-light", desc: "Explore plans" },
+  { icon: User, label: "Profile", href: "/dashboard/profile", color: "from-primary to-gold-dark", desc: "View & edit", locked: false },
+  { icon: Wallet, label: "Affiliate Wallet", href: "/dashboard/affiliate", color: "from-accent to-teal-dark", desc: "Your earnings", locked: !userData.hasPurchased },
+  { icon: BookOpen, label: "My Courses", href: "/dashboard/courses", color: "from-purple-500 to-purple-600", desc: "Continue learning", locked: false },
+  { icon: ShoppingCart, label: "Available Courses", href: "/dashboard/courses", color: "from-emerald to-emerald-light", desc: "Explore plans", locked: false },
 ];
 
 // Map plan icons
@@ -275,10 +278,27 @@ const UserHome = () => {
           {quickActions.map((action) => (
             <Link
               key={action.label}
-              to={action.href}
-              className="glass-card p-4 md:p-5 rounded-2xl group hover:-translate-y-1 transition-all duration-300"
+              to={action.locked ? "#" : action.href}
+              onClick={(e) => {
+                if (action.locked) {
+                  e.preventDefault();
+                  toast({ 
+                    title: "Feature Locked 🔒", 
+                    description: "Purchase a membership plan to unlock this feature.",
+                    variant: "destructive" 
+                  });
+                }
+              }}
+              className={`glass-card p-4 md:p-5 rounded-2xl group transition-all duration-300 relative ${
+                action.locked ? 'opacity-60 cursor-not-allowed' : 'hover:-translate-y-1'
+              }`}
             >
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-lg`}>
+              {action.locked && (
+                <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center">
+                  <Lock className="w-3 h-3 text-destructive" />
+                </div>
+              )}
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-lg ${action.locked ? 'grayscale' : ''}`}>
                 <action.icon className="w-6 h-6 text-white" />
               </div>
               <h3 className="font-bold text-sm group-hover:text-primary transition-colors">{action.label}</h3>
@@ -287,24 +307,44 @@ const UserHome = () => {
           ))}
         </div>
 
-        {/* Referral Link Widget */}
-        <div className="glass-card p-4 rounded-2xl mb-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald to-emerald-light flex items-center justify-center shadow-lg">
-                <Gift className="w-5 h-5 text-white" />
+        {/* Referral Link Widget - Only show if purchased */}
+        {userData.hasPurchased ? (
+          <div className="glass-card p-4 rounded-2xl mb-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald to-emerald-light flex items-center justify-center shadow-lg">
+                  <Gift className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <p className="font-bold text-sm">Share & Earn</p>
+                  <p className="text-xs text-muted-foreground">Earn 10-30% on every referral!</p>
+                </div>
               </div>
-              <div>
-                <p className="font-bold text-sm">Share & Earn</p>
-                <p className="text-xs text-muted-foreground">Earn 10-30% on every referral!</p>
-              </div>
+              <Button variant="outline" size="sm" onClick={copyReferralLink} className="shrink-0">
+                <Copy className="w-4 h-4 mr-2" />
+                Copy Referral Link
+              </Button>
             </div>
-            <Button variant="outline" size="sm" onClick={copyReferralLink} className="shrink-0">
-              <Copy className="w-4 h-4 mr-2" />
-              Copy Referral Link
-            </Button>
           </div>
-        </div>
+        ) : (
+          <div className="glass-card p-4 rounded-2xl mb-6 border-2 border-dashed border-primary/30 bg-gradient-to-r from-primary/5 to-accent/5">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center">
+                  <Lock className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <div>
+                  <p className="font-bold text-sm">🔒 Unlock Referral Earnings</p>
+                  <p className="text-xs text-muted-foreground">Purchase any plan to start earning commissions!</p>
+                </div>
+              </div>
+              <Button variant="hero" size="sm" onClick={() => navigate("/dashboard/courses")} className="shrink-0">
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                View Plans
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* Special Offers Section */}
         <div className="glass-card p-5 rounded-2xl mb-6 border-2 border-dashed border-primary/30 bg-gradient-to-r from-primary/5 to-accent/5">
