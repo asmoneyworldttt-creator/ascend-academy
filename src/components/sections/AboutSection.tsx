@@ -67,41 +67,47 @@ const AboutSection = () => {
 
       <div className="container relative mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 lg:mb-16">
           <h2 className="text-3xl lg:text-5xl font-bold font-display mb-6">
             About <span className="text-gradient-gold">Skill Learners</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base lg:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
             At Skill Learners, our mission is to help you unlock your potential in the digital world. 
             We offer high-quality video courses created by industry experts in fields like AI and digital marketing. 
             These courses provide practical, hands-on skills to advance your career and create new income streams.
           </p>
         </div>
 
-        {/* Cards Grid */}
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+        {/* Cards Grid - Mobile Optimized */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-8">
           {aboutCards.map((card, index) => {
             const Icon = card.icon;
             return (
               <div
                 key={card.title}
                 onClick={() => setSelectedCard(card)}
-                className="glass-card p-8 rounded-3xl cursor-pointer group hover:-translate-y-2 transition-all duration-500"
+                className="glass-card p-6 lg:p-8 rounded-2xl lg:rounded-3xl cursor-pointer group hover:-translate-y-2 transition-all duration-500"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className={`w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br ${card.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon className="w-8 h-8 text-primary-foreground" />
+                {/* Icon - Centered on mobile, left-aligned on desktop */}
+                <div className="flex flex-col items-center md:items-start">
+                  <div className={`w-14 h-14 lg:w-16 lg:h-16 mb-4 lg:mb-6 rounded-xl lg:rounded-2xl bg-gradient-to-br ${card.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon className="w-7 h-7 lg:w-8 lg:h-8 text-primary-foreground" />
+                  </div>
+                  
+                  <h3 className="text-lg lg:text-xl font-bold font-display mb-2 lg:mb-3 group-hover:text-primary transition-colors text-center md:text-left">
+                    {card.title}
+                  </h3>
+                  
+                  <p className="text-muted-foreground leading-relaxed mb-4 text-sm lg:text-base text-center md:text-left">
+                    {card.shortDesc}
+                  </p>
+                  
+                  <span className="inline-flex items-center text-primary font-medium group-hover:gap-2 transition-all text-sm">
+                    Learn More
+                    <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
+                  </span>
                 </div>
-                <h3 className="text-xl font-bold font-display mb-3 group-hover:text-primary transition-colors">
-                  {card.title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed mb-4">
-                  {card.shortDesc}
-                </p>
-                <span className="inline-flex items-center text-primary font-medium group-hover:gap-2 transition-all">
-                  Learn More
-                  <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
-                </span>
               </div>
             );
           })}
@@ -110,29 +116,29 @@ const AboutSection = () => {
 
       {/* Premium Modal with Banner Image */}
       <Dialog open={!!selectedCard} onOpenChange={() => setSelectedCard(null)}>
-        <DialogContent className="max-w-2xl p-0 glass-card border-border/50 overflow-hidden">
+        <DialogContent className="max-w-2xl p-0 glass-card border-border/50 overflow-hidden mx-4">
           {/* Banner Image */}
           {selectedCard && (
-            <div className="relative h-48 overflow-hidden">
+            <div className="relative h-32 md:h-48 overflow-hidden">
               <img 
                 src={selectedCard.bannerImage} 
                 alt={selectedCard.title}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
-              <div className={`absolute bottom-4 left-6 w-16 h-16 rounded-2xl bg-gradient-to-br ${selectedCard.color} flex items-center justify-center shadow-lg`}>
-                <selectedCard.icon className="w-8 h-8 text-primary-foreground" />
+              <div className={`absolute bottom-4 left-4 md:left-6 w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-gradient-to-br ${selectedCard.color} flex items-center justify-center shadow-lg`}>
+                <selectedCard.icon className="w-6 h-6 md:w-8 md:h-8 text-primary-foreground" />
               </div>
             </div>
           )}
           
-          <div className="p-6 pt-4">
+          <div className="p-4 md:p-6 pt-2 md:pt-4">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-bold font-display">
+              <DialogTitle className="text-xl md:text-2xl font-bold font-display">
                 {selectedCard?.title}
               </DialogTitle>
             </DialogHeader>
-            <div className="text-muted-foreground leading-relaxed whitespace-pre-line mt-4">
+            <div className="text-muted-foreground leading-relaxed whitespace-pre-line mt-4 text-sm md:text-base max-h-[50vh] overflow-y-auto">
               {selectedCard?.fullDesc}
             </div>
           </div>

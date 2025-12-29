@@ -60,19 +60,23 @@ const Navbar = () => {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-card/80 backdrop-blur-xl shadow-soft border-b border-border/50"
-          : "bg-transparent"
+          ? "bg-card/90 backdrop-blur-xl shadow-lg border-b border-border/50"
+          : "bg-gradient-to-b from-background/80 to-transparent backdrop-blur-sm"
       }`}
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          {/* Logo with glow effect */}
+          {/* Logo with enhanced visibility */}
           <Link to="/" className="flex items-center gap-2 group relative">
-            <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            {/* Logo background glow for visibility */}
+            <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 via-accent/10 to-primary/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className={`absolute -inset-1 rounded-xl transition-all duration-300 ${
+              !scrolled ? 'bg-card/40 backdrop-blur-sm shadow-md' : ''
+            }`} />
             <img
               src={logo}
               alt="Skill Learners"
-              className="relative h-14 md:h-16 w-auto transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(251,191,36,0.4)]"
+              className="relative h-14 md:h-16 w-auto transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_10px_rgba(251,191,36,0.3)]"
             />
           </Link>
 
