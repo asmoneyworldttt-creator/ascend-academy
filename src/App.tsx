@@ -18,6 +18,7 @@ import WalletPage from "./pages/affiliate/WalletPage";
 import LeaderboardPage from "./pages/affiliate/LeaderboardPage";
 import TasksPage from "./pages/affiliate/TasksPage";
 import ProfilePage from "./pages/affiliate/ProfilePage";
+import AdminPanel from "./pages/admin/AdminPanel";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ const App = () => (
           <Route path="/dashboard/leaderboard" element={<LeaderboardPage />} />
           <Route path="/dashboard/tasks" element={<TasksPage />} />
           <Route path="/dashboard/profile" element={<ProfilePage />} />
+          <Route path="/admin" element={<AdminPanel />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

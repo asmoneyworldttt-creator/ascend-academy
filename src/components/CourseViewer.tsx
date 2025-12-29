@@ -174,7 +174,7 @@ const CourseViewer = ({ course, onClose, onComplete }: CourseViewerProps) => {
           </div>
         </div>
 
-        {/* Episode List Sidebar */}
+        {/* Episode List Sidebar - Desktop */}
         <div className="hidden lg:block w-80 border-l border-border bg-card overflow-y-auto">
           <div className="p-4 border-b border-border">
             <h3 className="font-bold">Course Content</h3>
@@ -221,6 +221,39 @@ const CourseViewer = ({ course, onClose, onComplete }: CourseViewerProps) => {
               );
             })}
           </div>
+        </div>
+      </div>
+
+      {/* Mobile Episode Playlist - Below Video */}
+      <div className="lg:hidden border-t border-border bg-card">
+        <div className="p-3 border-b border-border flex items-center justify-between">
+          <h3 className="font-bold text-sm">Course Playlist</h3>
+          <span className="text-xs text-muted-foreground">{completedEpisodes.size}/{course.episodes.length}</span>
+        </div>
+        <div className="max-h-48 overflow-y-auto">
+          {course.episodes.map((ep, idx) => {
+            const isCompleted = completedEpisodes.has(ep.id);
+            const isCurrent = idx === currentEpisode;
+            return (
+              <button
+                key={ep.id}
+                onClick={() => setCurrentEpisode(idx)}
+                className={`w-full text-left p-3 flex items-center gap-3 border-b border-border/50 ${
+                  isCurrent ? 'bg-primary/10' : 'hover:bg-muted/50'
+                }`}
+              >
+                <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
+                  isCompleted ? 'bg-emerald/10 text-emerald' : isCurrent ? 'bg-primary text-primary-foreground' : 'bg-muted'
+                }`}>
+                  {isCompleted ? <CheckCircle className="w-3.5 h-3.5" /> : <span className="text-xs font-medium">{idx + 1}</span>}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className={`text-sm line-clamp-1 ${isCurrent ? 'font-medium text-primary' : ''}`}>{ep.title}</p>
+                  <p className="text-xs text-muted-foreground">{ep.duration}</p>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

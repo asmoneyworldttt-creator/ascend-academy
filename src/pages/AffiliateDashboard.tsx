@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { 
   ArrowLeft,
@@ -25,6 +25,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/logo.png";
+import AffiliateSidebar from "@/components/layout/AffiliateSidebar";
+import LockedFeatureOverlay from "@/components/LockedFeatureOverlay";
 
 // Mock affiliate data
 const affiliateData = {
@@ -114,8 +116,12 @@ const achievements = [
   { icon: TrendingUp, title: "₹10K Milestone", description: "Earned ₹10,000+", unlocked: false, progress: 45 },
 ];
 
+// Mock - check if user has purchased (would come from backend)
+const userHasPurchased = true; // Set to false to test locked state
+
 const AffiliateDashboard = () => {
   const [copied, setCopied] = useState(false);
+  const [isLocked, setIsLocked] = useState(!userHasPurchased);
   const { toast } = useToast();
   const navigate = useNavigate();
   
@@ -133,30 +139,14 @@ const AffiliateDashboard = () => {
 
   const totalIncome = incomeCards.reduce((sum, card) => sum + card.value, 0);
 
-  return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="bg-card/50 backdrop-blur-lg border-b border-border sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate("/user-home")} className="p-2 rounded-full hover:bg-muted transition-colors">
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-            <Link to="/">
-              <img src={logo} alt="Skill Learners" className="h-12 w-auto drop-shadow-[0_0_10px_rgba(251,191,36,0.3)]" />
-            </Link>
-          </div>
-          <nav className="hidden md:flex items-center gap-6">
-            <Link to="/user-home" className="text-muted-foreground hover:text-foreground transition-colors">Home</Link>
-            <Link to="/dashboard/courses" className="text-muted-foreground hover:text-foreground transition-colors">Courses</Link>
-            <Link to="/dashboard/affiliate" className="text-primary font-medium">Affiliate</Link>
-            <Link to="/dashboard/wallet" className="text-muted-foreground hover:text-foreground transition-colors">Wallet</Link>
-            <Link to="/dashboard/profile" className="text-muted-foreground hover:text-foreground transition-colors">Profile</Link>
-          </nav>
-        </div>
-      </header>
+  // Show locked overlay if user hasn't purchased
+  if (isLocked) {
+    return <LockedFeatureOverlay />;
+  }
 
-      <main className="container mx-auto px-4 py-8">
+  return (
+    <AffiliateSidebar>
+      <div className="max-w-7xl mx-auto">
         {/* Hero Section */}
         <div className="glass-card p-6 lg:p-8 rounded-3xl mb-8 bg-gradient-to-r from-primary/10 via-transparent to-accent/10 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
@@ -408,8 +398,8 @@ const AffiliateDashboard = () => {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </AffiliateSidebar>
   );
 };
 
