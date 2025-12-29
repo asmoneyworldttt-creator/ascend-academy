@@ -84,7 +84,7 @@ const RoadmapSection = () => {
 
       <div className="container relative mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 lg:mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 text-sm font-medium text-accent mb-6">
             <Flag className="w-4 h-4" />
             Your Success Journey
@@ -92,29 +92,27 @@ const RoadmapSection = () => {
           <h2 className="text-3xl lg:text-5xl font-bold font-display mb-4">
             Your <span className="text-gradient-teal">Roadmap</span> to Success
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
             Follow our proven path from beginner to expert. Each milestone unlocks new opportunities and income streams.
           </p>
         </div>
 
         {/* Roadmap Visual */}
         <div className="relative max-w-5xl mx-auto">
-          {/* SVG Road Path - Desktop */}
+          {/* SVG Road Path - Desktop Only */}
           <svg 
-            className="hidden md:block absolute inset-0 w-full h-full pointer-events-none" 
+            className="hidden lg:block absolute inset-0 w-full h-full pointer-events-none" 
             viewBox="0 0 1000 800"
             preserveAspectRatio="none"
             style={{ zIndex: 0 }}
           >
             <defs>
-              {/* Road gradient */}
               <linearGradient id="roadGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%" stopColor="#FBBF24" stopOpacity="0.8" />
                 <stop offset="50%" stopColor="#14B8A6" stopOpacity="0.6" />
                 <stop offset="100%" stopColor="#22C55E" stopOpacity="0.8" />
               </linearGradient>
               
-              {/* Glow filter */}
               <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
                 <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
                 <feMerge>
@@ -122,14 +120,8 @@ const RoadmapSection = () => {
                   <feMergeNode in="SourceGraphic"/>
                 </feMerge>
               </filter>
-
-              {/* Dash pattern for road */}
-              <pattern id="dashPattern" patternUnits="userSpaceOnUse" width="20" height="10">
-                <rect x="0" y="4" width="12" height="2" fill="white" opacity="0.5"/>
-              </pattern>
             </defs>
 
-            {/* Main winding road path */}
             <path
               d="M 150 80 
                  C 300 80, 400 120, 500 150
@@ -146,7 +138,6 @@ const RoadmapSection = () => {
               opacity="0.3"
             />
             
-            {/* Road center line - dashed */}
             <path
               d="M 150 80 
                  C 300 80, 400 120, 500 150
@@ -165,59 +156,112 @@ const RoadmapSection = () => {
             />
           </svg>
 
-          {/* Mobile vertical line */}
-          <div className="md:hidden absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-accent to-emerald rounded-full" />
-
-          {/* Milestones */}
-          <div className="relative space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-32 md:gap-y-16">
-            {milestones.map((milestone, index) => {
-              const Icon = milestone.icon;
-              const isEven = index % 2 === 0;
-              
-              // Position calculations for desktop
-              const positions = [
-                { top: '0', left: isEven ? '0' : 'auto', right: isEven ? 'auto' : '0' },
-                { top: '180px', left: isEven ? '0' : 'auto', right: isEven ? 'auto' : '0' },
-                { top: '360px', left: isEven ? '0' : 'auto', right: isEven ? 'auto' : '0' },
-                { top: '540px', left: isEven ? '0' : 'auto', right: isEven ? 'auto' : '0' },
-              ];
-
-              return (
-                <div
-                  key={milestone.id}
-                  className={`relative flex items-start gap-6 md:gap-8 ${
-                    !isEven ? 'md:col-start-2 md:flex-row-reverse md:text-right' : ''
-                  }`}
-                >
-                  {/* Mobile node connector */}
-                  <div className="md:hidden absolute left-8 top-6 w-4 h-0.5 bg-gradient-to-r from-primary to-transparent" 
-                       style={{ background: `linear-gradient(to right, ${milestone.color}, transparent)` }} 
-                  />
-
-                  {/* Milestone Node */}
-                  <div className="relative z-10 flex-shrink-0 ml-4 md:ml-0">
+          {/* Mobile Timeline - Premium Vertical Design */}
+          <div className="lg:hidden relative">
+            {/* Gradient Timeline Line */}
+            <div className="absolute left-6 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-accent to-emerald rounded-full" />
+            
+            <div className="space-y-6">
+              {milestones.map((milestone, index) => {
+                const Icon = milestone.icon;
+                
+                return (
+                  <div key={milestone.id} className="relative pl-16">
+                    {/* Timeline Node */}
                     <button
                       onClick={() => setSelectedMilestone(milestone)}
-                      className="group relative"
+                      className="absolute left-0 top-0"
                     >
-                      {/* Outer glow ring */}
+                      {/* Glow effect */}
                       <div 
-                        className="absolute inset-0 rounded-full blur-md opacity-50 group-hover:opacity-80 transition-opacity animate-pulse"
+                        className="absolute inset-0 rounded-full blur-md opacity-50 animate-pulse"
                         style={{ background: milestone.color, transform: 'scale(1.3)' }}
                       />
                       
                       {/* Main node */}
                       <div 
-                        className="relative w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-300"
+                        className="relative w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
+                        style={{ 
+                          background: `linear-gradient(135deg, ${milestone.color}, ${milestone.color}dd)`,
+                          boxShadow: `0 4px 20px ${milestone.color}60`
+                        }}
+                      >
+                        <Icon className="w-5 h-5 text-white" />
+                      </div>
+
+                      {/* Step number */}
+                      <div 
+                        className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-card border-2 flex items-center justify-center text-xs font-bold shadow-md"
+                        style={{ borderColor: milestone.color, color: milestone.color }}
+                      >
+                        {milestone.id}
+                      </div>
+                    </button>
+
+                    {/* Content Card */}
+                    <button
+                      onClick={() => setSelectedMilestone(milestone)}
+                      className="w-full glass-card p-5 rounded-2xl text-left hover:shadow-lg transition-all duration-300 border-2 border-transparent active:scale-[0.98]"
+                      style={{ 
+                        touchAction: 'manipulation'
+                      }}
+                    >
+                      <h3 
+                        className="text-base font-bold font-display mb-2"
+                        style={{ color: milestone.color }}
+                      >
+                        {milestone.title}
+                      </h3>
+                      <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
+                        {milestone.shortDesc}
+                      </p>
+                      <span 
+                        className="inline-flex items-center gap-1 text-sm font-medium"
+                        style={{ color: milestone.color }}
+                      >
+                        Learn more →
+                      </span>
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Desktop Milestones */}
+          <div className="hidden lg:grid lg:grid-cols-2 lg:gap-x-32 lg:gap-y-16">
+            {milestones.map((milestone, index) => {
+              const Icon = milestone.icon;
+              const isEven = index % 2 === 0;
+
+              return (
+                <div
+                  key={milestone.id}
+                  className={`relative flex items-start gap-8 ${
+                    !isEven ? 'lg:col-start-2 lg:flex-row-reverse lg:text-right' : ''
+                  }`}
+                >
+                  {/* Milestone Node */}
+                  <div className="relative z-10 flex-shrink-0">
+                    <button
+                      onClick={() => setSelectedMilestone(milestone)}
+                      className="group relative"
+                    >
+                      <div 
+                        className="absolute inset-0 rounded-full blur-md opacity-50 group-hover:opacity-80 transition-opacity animate-pulse"
+                        style={{ background: milestone.color, transform: 'scale(1.3)' }}
+                      />
+                      
+                      <div 
+                        className="relative w-20 h-20 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-300"
                         style={{ 
                           background: `linear-gradient(135deg, ${milestone.color}, ${milestone.color}dd)`,
                           boxShadow: `0 8px 32px ${milestone.color}60`
                         }}
                       >
-                        <Icon className="w-7 h-7 md:w-9 md:h-9 text-white" />
+                        <Icon className="w-9 h-9 text-white" />
                       </div>
 
-                      {/* Step number */}
                       <div 
                         className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-card border-2 flex items-center justify-center text-sm font-bold shadow-md"
                         style={{ borderColor: milestone.color, color: milestone.color }}
@@ -228,15 +272,12 @@ const RoadmapSection = () => {
                   </div>
 
                   {/* Content Card */}
-                  <div className="flex-1 pb-8 md:pb-0">
+                  <div className="flex-1">
                     <button
                       onClick={() => setSelectedMilestone(milestone)}
                       className={`w-full glass-card p-6 rounded-2xl text-left hover:-translate-y-1 transition-all duration-300 group border-2 border-transparent hover:border-opacity-50 ${
-                        !isEven ? 'md:text-right' : ''
+                        !isEven ? 'lg:text-right' : ''
                       }`}
-                      style={{ 
-                        '--hover-border-color': milestone.color 
-                      } as React.CSSProperties}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.borderColor = `${milestone.color}40`;
                       }}
@@ -244,15 +285,15 @@ const RoadmapSection = () => {
                         e.currentTarget.style.borderColor = 'transparent';
                       }}
                     >
-                      <div className={`flex items-center gap-3 mb-3 ${!isEven ? 'md:flex-row-reverse' : ''}`}>
+                      <div className={`flex items-center gap-3 mb-3 ${!isEven ? 'lg:flex-row-reverse' : ''}`}>
                         <h3 
-                          className="text-lg md:text-xl font-bold font-display group-hover:opacity-90 transition-colors"
+                          className="text-xl font-bold font-display group-hover:opacity-90 transition-colors"
                           style={{ color: milestone.color }}
                         >
                           {milestone.title}
                         </h3>
                       </div>
-                      <p className="text-muted-foreground text-sm md:text-base mb-3">
+                      <p className="text-muted-foreground text-base mb-3">
                         {milestone.shortDesc}
                       </p>
                       <span 
@@ -270,30 +311,26 @@ const RoadmapSection = () => {
           </div>
 
           {/* Finish Line - Financial Freedom */}
-          <div className="relative mt-16 flex flex-col items-center">
-            {/* Connector from last milestone */}
-            <div className="hidden md:block absolute -top-16 left-1/2 w-1 h-16 bg-gradient-to-b from-accent to-emerald rounded-full" />
+          <div className="relative mt-12 lg:mt-16 flex flex-col items-center">
+            <div className="hidden lg:block absolute -top-16 left-1/2 w-1 h-16 bg-gradient-to-b from-accent to-emerald rounded-full" />
             
-            {/* Trophy destination */}
             <div className="relative">
-              {/* Outer glow */}
               <div className="absolute inset-0 rounded-full bg-emerald/30 blur-2xl animate-pulse" style={{ transform: 'scale(2)' }} />
               
-              <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-emerald to-emerald-light flex items-center justify-center shadow-2xl"
+              <div className="relative w-20 h-20 lg:w-28 lg:h-28 rounded-full bg-gradient-to-br from-emerald to-emerald-light flex items-center justify-center shadow-2xl"
                    style={{ boxShadow: '0 12px 48px rgba(34, 197, 94, 0.5)' }}>
-                <CheckCircle className="w-12 h-12 md:w-14 md:h-14 text-white" />
+                <CheckCircle className="w-10 h-10 lg:w-14 lg:h-14 text-white" />
               </div>
               
-              {/* Sparkles */}
-              <Sparkles className="absolute -top-2 -left-2 w-6 h-6 text-primary animate-pulse" />
-              <Sparkles className="absolute -top-1 -right-3 w-5 h-5 text-accent animate-pulse" style={{ animationDelay: '0.5s' }} />
-              <Sparkles className="absolute -bottom-1 left-0 w-4 h-4 text-emerald animate-pulse" style={{ animationDelay: '1s' }} />
+              <Sparkles className="absolute -top-2 -left-2 w-5 h-5 lg:w-6 lg:h-6 text-primary animate-pulse" />
+              <Sparkles className="absolute -top-1 -right-3 w-4 h-4 lg:w-5 lg:h-5 text-accent animate-pulse" style={{ animationDelay: '0.5s' }} />
+              <Sparkles className="absolute -bottom-1 left-0 w-3 h-3 lg:w-4 lg:h-4 text-emerald animate-pulse" style={{ animationDelay: '1s' }} />
             </div>
             
-            <h3 className="text-2xl md:text-3xl font-bold font-display text-center mt-6">
+            <h3 className="text-xl lg:text-3xl font-bold font-display text-center mt-6">
               <span className="text-gradient-gold">Financial Freedom</span> Achieved! 🎉
             </h3>
-            <p className="text-muted-foreground text-center mt-2 max-w-md">
+            <p className="text-muted-foreground text-center mt-2 max-w-md text-sm lg:text-base px-4">
               You've mastered the skills to earn ₹1 Lakh+ per month and build lasting wealth
             </p>
           </div>
@@ -306,42 +343,37 @@ const RoadmapSection = () => {
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           onClick={() => setSelectedMilestone(null)}
         >
-          {/* Backdrop */}
           <div className="absolute inset-0 bg-foreground/60 backdrop-blur-sm animate-fade-in" />
           
-          {/* Modal Content */}
           <div
-            className="relative glass-card max-w-xl w-full rounded-3xl overflow-hidden animate-scale-in"
+            className="relative glass-card max-w-xl w-full rounded-2xl lg:rounded-3xl overflow-hidden animate-scale-in mx-4"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header banner with gradient */}
             <div 
-              className="h-24 relative"
+              className="h-20 lg:h-24 relative"
               style={{ 
                 background: `linear-gradient(135deg, ${selectedMilestone.color}40, ${selectedMilestone.color}20)` 
               }}
             >
               <div 
-                className="absolute -bottom-8 left-8 w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
+                className="absolute -bottom-6 lg:-bottom-8 left-6 lg:left-8 w-12 h-12 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl flex items-center justify-center shadow-lg"
                 style={{ 
                   background: `linear-gradient(135deg, ${selectedMilestone.color}, ${selectedMilestone.color}dd)`,
                   boxShadow: `0 8px 24px ${selectedMilestone.color}50`
                 }}
               >
-                <selectedMilestone.icon className="w-8 h-8 text-white" />
+                <selectedMilestone.icon className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
               </div>
             </div>
 
-            {/* Close button */}
             <button
               onClick={() => setSelectedMilestone(null)}
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-card/80 backdrop-blur-sm flex items-center justify-center hover:bg-destructive hover:text-destructive-foreground transition-colors"
+              className="absolute top-3 right-3 lg:top-4 lg:right-4 w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-card/80 backdrop-blur-sm flex items-center justify-center hover:bg-destructive hover:text-destructive-foreground transition-colors"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4 lg:w-5 lg:h-5" />
             </button>
 
-            {/* Content */}
-            <div className="p-8 pt-12">
+            <div className="p-6 lg:p-8 pt-10 lg:pt-12">
               <div className="flex items-center gap-3 mb-4">
                 <span 
                   className="text-xs font-bold px-3 py-1 rounded-full"
@@ -355,13 +387,13 @@ const RoadmapSection = () => {
               </div>
               
               <h3 
-                className="text-2xl font-bold font-display mb-4"
+                className="text-xl lg:text-2xl font-bold font-display mb-4"
                 style={{ color: selectedMilestone.color }}
               >
                 {selectedMilestone.title}
               </h3>
 
-              <div className="text-muted-foreground leading-relaxed whitespace-pre-line text-sm md:text-base">
+              <div className="text-muted-foreground leading-relaxed whitespace-pre-line text-sm lg:text-base max-h-[50vh] overflow-y-auto">
                 {selectedMilestone.fullDesc}
               </div>
             </div>
