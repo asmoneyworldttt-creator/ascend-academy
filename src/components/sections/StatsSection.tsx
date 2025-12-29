@@ -54,8 +54,8 @@ const CircularStatCard = ({
   const Icon = stat.icon;
   
   const percentage = (stat.value / stat.maxValue) * 100;
-  const strokeWidth = 8;
-  const radius = 55;
+  const strokeWidth = 6;
+  const radius = 40;
   const circumference = 2 * Math.PI * radius;
   
   useEffect(() => {
@@ -89,8 +89,8 @@ const CircularStatCard = ({
       className="relative group"
       style={{ animationDelay: `${index * 0.15}s` }}
     >
-      {/* 3D Floating Card */}
-      <div className="glass-card p-6 lg:p-8 rounded-3xl transition-all duration-500 hover:-translate-y-3 hover:shadow-elevated relative overflow-hidden group-hover:scale-[1.02]">
+      {/* 3D Floating Card - More compact */}
+      <div className="glass-card p-4 lg:p-6 rounded-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-elevated relative overflow-hidden group-hover:scale-[1.02]">
         {/* Glowing border effect on hover */}
         <div 
           className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
@@ -106,13 +106,13 @@ const CircularStatCard = ({
         />
         
         <div className="relative flex flex-col items-center">
-          {/* SVG Circle Progress */}
-          <div className="relative w-32 h-32 lg:w-40 lg:h-40 mb-4">
-            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 130 130">
+          {/* SVG Circle Progress - Compact */}
+          <div className="relative w-24 h-24 lg:w-28 lg:h-28 mb-3">
+            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
               {/* Background circle */}
               <circle
-                cx="65"
-                cy="65"
+                cx="50"
+                cy="50"
                 r={radius}
                 fill="none"
                 stroke="currentColor"
@@ -121,8 +121,8 @@ const CircularStatCard = ({
               />
               {/* Progress circle with glow */}
               <circle
-                cx="65"
-                cy="65"
+                cx="50"
+                cy="50"
                 r={radius}
                 fill="none"
                 stroke={stat.color}
@@ -132,41 +132,31 @@ const CircularStatCard = ({
                 strokeDashoffset={strokeDashoffset}
                 className="transition-all duration-[2000ms] ease-out"
                 style={{
-                  filter: `drop-shadow(0 0 8px ${stat.color}80)`,
+                  filter: `drop-shadow(0 0 6px ${stat.color}80)`,
                 }}
-              />
-              {/* Inner decorative circle */}
-              <circle
-                cx="65"
-                cy="65"
-                r={radius - 15}
-                fill="none"
-                stroke={stat.color}
-                strokeWidth="1"
-                opacity="0.2"
               />
             </svg>
             
-            {/* Center icon with 3D effect */}
+            {/* Center icon with 3D effect - Compact */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div 
-                className={`w-16 h-16 lg:w-20 lg:h-20 rounded-2xl bg-gradient-to-br ${stat.bgGradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                className={`w-12 h-12 lg:w-14 lg:h-14 rounded-xl bg-gradient-to-br ${stat.bgGradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}
                 style={{
-                  boxShadow: `0 10px 30px ${stat.color}40`,
+                  boxShadow: `0 8px 20px ${stat.color}40`,
                 }}
               >
-                <Icon className="w-8 h-8 lg:w-10 lg:h-10 text-white" />
+                <Icon className="w-6 h-6 lg:w-7 lg:h-7 text-white" />
               </div>
             </div>
           </div>
           
-          {/* Value with animation */}
+          {/* Value with animation - Compact */}
           <div className="text-center">
-            <h3 className="text-3xl lg:text-4xl xl:text-5xl font-bold font-display text-foreground mb-2">
+            <h3 className="text-2xl lg:text-3xl font-bold font-display text-foreground mb-1">
               <span style={{ color: stat.color }}>{count.toLocaleString()}</span>
               <span className="text-foreground">{stat.suffix}</span>
             </h3>
-            <p className="text-muted-foreground font-medium text-sm lg:text-base">{stat.label}</p>
+            <p className="text-muted-foreground font-medium text-xs lg:text-sm">{stat.label}</p>
           </div>
         </div>
         
@@ -201,7 +191,7 @@ const StatsSection = () => {
   }, []);
 
   return (
-    <section id="stats" ref={sectionRef} className="py-20 lg:py-32 relative overflow-hidden">
+    <section id="stats" ref={sectionRef} className="py-12 lg:py-20 relative overflow-hidden">
       {/* Background with depth */}
       <div className="absolute inset-0 bg-muted/50" />
       

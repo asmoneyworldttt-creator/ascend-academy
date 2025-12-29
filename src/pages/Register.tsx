@@ -1,25 +1,46 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, ArrowRight, CheckCircle, Sparkles, GraduationCap, Wallet, Users } from "lucide-react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Eye, EyeOff, ArrowRight, CheckCircle, Sparkles, GraduationCap, Wallet, Users, Crown, Star, Gem, Trophy, Package, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
 
+const planData: Record<string, { name: string; icon: React.ComponentType<any>; color: string; benefits: string[] }> = {
+  Starter: { name: "Starter", icon: Star, color: "from-slate to-secondary", benefits: ["5 Beginner Courses", "Email Support", "Mobile & Web Access", "Course Certificate"] },
+  Silver: { name: "Silver", icon: Sparkles, color: "from-zinc-400 to-zinc-600", benefits: ["10+ Basic Courses", "Priority Support", "Live Q&A Sessions", "Resource Downloads"] },
+  Gold: { name: "Gold", icon: Crown, color: "from-primary to-gold-dark", benefits: ["All Courses Unlocked", "24/7 Support", "1-on-1 Mentorship", "Income Training"] },
+  Diamond: { name: "Diamond", icon: Gem, color: "from-accent to-teal-dark", benefits: ["Everything in Gold", "Career Mentorship", "Job Placement", "VIP Access"] },
+  Platinum: { name: "Platinum", icon: Trophy, color: "from-secondary to-navy", benefits: ["Everything in Diamond", "Lifetime VIP", "Revenue Share", "Direct Mentor Access"] },
+};
+
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const selectedPlanName = searchParams.get("plan");
+  const selectedPlan = selectedPlanName ? planData[selectedPlanName] : null;
+  
   const [formData, setFormData] = useState({
     sponsorId: "",
     name: "",
     email: "",
     phone: "",
+    country: "",
+    state: "",
+    address: "",
+    pincode: "",
     password: "",
+    confirmPassword: "",
     terms: false,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
     console.log("Register submitted:", formData);
-    // Navigate to success page with user data
     navigate("/registration-success");
   };
 
@@ -38,7 +59,6 @@ const Register = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-background to-primary/5" />
         <div className="absolute top-32 left-16 w-80 h-80 rounded-full bg-gradient-to-br from-accent/20 to-accent/5 blur-3xl animate-pulse" />
         <div className="absolute bottom-20 right-24 w-64 h-64 rounded-full bg-gradient-to-br from-primary/15 to-primary/5 blur-3xl animate-pulse delay-700" />
-        <div className="absolute top-1/3 right-1/4 w-40 h-40 rounded-full bg-emerald/10 blur-3xl animate-pulse delay-300" />
         
         {/* Floating Elements */}
         {[...Array(8)].map((_, i) => (
@@ -55,64 +75,111 @@ const Register = () => {
         ))}
         
         <div className="relative z-10 flex flex-col justify-center px-12 xl:px-20 w-full">
-          <Link to="/" className="mb-10">
-            <img src={logo} alt="Skill Learners" className="h-16 w-auto" />
+          <Link to="/" className="mb-8 relative inline-block">
+            <div className="absolute inset-0 bg-accent/25 blur-2xl rounded-full" />
+            <img src={logo} alt="Skill Learners" className="relative h-20 w-auto drop-shadow-[0_0_20px_rgba(20,184,166,0.5)]" />
           </Link>
           
-          <h1 className="text-4xl xl:text-5xl font-bold font-display mb-6 leading-tight">
-            Start Your Journey to{" "}
-            <span className="text-gradient-teal">Financial Freedom</span>
-          </h1>
-          
-          <p className="text-xl text-muted-foreground mb-10 leading-relaxed max-w-md">
-            Join thousands of learners who transformed their careers and achieved their income goals.
-          </p>
-          
-          <div className="grid grid-cols-2 gap-4">
-            {benefits.map((benefit, i) => (
-              <div key={i} className="flex items-center gap-3 p-4 rounded-2xl bg-card/30 backdrop-blur-sm border border-border/50 group hover:border-accent/30 transition-all duration-300">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent/20 to-accent/10 flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
-                  <benefit.icon className="w-5 h-5 text-accent" />
+          {/* Selected Plan Summary */}
+          {selectedPlan ? (
+            <div className="mb-8">
+              <div className="glass-card p-6 rounded-2xl border-2 border-accent/30 bg-accent/5">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${selectedPlan.color} flex items-center justify-center shadow-lg`}>
+                    <selectedPlan.icon className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-accent font-medium">Thank you for choosing</p>
+                    <h3 className="text-2xl font-bold font-display">{selectedPlan.name} Plan</h3>
+                  </div>
                 </div>
-                <span className="text-sm font-medium">{benefit.text}</span>
+                <p className="text-muted-foreground text-sm mb-4">Here's what you'll get:</p>
+                <ul className="space-y-2">
+                  {selectedPlan.benefits.map((benefit, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm">
+                      <Check className="w-4 h-4 text-emerald" />
+                      <span>{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            ))}
-          </div>
+            </div>
+          ) : (
+            <>
+              <h1 className="text-4xl xl:text-5xl font-bold font-display mb-6 leading-tight">
+                Start Your Journey to{" "}
+                <span className="text-gradient-teal">Financial Freedom</span>
+              </h1>
+              
+              <p className="text-xl text-muted-foreground mb-8 leading-relaxed max-w-md">
+                Join thousands of learners who transformed their careers.
+              </p>
+              
+              <div className="grid grid-cols-2 gap-3">
+                {benefits.map((benefit, i) => (
+                  <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-card/30 backdrop-blur-sm border border-border/50">
+                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 flex items-center justify-center shrink-0">
+                      <benefit.icon className="w-4 h-4 text-accent" />
+                    </div>
+                    <span className="text-xs font-medium">{benefit.text}</span>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
 
       {/* Right Side - Glassmorphic Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 md:p-8 bg-gradient-to-br from-background via-background to-muted/30 min-h-screen lg:min-h-0 overflow-y-auto">
-        <div className="w-full max-w-md py-8">
-          {/* Mobile Logo */}
-          <div className="lg:hidden text-center mb-6">
-            <Link to="/">
-              <img src={logo} alt="Skill Learners" className="h-12 w-auto mx-auto mb-3" />
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 md:p-6 bg-gradient-to-br from-background via-background to-muted/30 min-h-screen lg:min-h-0 overflow-y-auto">
+        <div className="w-full max-w-lg py-6">
+          {/* Mobile Logo & Plan Summary */}
+          <div className="lg:hidden text-center mb-4">
+            <Link to="/" className="relative inline-block">
+              <div className="absolute inset-0 bg-accent/20 blur-xl rounded-full" />
+              <img src={logo} alt="Skill Learners" className="relative h-14 w-auto mx-auto mb-2 drop-shadow-[0_0_15px_rgba(20,184,166,0.4)]" />
             </Link>
-            <h1 className="text-xl font-bold font-display">
-              Join <span className="text-gradient-teal">Skill Learners</span>
+            <h1 className="text-lg font-bold font-display">
+              {selectedPlan ? `Join with ${selectedPlan.name} Plan` : <span>Join <span className="text-gradient-teal">Skill Learners</span></span>}
             </h1>
           </div>
+
+          {/* Mobile Plan Summary */}
+          {selectedPlan && (
+            <div className="lg:hidden glass-card p-4 rounded-xl border border-accent/20 mb-4">
+              <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${selectedPlan.color} flex items-center justify-center`}>
+                  <selectedPlan.icon className="w-5 h-5 text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-xs text-accent">Selected Plan</p>
+                  <p className="font-bold">{selectedPlan.name}</p>
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {selectedPlan.benefits.slice(0, 2).map((b, i) => (
+                    <span key={i} className="text-xs px-2 py-0.5 bg-muted rounded-full">{b}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Glass Card Form */}
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-accent/20 via-primary/20 to-accent/20 rounded-[2rem] blur-xl opacity-50" />
             
-            <div className="relative glass-card p-6 md:p-8 rounded-3xl border border-border/50 backdrop-blur-xl">
-              <div className="text-center mb-6">
-                <div className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-accent to-accent/80 flex items-center justify-center shadow-lg shadow-accent/25">
-                  <Users className="w-7 h-7 text-white" />
-                </div>
-                <h2 className="text-xl font-bold font-display">Create Your Account</h2>
-                <p className="text-sm text-muted-foreground mt-1">Enter your details to get started</p>
+            <div className="relative glass-card p-5 md:p-6 rounded-2xl border border-border/50 backdrop-blur-xl">
+              <div className="text-center mb-4">
+                <h2 className="text-lg font-bold font-display">Create Your Account</h2>
+                <p className="text-xs text-muted-foreground mt-1">Enter your details to get started</p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4" action="request_handler.php" method="post">
+              <form onSubmit={handleSubmit} className="space-y-3" action="request_handler.php" method="post">
                 {/* Sponsor ID */}
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium">Sponsor ID <span className="text-muted-foreground">(Optional)</span></label>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium">Sponsor ID <span className="text-muted-foreground">(Optional)</span></label>
                   <div className="flex">
-                    <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-border/50 bg-muted/50 text-muted-foreground font-bold text-sm backdrop-blur-sm">
+                    <span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-border/50 bg-muted/50 text-muted-foreground font-bold text-xs">
                       3T
                     </span>
                     <input
@@ -121,79 +188,159 @@ const Register = () => {
                       pattern="[0-9]{6}"
                       value={formData.sponsorId}
                       onChange={(e) => setFormData({ ...formData, sponsorId: e.target.value })}
-                      className="flex-1 px-4 py-3 rounded-r-xl bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all backdrop-blur-sm placeholder:text-muted-foreground/50 text-sm"
+                      className="flex-1 px-3 py-2.5 rounded-r-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
                       placeholder="Sponsor ID"
                     />
                   </div>
                 </div>
 
                 {/* Name */}
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium">Full Name</label>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium">Full Name</label>
                   <input
                     type="text"
                     name="username"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all backdrop-blur-sm placeholder:text-muted-foreground/50 text-sm"
+                    className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
                     placeholder="John Doe"
                   />
                 </div>
 
-                {/* Email & Phone in 2 columns on larger screens */}
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-sm font-medium">Email</label>
+                {/* Email & Phone */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium">Email</label>
                     <input
                       type="email"
                       name="user_email"
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all backdrop-blur-sm placeholder:text-muted-foreground/50 text-sm"
+                      className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
                       placeholder="john@example.com"
                     />
                   </div>
-                  <div className="space-y-1.5">
-                    <label className="text-sm font-medium">Mobile</label>
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium">Mobile</label>
                     <input
                       type="tel"
                       name="user_mob"
                       required
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all backdrop-blur-sm placeholder:text-muted-foreground/50 text-sm"
+                      className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
                       placeholder="+91 9876543210"
                     />
                   </div>
                 </div>
 
-                {/* Password */}
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium">Password</label>
-                  <div className="relative">
+                {/* Country & State */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium">Country</label>
                     <input
-                      type={showPassword ? "text" : "password"}
-                      name="user_password"
+                      type="text"
+                      name="country"
                       required
-                      value={formData.password}
-                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all pr-12 backdrop-blur-sm placeholder:text-muted-foreground/50 text-sm"
-                      placeholder="••••••••"
+                      value={formData.country}
+                      onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
+                      placeholder="India"
                     />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium">State</label>
+                    <input
+                      type="text"
+                      name="state"
+                      required
+                      value={formData.state}
+                      onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
+                      placeholder="Tamil Nadu"
+                    />
+                  </div>
+                </div>
+
+                {/* Address */}
+                <div className="space-y-1">
+                  <label className="text-xs font-medium">Full Address</label>
+                  <input
+                    type="text"
+                    name="address"
+                    required
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
+                    placeholder="123 Main Street, City"
+                  />
+                </div>
+
+                {/* Pincode */}
+                <div className="space-y-1">
+                  <label className="text-xs font-medium">Pincode</label>
+                  <input
+                    type="text"
+                    name="pincode"
+                    required
+                    pattern="[0-9]{6}"
+                    value={formData.pincode}
+                    onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
+                    className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
+                    placeholder="627001"
+                  />
+                </div>
+
+                {/* Password & Confirm Password */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium">Password</label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="user_password"
+                        required
+                        value={formData.password}
+                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all pr-10 text-sm"
+                        placeholder="••••••••"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium">Confirm Password</label>
+                    <div className="relative">
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        name="confirm_password"
+                        required
+                        value={formData.confirmPassword}
+                        onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                        className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all pr-10 text-sm"
+                        placeholder="••••••••"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      >
+                        {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
                   </div>
                 </div>
 
                 {/* Terms */}
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-2">
                   <input
                     type="checkbox"
                     name="terms"
@@ -205,7 +352,7 @@ const Register = () => {
                   />
                   <label htmlFor="terms" className="text-xs text-muted-foreground leading-relaxed">
                     I agree to the{" "}
-                    <Link to="/terms" className="text-accent hover:underline">Terms & Conditions</Link>
+                    <Link to="/terms" className="text-accent hover:underline">Terms</Link>
                     {" "}and{" "}
                     <Link to="/privacy" className="text-accent hover:underline">Privacy Policy</Link>
                   </label>
@@ -227,7 +374,7 @@ const Register = () => {
           </div>
 
           {/* Back to Home */}
-          <p className="text-center text-sm text-muted-foreground mt-6">
+          <p className="text-center text-xs text-muted-foreground mt-4">
             <Link to="/" className="hover:text-accent transition-colors">
               ← Back to Home
             </Link>

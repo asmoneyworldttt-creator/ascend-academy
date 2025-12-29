@@ -235,7 +235,7 @@ const PlanCard = ({ plan, index }: { plan: typeof plans[0]; index: number }) => 
         </ul>
 
         {/* CTA */}
-        <Link to="/register" className="block">
+        <Link to={`/register?plan=${plan.name}`} className="block">
           <Button
             variant={plan.popular ? "hero" : "outline"}
             className="w-full"

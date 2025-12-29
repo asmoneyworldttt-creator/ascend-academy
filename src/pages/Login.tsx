@@ -44,8 +44,9 @@ const Login = () => {
         ))}
         
         <div className="relative z-10 flex flex-col justify-center px-12 xl:px-20 w-full">
-          <Link to="/" className="mb-12">
-            <img src={logo} alt="Skill Learners" className="h-16 w-auto" />
+          <Link to="/" className="mb-12 relative inline-block">
+            <div className="absolute inset-0 bg-primary/25 blur-2xl rounded-full" />
+            <img src={logo} alt="Skill Learners" className="relative h-20 w-auto drop-shadow-[0_0_20px_rgba(251,191,36,0.5)]" />
           </Link>
           
           <h1 className="text-4xl xl:text-5xl font-bold font-display mb-6 leading-tight">
@@ -75,8 +76,9 @@ const Login = () => {
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="lg:hidden text-center mb-8">
-            <Link to="/">
-              <img src={logo} alt="Skill Learners" className="h-14 w-auto mx-auto mb-4" />
+            <Link to="/" className="relative inline-block">
+              <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full" />
+              <img src={logo} alt="Skill Learners" className="relative h-16 w-auto mx-auto mb-4 drop-shadow-[0_0_15px_rgba(251,191,36,0.4)]" />
             </Link>
             <h1 className="text-2xl font-bold font-display">
               Welcome Back <span className="text-gradient-gold">!</span>
