@@ -160,8 +160,8 @@ const UserCourses = () => {
                     <span className="text-sm text-muted-foreground line-through">₹{plan.mrp.toLocaleString()}</span>
                   </div>
                   <p className="text-xs text-muted-foreground mb-3">{plan.shortDesc}</p>
-                  <Link to={`/register?plan=${plan.name}`}>
-                    <Button variant={plan.popular ? "hero" : "outline"} size="sm" className="w-full">Enroll Now</Button>
+                  <Link to={`/payment?plan=${plan.name}`}>
+                    <Button variant={plan.popular ? "hero" : "outline"} size="sm" className="w-full">Buy Now</Button>
                   </Link>
                 </div>
               );
