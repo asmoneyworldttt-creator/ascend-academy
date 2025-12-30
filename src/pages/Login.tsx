@@ -1,16 +1,52 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Eye, EyeOff, ArrowRight, Shield, Sparkles, Users, Lock } from "lucide-react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Eye, EyeOff, ArrowRight, Shield, Sparkles, Users, Lock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/logo.png";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({ agentId: "", password: "" });
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [isLoading, setIsLoading] = useState(false);
+  const { signIn, user } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Get the redirect path from location state or default to user-home
+  const from = (location.state as any)?.from?.pathname || "/user-home";
+
+  // If already logged in, redirect
+  if (user) {
+    navigate(from, { replace: true });
+    return null;
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login submitted:", formData);
+    setIsLoading(true);
+
+    const { error } = await signIn(formData.email, formData.password);
+
+    if (error) {
+      toast({
+        title: "Login Failed",
+        description: error.message || "Invalid email or password. Please try again.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    toast({
+      title: "Welcome back! 🎉",
+      description: "Login successful. Redirecting...",
+    });
+
+    // Navigate to the intended page or user home
+    navigate(from, { replace: true });
   };
 
   const features = [
@@ -99,25 +135,19 @@ const Login = () => {
                 <p className="text-muted-foreground mt-2">Enter your credentials to continue</p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6" action="./request_handler.php" method="post">
-                {/* Agent ID Field */}
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Email Field */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Agent ID</label>
-                  <div className="flex">
-                    <span className="inline-flex items-center px-4 rounded-l-xl border border-r-0 border-border/50 bg-muted/50 text-muted-foreground font-bold text-sm backdrop-blur-sm">
-                      3T
-                    </span>
-                    <input
-                      type="text"
-                      name="agent_id"
-                      pattern="[0-9]{6}"
-                      required
-                      value={formData.agentId}
-                      onChange={(e) => setFormData({ ...formData, agentId: e.target.value })}
-                      className="flex-1 px-4 py-3.5 rounded-r-xl bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all backdrop-blur-sm placeholder:text-muted-foreground/50"
-                      placeholder="123456"
-                    />
-                  </div>
+                  <label className="text-sm font-medium">Email Address</label>
+                  <input
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full px-4 py-3.5 rounded-xl bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all backdrop-blur-sm placeholder:text-muted-foreground/50"
+                    placeholder="your@email.com"
+                    disabled={isLoading}
+                  />
                 </div>
 
                 {/* Password Field */}
@@ -126,12 +156,12 @@ const Login = () => {
                   <div className="relative">
                     <input
                       type={showPassword ? "text" : "password"}
-                      name="agent_password"
                       required
                       value={formData.password}
                       onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                       className="w-full px-4 py-3.5 rounded-xl bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all pr-12 backdrop-blur-sm placeholder:text-muted-foreground/50"
                       placeholder="••••••••"
+                      disabled={isLoading}
                     />
                     <button
                       type="button"
@@ -141,14 +171,6 @@ const Login = () => {
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
-                </div>
-
-                {/* Email Verification Notice */}
-                <div className="p-3 rounded-xl bg-primary/5 border border-primary/20">
-                  <p className="text-xs text-center text-muted-foreground">
-                    <Shield className="w-3 h-3 inline mr-1" />
-                    Your account must be verified via email before logging in
-                  </p>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -161,9 +183,18 @@ const Login = () => {
                   </Link>
                 </div>
 
-                <Button type="submit" name="login_btn" variant="hero" size="lg" className="w-full">
-                  Login
-                  <ArrowRight className="w-5 h-5" />
+                <Button type="submit" variant="hero" size="lg" className="w-full" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Logging in...
+                    </>
+                  ) : (
+                    <>
+                      Login
+                      <ArrowRight className="w-5 h-5" />
+                    </>
+                  )}
                 </Button>
 
                 <div className="relative">

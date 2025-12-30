@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { Eye, EyeOff, ArrowRight, CheckCircle, Sparkles, GraduationCap, Wallet, Users, Crown, Star, Gem, Trophy, Package, Check } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, CheckCircle, Sparkles, GraduationCap, Wallet, Users, Crown, Star, Gem, Trophy, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/logo.png";
 
 const planData: Record<string, { name: string; icon: React.ComponentType<any>; color: string; benefits: string[] }> = {
@@ -15,33 +17,103 @@ const planData: Record<string, { name: string; icon: React.ComponentType<any>; c
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const selectedPlanName = searchParams.get("plan");
   const selectedPlan = selectedPlanName ? planData[selectedPlanName] : null;
+  const { signUp, user } = useAuth();
+  const { toast } = useToast();
   
   const [formData, setFormData] = useState({
     sponsorId: "",
     name: "",
     email: "",
     phone: "",
-    country: "",
-    state: "",
-    address: "",
-    pincode: "",
     password: "",
     confirmPassword: "",
     terms: false,
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // If already logged in, redirect
+  if (user) {
+    navigate("/user-home", { replace: true });
+    return null;
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validation
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast({
+        title: "Password Mismatch",
+        description: "Passwords do not match. Please try again.",
+        variant: "destructive",
+      });
       return;
     }
-    console.log("Register submitted:", formData);
-    navigate("/registration-success");
+
+    if (formData.password.length < 6) {
+      toast({
+        title: "Password Too Short",
+        description: "Password must be at least 6 characters long.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.terms) {
+      toast({
+        title: "Terms Required",
+        description: "Please accept the terms and conditions to continue.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    const { error } = await signUp(formData.email, formData.password, {
+      full_name: formData.name,
+      phone: formData.phone,
+      referred_by: formData.sponsorId || undefined,
+    });
+
+    if (error) {
+      let errorMessage = error.message;
+      
+      // Handle specific error cases
+      if (error.message.includes("already registered")) {
+        errorMessage = "This email is already registered. Please login instead.";
+      }
+      
+      toast({
+        title: "Registration Failed",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    toast({
+      title: "Registration Successful! 🎉",
+      description: "Your account has been created. Redirecting...",
+    });
+
+    // Navigate to success page with user data
+    navigate("/registration-success", {
+      state: {
+        userData: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          sponsorId: formData.sponsorId,
+          plan: selectedPlanName,
+        }
+      }
+    });
   };
 
   const benefits = [
@@ -174,24 +246,18 @@ const Register = () => {
                 <p className="text-xs text-muted-foreground mt-1">Enter your details to get started</p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-3" action="request_handler.php" method="post">
+              <form onSubmit={handleSubmit} className="space-y-3">
                 {/* Sponsor ID */}
                 <div className="space-y-1">
-                  <label className="text-xs font-medium">Sponsor ID <span className="text-muted-foreground">(Optional)</span></label>
-                  <div className="flex">
-                    <span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-border/50 bg-muted/50 text-muted-foreground font-bold text-xs">
-                      3T
-                    </span>
-                    <input
-                      type="text"
-                      name="sps_id"
-                      pattern="[0-9]{6}"
-                      value={formData.sponsorId}
-                      onChange={(e) => setFormData({ ...formData, sponsorId: e.target.value })}
-                      className="flex-1 px-3 py-2.5 rounded-r-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
-                      placeholder="Sponsor ID"
-                    />
-                  </div>
+                  <label className="text-xs font-medium">Referral Code <span className="text-muted-foreground">(Optional)</span></label>
+                  <input
+                    type="text"
+                    value={formData.sponsorId}
+                    onChange={(e) => setFormData({ ...formData, sponsorId: e.target.value.toUpperCase() })}
+                    className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm uppercase"
+                    placeholder="Enter referral code"
+                    disabled={isLoading}
+                  />
                 </div>
 
                 {/* Name */}
@@ -199,12 +265,12 @@ const Register = () => {
                   <label className="text-xs font-medium">Full Name</label>
                   <input
                     type="text"
-                    name="username"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
                     placeholder="John Doe"
+                    disabled={isLoading}
                   />
                 </div>
 
@@ -214,83 +280,26 @@ const Register = () => {
                     <label className="text-xs font-medium">Email</label>
                     <input
                       type="email"
-                      name="user_email"
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
                       placeholder="john@example.com"
+                      disabled={isLoading}
                     />
                   </div>
                   <div className="space-y-1">
                     <label className="text-xs font-medium">Mobile</label>
                     <input
                       type="tel"
-                      name="user_mob"
                       required
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
                       placeholder="+91 9876543210"
+                      disabled={isLoading}
                     />
                   </div>
-                </div>
-
-                {/* Country & State */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1">
-                    <label className="text-xs font-medium">Country</label>
-                    <input
-                      type="text"
-                      name="country"
-                      required
-                      value={formData.country}
-                      onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
-                      placeholder="India"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-xs font-medium">State</label>
-                    <input
-                      type="text"
-                      name="state"
-                      required
-                      value={formData.state}
-                      onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
-                      placeholder="Tamil Nadu"
-                    />
-                  </div>
-                </div>
-
-                {/* Address */}
-                <div className="space-y-1">
-                  <label className="text-xs font-medium">Full Address</label>
-                  <input
-                    type="text"
-                    name="address"
-                    required
-                    value={formData.address}
-                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
-                    placeholder="123 Main Street, City"
-                  />
-                </div>
-
-                {/* Pincode */}
-                <div className="space-y-1">
-                  <label className="text-xs font-medium">Pincode</label>
-                  <input
-                    type="text"
-                    name="pincode"
-                    required
-                    pattern="[0-9]{6}"
-                    value={formData.pincode}
-                    onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
-                    className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
-                    placeholder="627001"
-                  />
                 </div>
 
                 {/* Password & Confirm Password */}
@@ -300,12 +309,12 @@ const Register = () => {
                     <div className="relative">
                       <input
                         type={showPassword ? "text" : "password"}
-                        name="user_password"
                         required
                         value={formData.password}
                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                         className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all pr-10 text-sm"
                         placeholder="••••••••"
+                        disabled={isLoading}
                       />
                       <button
                         type="button"
@@ -321,12 +330,12 @@ const Register = () => {
                     <div className="relative">
                       <input
                         type={showConfirmPassword ? "text" : "password"}
-                        name="confirm_password"
                         required
                         value={formData.confirmPassword}
                         onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                         className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all pr-10 text-sm"
                         placeholder="••••••••"
+                        disabled={isLoading}
                       />
                       <button
                         type="button"
@@ -343,30 +352,48 @@ const Register = () => {
                 <div className="flex items-start gap-2">
                   <input
                     type="checkbox"
-                    name="terms"
                     id="terms"
                     required
                     checked={formData.terms}
                     onChange={(e) => setFormData({ ...formData, terms: e.target.checked })}
                     className="mt-0.5 w-4 h-4 rounded border-border text-accent focus:ring-accent"
+                    disabled={isLoading}
                   />
-                  <label htmlFor="terms" className="text-xs text-muted-foreground leading-relaxed">
+                  <label htmlFor="terms" className="text-xs text-muted-foreground">
                     I agree to the{" "}
-                    <Link to="/terms" className="text-accent hover:underline">Terms</Link>
+                    <Link to="/terms" className="text-accent hover:underline">Terms of Service</Link>
                     {" "}and{" "}
                     <Link to="/privacy" className="text-accent hover:underline">Privacy Policy</Link>
                   </label>
                 </div>
 
-                <Button type="submit" name="register_btn" variant="hero" size="lg" className="w-full bg-gradient-to-r from-accent to-teal-dark hover:from-accent/90 hover:to-teal-dark/90">
-                  Create Account
-                  <ArrowRight className="w-5 h-5" />
+                <Button type="submit" variant="teal" size="lg" className="w-full" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Creating Account...
+                    </>
+                  ) : (
+                    <>
+                      Create Account
+                      <ArrowRight className="w-5 h-5" />
+                    </>
+                  )}
                 </Button>
 
-                <p className="text-center text-sm text-muted-foreground">
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-border/50" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-card px-2 text-muted-foreground">or</span>
+                  </div>
+                </div>
+
+                <p className="text-center text-muted-foreground text-sm">
                   Already have an account?{" "}
                   <Link to="/login" className="text-accent font-semibold hover:underline">
-                    Log in
+                    Login
                   </Link>
                 </p>
               </form>
@@ -374,7 +401,7 @@ const Register = () => {
           </div>
 
           {/* Back to Home */}
-          <p className="text-center text-xs text-muted-foreground mt-4">
+          <p className="text-center text-sm text-muted-foreground mt-4">
             <Link to="/" className="hover:text-accent transition-colors">
               ← Back to Home
             </Link>

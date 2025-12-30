@@ -3,6 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/hooks/useAuth";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -28,24 +30,69 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/registration-success" element={<RegistrationSuccess />} />
-          <Route path="/payment" element={<PaymentGateway />} />
-          <Route path="/user-home" element={<UserHome />} />
-          <Route path="/dashboard/affiliate" element={<AffiliateDashboard />} />
-          <Route path="/dashboard/courses" element={<UserCourses />} />
-          <Route path="/dashboard/learners" element={<LearnersPage />} />
-          <Route path="/dashboard/income/:type" element={<IncomeReportPage />} />
-          <Route path="/dashboard/wallet" element={<WalletPage />} />
-          <Route path="/dashboard/leaderboard" element={<LeaderboardPage />} />
-          <Route path="/dashboard/tasks" element={<TasksPage />} />
-          <Route path="/dashboard/profile" element={<ProfilePage />} />
-          <Route path="/admin" element={<AdminPanel />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/registration-success" element={<RegistrationSuccess />} />
+            <Route path="/payment" element={<PaymentGateway />} />
+            
+            {/* Protected Routes */}
+            <Route path="/user-home" element={
+              <ProtectedRoute>
+                <UserHome />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/affiliate" element={
+              <ProtectedRoute>
+                <AffiliateDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/courses" element={
+              <ProtectedRoute>
+                <UserCourses />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/learners" element={
+              <ProtectedRoute>
+                <LearnersPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/income/:type" element={
+              <ProtectedRoute>
+                <IncomeReportPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/wallet" element={
+              <ProtectedRoute>
+                <WalletPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/leaderboard" element={
+              <ProtectedRoute>
+                <LeaderboardPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/tasks" element={
+              <ProtectedRoute>
+                <TasksPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/profile" element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            } />
+            
+            {/* Admin Routes */}
+            <Route path="/admin" element={<AdminPanel />} />
+            
+            {/* 404 */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

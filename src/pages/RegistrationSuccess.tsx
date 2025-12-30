@@ -22,19 +22,17 @@ const RegistrationSuccess = () => {
   const { toast } = useToast();
   const location = useLocation();
   
-  // Get data from navigation state or use defaults
-  const userData: UserData = location.state?.userData || {
-    name: "John Doe",
-    agentId: "3T123456",
-    password: "••••••••",
-    email: "john@example.com",
-    phone: "+91 9876543210",
-    sponsorId: "3T000001",
-    country: "India",
-    state: "Maharashtra",
-    address: "123 Main Street, Mumbai",
-    pincode: "400001",
-    plan: "Gold",
+  // Get data from navigation state
+  const stateData = location.state?.userData;
+  
+  const userData: UserData = {
+    name: stateData?.name || "New User",
+    agentId: "Check your email", // Will be the user's referral code after verification
+    password: "Your chosen password",
+    email: stateData?.email || "your@email.com",
+    phone: stateData?.phone || "",
+    sponsorId: stateData?.sponsorId,
+    plan: stateData?.plan,
   };
 
   const copyToClipboard = (text: string, label: string) => {
