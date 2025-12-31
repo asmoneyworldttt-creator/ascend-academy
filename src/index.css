@@ -16,51 +16,56 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 25% 12%;
 
-    /* Primary - Rich Gold/Amber from logo */
-    --primary: 43 96% 46%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary - Sophisticated Warm Gold (softer, refined) */
+    --primary: 42 78% 52%;
+    --primary-foreground: 30 25% 12%;
 
-    /* Secondary - Soft Slate */
-    --secondary: 220 15% 92%;
-    --secondary-foreground: 220 25% 20%;
+    /* Secondary - Elegant Slate */
+    --secondary: 220 18% 90%;
+    --secondary-foreground: 220 25% 18%;
 
-    /* Accent - Teal/Cyan from logo */
-    --accent: 177 70% 38%;
+    /* Accent - Royal Teal */
+    --accent: 175 65% 42%;
     --accent-foreground: 0 0% 100%;
 
-    /* Electric Blue */
-    --electric: 195 100% 45%;
-    --electric-glow: 195 100% 55%;
+    /* Electric Blue - Premium */
+    --electric: 210 85% 52%;
+    --electric-glow: 210 90% 60%;
+
+    /* Royal Purple for premium accents */
+    --royal: 265 70% 55%;
+    --royal-light: 265 80% 65%;
+    --royal-dark: 265 60% 45%;
 
     /* Muted */
-    --muted: 220 15% 94%;
-    --muted-foreground: 220 15% 45%;
+    --muted: 220 18% 93%;
+    --muted-foreground: 220 12% 48%;
 
     /* Destructive */
-    --destructive: 0 70% 50%;
+    --destructive: 0 65% 50%;
     --destructive-foreground: 0 0% 100%;
 
     /* Border & Input */
-    --border: 220 15% 88%;
-    --input: 220 15% 88%;
-    --ring: 43 96% 46%;
+    --border: 220 18% 86%;
+    --input: 220 18% 86%;
+    --ring: 42 78% 52%;
 
     --radius: 0.75rem;
 
-    /* Extended Design Tokens */
-    --gold: 43 96% 46%;
-    --gold-light: 45 100% 60%;
-    --gold-dark: 38 90% 38%;
+    /* Extended Design Tokens - Refined */
+    --gold: 42 78% 52%;
+    --gold-light: 44 85% 62%;
+    --gold-dark: 38 75% 42%;
     
-    --teal: 177 70% 38%;
-    --teal-light: 175 80% 50%;
-    --teal-dark: 180 60% 30%;
+    --teal: 175 65% 42%;
+    --teal-light: 172 70% 52%;
+    --teal-dark: 178 55% 32%;
     
-    --emerald: 145 70% 40%;
-    --emerald-light: 142 75% 50%;
+    --emerald: 152 65% 42%;
+    --emerald-light: 150 70% 52%;
     
-    --navy: 220 50% 25%;
-    --slate: 220 25% 50%;
+    --navy: 225 45% 22%;
+    --slate: 220 22% 48%;
 
     /* Glassmorphism - Light */
     --glass: 0 0% 100% / 0.7;
@@ -109,42 +114,47 @@
     --popover: 220 35% 8%;
     --popover-foreground: 45 20% 97%;
 
-    --primary: 43 96% 56%;
-    --primary-foreground: 220 25% 10%;
+    --primary: 42 80% 58%;
+    --primary-foreground: 30 25% 8%;
 
-    --secondary: 220 30% 15%;
-    --secondary-foreground: 45 20% 97%;
+    --secondary: 225 28% 14%;
+    --secondary-foreground: 40 18% 96%;
 
-    --accent: 177 70% 50%;
+    --accent: 175 68% 48%;
     --accent-foreground: 220 40% 4%;
 
-    --electric: 195 100% 50%;
-    --electric-glow: 195 100% 60%;
+    --electric: 210 88% 55%;
+    --electric-glow: 210 92% 65%;
 
-    --muted: 220 25% 12%;
-    --muted-foreground: 220 15% 55%;
+    /* Royal Purple for premium accents */
+    --royal: 265 72% 60%;
+    --royal-light: 265 82% 70%;
+    --royal-dark: 265 62% 50%;
 
-    --destructive: 0 70% 50%;
+    --muted: 225 22% 11%;
+    --muted-foreground: 220 12% 58%;
+
+    --destructive: 0 68% 52%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 25% 15%;
-    --input: 220 25% 15%;
-    --ring: 43 96% 56%;
+    --border: 225 22% 14%;
+    --input: 225 22% 14%;
+    --ring: 42 80% 58%;
 
     /* Extended Design Tokens - Dark */
-    --gold: 43 96% 56%;
-    --gold-light: 45 100% 70%;
-    --gold-dark: 38 90% 45%;
+    --gold: 42 80% 58%;
+    --gold-light: 44 88% 68%;
+    --gold-dark: 38 72% 48%;
     
-    --teal: 177 70% 45%;
-    --teal-light: 175 80% 60%;
-    --teal-dark: 180 60% 35%;
+    --teal: 175 68% 48%;
+    --teal-light: 172 75% 58%;
+    --teal-dark: 178 58% 38%;
     
-    --emerald: 145 70% 45%;
-    --emerald-light: 142 75% 55%;
+    --emerald: 152 68% 48%;
+    --emerald-light: 150 75% 58%;
     
-    --navy: 220 50% 12%;
-    --slate: 220 25% 35%;
+    --navy: 225 48% 10%;
+    --slate: 220 22% 38%;
 
     --glass: 220 30% 8% / 0.85;
     --glass-border: 0 0% 100% / 0.08;
