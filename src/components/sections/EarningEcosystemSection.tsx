@@ -38,13 +38,13 @@ const EarningEcosystemSection = () => {
 
   return (
     <section className="py-16 lg:py-24 relative overflow-hidden">
-      {/* Royal Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 dark:from-background dark:via-muted/30 dark:to-background" />
+      {/* Royal Gradient Background - Better light mode contrast */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800 dark:from-background dark:via-muted/30 dark:to-background" />
       <div className="absolute inset-0 bg-mesh-gradient opacity-40" />
       
       {/* Decorative Elements - Smaller */}
-      <div className="absolute top-1/4 left-[5%] w-64 h-64 rounded-full bg-primary/10 blur-[100px]" />
-      <div className="absolute bottom-1/4 right-[5%] w-56 h-56 rounded-full bg-accent/10 blur-[80px]" />
+      <div className="absolute top-1/4 left-[5%] w-64 h-64 rounded-full bg-primary/15 blur-[100px]" />
+      <div className="absolute bottom-1/4 right-[5%] w-56 h-56 rounded-full bg-accent/15 blur-[80px]" />
 
       <div className="container relative mx-auto px-4">
         {/* Section Header */}

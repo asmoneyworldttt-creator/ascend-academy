@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { Eye, EyeOff, ArrowRight, CheckCircle, Sparkles, GraduationCap, Wallet, Users, Crown, Star, Gem, Trophy, Check, Loader2 } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, CheckCircle, Sparkles, GraduationCap, Wallet, Users, Crown, Star, Gem, Trophy, Check, Loader2, ChevronDown, Calendar, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { countries, getStatesByCountry } from "@/data/countries";
 import logo from "@/assets/logo.png";
 
 const planData: Record<string, { name: string; displayName: string; nickname: string; tagline: string; icon: React.ComponentType<any>; color: string; benefits: string[] }> = {
@@ -31,19 +32,36 @@ const Register = () => {
     name: "",
     email: "",
     phone: "",
+    country: "",
+    state: "",
+    address: "",
+    pincode: "",
+    dob: "",
     password: "",
     confirmPassword: "",
     terms: false,
   });
 
-  // If already logged in, redirect using useEffect
-  React.useEffect(() => {
+  const [availableStates, setAvailableStates] = useState<string[]>([]);
+
+  // Update states when country changes
+  useEffect(() => {
+    if (formData.country) {
+      const states = getStatesByCountry(formData.country);
+      setAvailableStates(states);
+      setFormData(prev => ({ ...prev, state: "" }));
+    } else {
+      setAvailableStates([]);
+    }
+  }, [formData.country]);
+
+  // If already logged in, redirect
+  useEffect(() => {
     if (user) {
       navigate("/user-home", { replace: true });
     }
   }, [user, navigate]);
 
-  // Show nothing while redirecting
   if (user) {
     return null;
   }
@@ -51,7 +69,6 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validation
     if (formData.password !== formData.confirmPassword) {
       toast({
         title: "Password Mismatch",
@@ -90,7 +107,6 @@ const Register = () => {
     if (error) {
       let errorMessage = error.message;
       
-      // Handle specific error cases
       if (error.message.includes("already registered")) {
         errorMessage = "This email is already registered. Please login instead.";
       }
@@ -109,7 +125,6 @@ const Register = () => {
       description: "Your account has been created. Redirecting...",
     });
 
-    // Navigate to success page with user data
     navigate("/registration-success", {
       state: {
         userData: {
@@ -117,6 +132,11 @@ const Register = () => {
           email: formData.email,
           phone: formData.phone,
           sponsorId: formData.sponsorId,
+          country: formData.country,
+          state: formData.state,
+          address: formData.address,
+          pincode: formData.pincode,
+          dob: formData.dob,
           plan: selectedPlanName,
         }
       }
@@ -131,9 +151,9 @@ const Register = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-background">
       {/* Left Side - Premium Branding */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-background overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         {/* Animated Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-background to-primary/5" />
         <div className="absolute top-32 left-16 w-80 h-80 rounded-full bg-gradient-to-br from-accent/20 to-accent/5 blur-3xl animate-pulse" />
@@ -159,7 +179,6 @@ const Register = () => {
             <img src={logo} alt="Skill Learners" className="relative h-20 w-auto drop-shadow-[0_0_20px_rgba(20,184,166,0.5)]" />
           </Link>
           
-          {/* Selected Plan Summary */}
           {selectedPlan ? (
             <div className="mb-8">
               <div className="glass-card p-6 rounded-2xl border-2 border-accent/30 bg-accent/5 neon-border">
@@ -241,11 +260,6 @@ const Register = () => {
                   <p className="text-xs text-accent">Selected Plan</p>
                   <p className="font-bold">{selectedPlan.name}</p>
                 </div>
-                <div className="flex flex-wrap gap-1">
-                  {selectedPlan.benefits.slice(0, 2).map((b, i) => (
-                    <span key={i} className="text-xs px-2 py-0.5 bg-muted rounded-full">{b}</span>
-                  ))}
-                </div>
               </div>
             </div>
           )}
@@ -276,7 +290,7 @@ const Register = () => {
 
                 {/* Name */}
                 <div className="space-y-1">
-                  <label className="text-xs font-medium">Full Name</label>
+                  <label className="text-xs font-medium">Full Name <span className="text-destructive">*</span></label>
                   <input
                     type="text"
                     required
@@ -291,7 +305,7 @@ const Register = () => {
                 {/* Email & Phone */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label className="text-xs font-medium">Email</label>
+                    <label className="text-xs font-medium">Email <span className="text-destructive">*</span></label>
                     <input
                       type="email"
                       required
@@ -303,7 +317,7 @@ const Register = () => {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs font-medium">Mobile</label>
+                    <label className="text-xs font-medium">Mobile <span className="text-destructive">*</span></label>
                     <input
                       type="tel"
                       required
@@ -316,10 +330,101 @@ const Register = () => {
                   </div>
                 </div>
 
+                {/* Date of Birth */}
+                <div className="space-y-1">
+                  <label className="text-xs font-medium flex items-center gap-1">
+                    <Calendar className="w-3 h-3" />
+                    Date of Birth <span className="text-destructive">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    value={formData.dob}
+                    onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+                    className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
+                    disabled={isLoading}
+                  />
+                </div>
+
+                {/* Country & State - Smart Dropdowns */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium flex items-center gap-1">
+                      <MapPin className="w-3 h-3" />
+                      Country <span className="text-destructive">*</span>
+                    </label>
+                    <div className="relative">
+                      <select
+                        required
+                        value={formData.country}
+                        onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                        className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm appearance-none cursor-pointer"
+                        disabled={isLoading}
+                      >
+                        <option value="">Select Country</option>
+                        {countries.map((country) => (
+                          <option key={country.code} value={country.name}>
+                            {country.name}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium">State <span className="text-destructive">*</span></label>
+                    <div className="relative">
+                      <select
+                        required
+                        value={formData.state}
+                        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                        className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm appearance-none cursor-pointer disabled:opacity-50"
+                        disabled={isLoading || !formData.country}
+                      >
+                        <option value="">{formData.country ? "Select State" : "Select Country first"}</option>
+                        {availableStates.map((state) => (
+                          <option key={state} value={state}>
+                            {state}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Address */}
+                <div className="space-y-1">
+                  <label className="text-xs font-medium">Full Address <span className="text-destructive">*</span></label>
+                  <textarea
+                    required
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm resize-none"
+                    placeholder="Enter your full address"
+                    rows={2}
+                    disabled={isLoading}
+                  />
+                </div>
+
+                {/* Pincode */}
+                <div className="space-y-1">
+                  <label className="text-xs font-medium">Pincode / ZIP Code <span className="text-destructive">*</span></label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.pincode}
+                    onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
+                    className="w-full px-3 py-2.5 rounded-lg bg-card/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all text-sm"
+                    placeholder="Enter pincode"
+                    disabled={isLoading}
+                  />
+                </div>
+
                 {/* Password & Confirm Password */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label className="text-xs font-medium">Password</label>
+                    <label className="text-xs font-medium">Password <span className="text-destructive">*</span></label>
                     <div className="relative">
                       <input
                         type={showPassword ? "text" : "password"}
@@ -340,7 +445,7 @@ const Register = () => {
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs font-medium">Confirm Password</label>
+                    <label className="text-xs font-medium">Confirm Password <span className="text-destructive">*</span></label>
                     <div className="relative">
                       <input
                         type={showConfirmPassword ? "text" : "password"}
@@ -375,13 +480,14 @@ const Register = () => {
                   />
                   <label htmlFor="terms" className="text-xs text-muted-foreground">
                     I agree to the{" "}
-                    <Link to="/terms" className="text-accent hover:underline">Terms of Service</Link>
+                    <Link to="/terms" className="text-accent hover:underline">Terms & Conditions</Link>
                     {" "}and{" "}
                     <Link to="/privacy" className="text-accent hover:underline">Privacy Policy</Link>
                   </label>
                 </div>
 
-                <Button type="submit" variant="teal" size="lg" className="w-full" disabled={isLoading}>
+                {/* Submit Button */}
+                <Button type="submit" variant="hero" size="lg" className="w-full" disabled={isLoading}>
                   {isLoading ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
@@ -395,19 +501,11 @@ const Register = () => {
                   )}
                 </Button>
 
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-border/50" />
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-card px-2 text-muted-foreground">or</span>
-                  </div>
-                </div>
-
-                <p className="text-center text-muted-foreground text-sm">
+                {/* Login Link */}
+                <p className="text-center text-sm text-muted-foreground">
                   Already have an account?{" "}
                   <Link to="/login" className="text-accent font-semibold hover:underline">
-                    Login
+                    Login here
                   </Link>
                 </p>
               </form>
