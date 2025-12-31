@@ -21,13 +21,19 @@ import {
   Sparkles,
   ShoppingCart,
   Lock,
-  LogOut
+  LogOut,
+  Menu,
+  X,
+  Home,
+  Settings
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import logo from "@/assets/logo.png";
 import DailyWelcomePopup from "@/components/DailyWelcomePopup";
+import PaymentReminderBar from "@/components/PaymentReminderBar";
+import PaymentReminderPopup from "@/components/PaymentReminderPopup";
 import { packages } from "@/data/packages";
 
 // Ads data
@@ -44,17 +50,29 @@ const announcements = [
 ];
 
 const planIcons: Record<string, React.ComponentType<{ className?: string }>> = {
-  "Creator Pack": Star,
-  "Social Media Mastery": Sparkles,
-  "Business & Commerce": Crown,
-  "Digital Marketing Pro": Gem,
-  "Financial Trading Expert": Trophy,
+  "IGNITE": Star,
+  "VELOCITY": Sparkles,
+  "APEX": Crown,
+  "ZENITH": Gem,
+  "PINNACLE": Trophy,
 };
+
+const navItems = [
+  { icon: Home, label: "Home", href: "/user-home" },
+  { icon: User, label: "Profile", href: "/dashboard/profile" },
+  { icon: Wallet, label: "Wallet", href: "/dashboard/affiliate" },
+  { icon: BookOpen, label: "Courses", href: "/dashboard/courses" },
+  { icon: Users, label: "Referrals", href: "/dashboard/referrals" },
+  { icon: Settings, label: "Settings", href: "/dashboard/settings" },
+];
 
 const UserHome = () => {
   const [currentAd, setCurrentAd] = useState(0);
   const [adProgress, setAdProgress] = useState(0);
   const [showWelcome, setShowWelcome] = useState(true);
+  const [showReminderBar, setShowReminderBar] = useState(true);
+  const [showPaymentPopup, setShowPaymentPopup] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { user, profile, signOut } = useAuth();
@@ -71,6 +89,17 @@ const UserHome = () => {
     { icon: BookOpen, label: "My Courses", href: "/dashboard/courses", color: "from-purple-500 to-purple-600", desc: "Continue learning", locked: false },
     { icon: ShoppingCart, label: "Available Courses", href: "/dashboard/courses", color: "from-emerald to-emerald-light", desc: "Explore plans", locked: false },
   ];
+
+  // Show payment popup on first login if not purchased
+  useEffect(() => {
+    if (!hasPurchased && purchasedPlan) {
+      const hasSeenPopup = sessionStorage.getItem('hasSeenPaymentPopup');
+      if (!hasSeenPopup) {
+        setShowPaymentPopup(true);
+        sessionStorage.setItem('hasSeenPaymentPopup', 'true');
+      }
+    }
+  }, [hasPurchased, purchasedPlan]);
 
   useEffect(() => {
     const currentAdData = adsData[currentAd];
@@ -105,24 +134,105 @@ const UserHome = () => {
     navigate("/");
   };
 
-  const purchasedCourses = packages.filter(p => p.name === purchasedPlan);
   const availableCourses = packages.filter(p => p.name !== purchasedPlan);
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Payment Reminder Bar */}
+      {!hasPurchased && purchasedPlan && showReminderBar && (
+        <PaymentReminderBar 
+          planName={purchasedPlan} 
+          onClose={() => setShowReminderBar(false)} 
+        />
+      )}
+
+      {/* Payment Reminder Popup */}
+      {showPaymentPopup && !hasPurchased && purchasedPlan && (
+        <PaymentReminderPopup 
+          planName={purchasedPlan} 
+          onClose={() => setShowPaymentPopup(false)} 
+        />
+      )}
+
+      {/* Welcome Popup */}
       {showWelcome && (
         <DailyWelcomePopup userName={userName.split(" ")[0]} onClose={() => setShowWelcome(false)} />
       )}
 
-      <header className="bg-card/80 backdrop-blur-xl border-b border-border sticky top-0 z-50">
+      {/* Mobile Drawer Menu */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-[55] lg:hidden">
+          <div 
+            className="absolute inset-0 bg-background/80 backdrop-blur-sm"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          <div className="absolute left-0 top-0 bottom-0 w-72 bg-card border-r border-border animate-slide-in-right shadow-elevated">
+            <div className="p-4 border-b border-border">
+              <div className="flex items-center justify-between mb-4">
+                <img src={logo} alt="Skill Learners" className="h-10 w-auto" />
+                <button 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 rounded-full hover:bg-muted transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-gradient-gold flex items-center justify-center shadow-lg">
+                  <span className="text-xl font-bold text-primary-foreground">{userName.charAt(0).toUpperCase()}</span>
+                </div>
+                <div>
+                  <p className="font-semibold">{userName}</p>
+                  <p className="text-sm text-muted-foreground">{referralCode || "New User"}</p>
+                </div>
+              </div>
+            </div>
+            
+            <nav className="p-4 space-y-1">
+              {navItems.map((item) => (
+                <Link
+                  key={item.label}
+                  to={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted transition-colors"
+                >
+                  <item.icon className="w-5 h-5 text-muted-foreground" />
+                  <span>{item.label}</span>
+                </Link>
+              ))}
+            </nav>
+
+            <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border">
+              <button
+                onClick={handleSignOut}
+                className="flex items-center gap-3 p-3 rounded-xl hover:bg-destructive/10 text-destructive transition-colors w-full"
+              >
+                <LogOut className="w-5 h-5" />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <header className={`bg-card/80 backdrop-blur-xl border-b border-border sticky z-50 ${!hasPurchased && purchasedPlan && showReminderBar ? 'top-10' : 'top-0'}`}>
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <Link to="/"><img src={logo} alt="Skill Learners" className="h-12 w-auto drop-shadow-[0_0_10px_rgba(251,191,36,0.3)]" /></Link>
+          <div className="flex items-center gap-3">
+            {/* Mobile menu button */}
+            <button 
+              onClick={() => setMobileMenuOpen(true)}
+              className="lg:hidden p-2 rounded-lg hover:bg-muted transition-colors"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            <Link to="/"><img src={logo} alt="Skill Learners" className="h-10 lg:h-12 w-auto drop-shadow-[0_0_10px_rgba(251,191,36,0.3)]" /></Link>
+          </div>
           <div className="flex items-center gap-3">
             <button className="relative p-2 rounded-full hover:bg-muted transition-colors">
               <Bell className="w-5 h-5" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
             </button>
-            <button onClick={handleSignOut} className="p-2 rounded-full hover:bg-muted transition-colors" title="Sign Out">
+            <button onClick={handleSignOut} className="p-2 rounded-full hover:bg-muted transition-colors hidden sm:flex" title="Sign Out">
               <LogOut className="w-5 h-5" />
             </button>
             <Link to="/dashboard/profile" className="flex items-center gap-3 p-2 rounded-xl hover:bg-muted transition-colors">
@@ -166,7 +276,7 @@ const UserHome = () => {
             <div className="flex items-center gap-4 w-full lg:w-auto">
               <div className="text-center p-4 bg-card/50 rounded-2xl border border-border/50 flex-1 lg:flex-initial">
                 <p className="text-xs text-muted-foreground">Current Plan</p>
-                <p className="text-xl font-bold text-gradient-gold">{purchasedPlan || "Free"}</p>
+                <p className="text-xl font-bold text-gradient-gold font-tier">{purchasedPlan || "Free"}</p>
               </div>
               <Button variant="hero" onClick={() => navigate("/dashboard/courses")} className="flex-1 lg:flex-initial">
                 Continue Learning<ArrowRight className="w-4 h-4" />
@@ -181,7 +291,7 @@ const UserHome = () => {
               {adsData[currentAd].type === "video" ? (
                 <video src={adsData[currentAd].src} autoPlay muted loop className="absolute inset-0 w-full h-full object-cover" />
               ) : (
-                <img src={adsData[currentAd].src} alt="Advertisement" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img src={adsData[currentAd].src} alt="Advertisement" loading="lazy" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-4">
@@ -243,7 +353,7 @@ const UserHome = () => {
                   <div className="flex items-start gap-4">
                     <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${course.color} flex items-center justify-center shadow-lg`}><Icon className="w-6 h-6 text-white" /></div>
                     <div className="flex-1">
-                      <h3 className="font-bold text-sm mb-1">{course.name}</h3>
+                      <h3 className="font-bold font-tier text-sm mb-1">{course.name}</h3>
                       <p className="text-xs text-muted-foreground mb-3">{course.shortDesc}</p>
                       <Button variant="outline" size="sm" className="w-full" onClick={() => navigate("/payment")}><ShoppingCart className="w-4 h-4 mr-1" />₹{course.price}</Button>
                     </div>
@@ -259,4 +369,3 @@ const UserHome = () => {
 };
 
 export default UserHome;
-

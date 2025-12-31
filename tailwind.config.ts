@@ -73,7 +73,6 @@ export default {
         },
         navy: "hsl(var(--navy))",
         slate: "hsl(var(--slate))",
-        slate: "hsl(var(--slate))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -101,7 +100,6 @@ export default {
         "glow-teal": "var(--shadow-glow-teal)",
         "glow-electric": "var(--shadow-glow-electric)",
         "glow-neon": "var(--shadow-glow-neon)",
-      },
       },
       keyframes: {
         "accordion-down": {
