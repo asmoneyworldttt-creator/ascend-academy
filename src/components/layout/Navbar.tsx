@@ -15,7 +15,7 @@ const navLinks = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true); // Default to dark
   const location = useLocation();
 
   useEffect(() => {
@@ -28,9 +28,14 @@ const Navbar = () => {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
+    // Dark mode by default, only switch to light if explicitly saved
+    if (savedTheme === "light") {
+      document.documentElement.classList.remove("dark");
+      setIsDark(false);
+    } else {
       document.documentElement.classList.add("dark");
       setIsDark(true);
+      if (!savedTheme) localStorage.setItem("theme", "dark");
     }
   }, []);
 
