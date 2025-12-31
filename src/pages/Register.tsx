@@ -6,12 +6,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/logo.png";
 
-const planData: Record<string, { name: string; icon: React.ComponentType<any>; color: string; benefits: string[] }> = {
-  Starter: { name: "Starter", icon: Star, color: "from-slate to-secondary", benefits: ["5 Beginner Courses", "Email Support", "Mobile & Web Access", "Course Certificate"] },
-  Silver: { name: "Silver", icon: Sparkles, color: "from-zinc-400 to-zinc-600", benefits: ["10+ Basic Courses", "Priority Support", "Live Q&A Sessions", "Resource Downloads"] },
-  Gold: { name: "Gold", icon: Crown, color: "from-primary to-gold-dark", benefits: ["All Courses Unlocked", "24/7 Support", "1-on-1 Mentorship", "Income Training"] },
-  Diamond: { name: "Diamond", icon: Gem, color: "from-accent to-teal-dark", benefits: ["Everything in Gold", "Career Mentorship", "Job Placement", "VIP Access"] },
-  Platinum: { name: "Platinum", icon: Trophy, color: "from-secondary to-navy", benefits: ["Everything in Diamond", "Lifetime VIP", "Revenue Share", "Direct Mentor Access"] },
+const planData: Record<string, { name: string; displayName: string; tagline: string; icon: React.ComponentType<any>; color: string; benefits: string[] }> = {
+  IGNITE: { name: "IGNITE", displayName: "Ignite", tagline: "Spark Your Journey", icon: Star, color: "from-rose-500 to-pink-600", benefits: ["100GB+ Editing Assets", "Video Templates", "Audio & SFX Library", "Commercial License"] },
+  VELOCITY: { name: "VELOCITY", displayName: "Velocity", tagline: "Accelerate Growth", icon: Sparkles, color: "from-blue-500 to-indigo-600", benefits: ["Social Media Courses", "YouTube Monetization", "Instagram Growth", "Content Templates"] },
+  APEX: { name: "APEX", displayName: "Apex", tagline: "Reach New Heights", icon: Crown, color: "from-emerald-500 to-green-600", benefits: ["Affiliate Marketing", "E-commerce Training", "Direct Selling", "Sales Funnels"] },
+  ZENITH: { name: "ZENITH", displayName: "Zenith", tagline: "Peak Performance", icon: Gem, color: "from-primary to-gold-dark", benefits: ["Digital Marketing Pro", "Facebook & Google Ads", "SEO Mastery", "Lead Generation"] },
+  PINNACLE: { name: "PINNACLE", displayName: "Pinnacle", tagline: "Ultimate Mastery", icon: Trophy, color: "from-purple-600 to-violet-700", benefits: ["Financial Trading", "Crypto Basics", "Live Sessions", "Trading Signals"] },
 };
 
 const Register = () => {
@@ -21,6 +21,7 @@ const Register = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const selectedPlanName = searchParams.get("plan");
+  const selectedCourse = searchParams.get("course");
   const selectedPlan = selectedPlanName ? planData[selectedPlanName] : null;
   const { signUp, user } = useAuth();
   const { toast } = useToast();
@@ -155,17 +156,24 @@ const Register = () => {
           {/* Selected Plan Summary */}
           {selectedPlan ? (
             <div className="mb-8">
-              <div className="glass-card p-6 rounded-2xl border-2 border-accent/30 bg-accent/5">
+              <div className="glass-card p-6 rounded-2xl border-2 border-accent/30 bg-accent/5 neon-border">
                 <div className="flex items-center gap-4 mb-4">
                   <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${selectedPlan.color} flex items-center justify-center shadow-lg`}>
                     <selectedPlan.icon className="w-7 h-7 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm text-accent font-medium">Thank you for choosing</p>
-                    <h3 className="text-2xl font-bold font-display">{selectedPlan.name} Plan</h3>
+                    <p className="text-sm text-accent font-medium">You are starting your journey with</p>
+                    <h3 className="text-2xl font-bold font-tier tracking-wider">{selectedPlan.name}</h3>
+                    <p className="text-xs text-muted-foreground">{selectedPlan.tagline}</p>
                   </div>
                 </div>
-                <p className="text-muted-foreground text-sm mb-4">Here's what you'll get:</p>
+                {selectedCourse && (
+                  <div className="mb-4 p-3 bg-primary/10 rounded-xl border border-primary/20">
+                    <p className="text-xs text-primary font-medium">🎯 Your Selected Interest</p>
+                    <p className="text-sm font-medium">{selectedCourse}</p>
+                  </div>
+                )}
+                <p className="text-muted-foreground text-sm mb-4">Here's what you'll unlock:</p>
                 <ul className="space-y-2">
                   {selectedPlan.benefits.map((benefit, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm">

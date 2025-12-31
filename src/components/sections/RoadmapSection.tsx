@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ShoppingCart, Bitcoin, Briefcase, Video, CheckCircle, X, Flag, Sparkles } from "lucide-react";
+import { ShoppingCart, Bitcoin, Briefcase, Video, CheckCircle, X, Flag, Sparkles, Trophy } from "lucide-react";
 
 const milestones = [
   {
@@ -78,7 +78,7 @@ const RoadmapSection = () => {
   return (
     <section className="py-20 lg:py-32 relative overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-muted/30 via-background to-muted/30" />
+      <div className="absolute inset-0 bg-gradient-to-b from-muted/20 via-background to-muted/20" />
       <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-10 w-80 h-80 bg-emerald/5 rounded-full blur-3xl" />
 
@@ -99,11 +99,11 @@ const RoadmapSection = () => {
 
         {/* Roadmap Visual */}
         <div className="relative max-w-5xl mx-auto">
-          {/* SVG Road Path - Desktop Only */}
+          {/* SVG Road Path - Desktop Only - Fixed for widescreen */}
           <svg 
             className="hidden lg:block absolute inset-0 w-full h-full pointer-events-none" 
-            viewBox="0 0 1000 800"
-            preserveAspectRatio="none"
+            viewBox="0 0 1000 900"
+            preserveAspectRatio="xMidYMid meet"
             style={{ zIndex: 0 }}
           >
             <defs>
@@ -122,6 +122,7 @@ const RoadmapSection = () => {
               </filter>
             </defs>
 
+            {/* Background path */}
             <path
               d="M 150 80 
                  C 300 80, 400 120, 500 150
@@ -129,7 +130,9 @@ const RoadmapSection = () => {
                  C 900 350, 700 380, 500 400
                  C 300 420, 200 450, 150 520
                  C 100 600, 300 650, 500 680
-                 C 700 700, 850 720, 850 780"
+                 C 700 710, 850 730, 850 800
+                 L 850 850
+                 L 500 850"
               stroke="url(#roadGradient)"
               strokeWidth="40"
               fill="none"
@@ -138,6 +141,7 @@ const RoadmapSection = () => {
               opacity="0.3"
             />
             
+            {/* Animated dashed line */}
             <path
               d="M 150 80 
                  C 300 80, 400 120, 500 150
@@ -145,7 +149,9 @@ const RoadmapSection = () => {
                  C 900 350, 700 380, 500 400
                  C 300 420, 200 450, 150 520
                  C 100 600, 300 650, 500 680
-                 C 700 700, 850 720, 850 780"
+                 C 700 710, 850 730, 850 800
+                 L 850 850
+                 L 500 850"
               stroke="url(#roadGradient)"
               strokeWidth="4"
               fill="none"
@@ -310,27 +316,32 @@ const RoadmapSection = () => {
             })}
           </div>
 
-          {/* Finish Line - Financial Freedom */}
-          <div className="relative mt-12 lg:mt-16 flex flex-col items-center">
-            <div className="hidden lg:block absolute -top-16 left-1/2 w-1 h-16 bg-gradient-to-b from-accent to-emerald rounded-full" />
+          {/* Finish Line - Financial Freedom - Properly aligned */}
+          <div className="relative mt-12 lg:mt-20 flex flex-col items-center">
+            {/* Connecting line from path to finish */}
+            <div className="hidden lg:block absolute -top-20 left-1/2 -translate-x-1/2 w-1 h-20 bg-gradient-to-b from-accent to-emerald rounded-full" />
             
             <div className="relative">
-              <div className="absolute inset-0 rounded-full bg-emerald/30 blur-2xl animate-pulse" style={{ transform: 'scale(2)' }} />
+              {/* Large glow effect */}
+              <div className="absolute inset-0 rounded-full bg-emerald/30 blur-3xl animate-pulse" style={{ transform: 'scale(2.5)' }} />
               
-              <div className="relative w-20 h-20 lg:w-28 lg:h-28 rounded-full bg-gradient-to-br from-emerald to-emerald-light flex items-center justify-center shadow-2xl"
-                   style={{ boxShadow: '0 12px 48px rgba(34, 197, 94, 0.5)' }}>
-                <CheckCircle className="w-10 h-10 lg:w-14 lg:h-14 text-white" />
+              {/* Trophy/Success icon */}
+              <div className="relative w-24 h-24 lg:w-32 lg:h-32 rounded-full bg-gradient-to-br from-emerald to-emerald-light flex items-center justify-center shadow-2xl"
+                   style={{ boxShadow: '0 16px 64px rgba(34, 197, 94, 0.5)' }}>
+                <Trophy className="w-12 h-12 lg:w-16 lg:h-16 text-white" />
               </div>
               
-              <Sparkles className="absolute -top-2 -left-2 w-5 h-5 lg:w-6 lg:h-6 text-primary animate-pulse" />
-              <Sparkles className="absolute -top-1 -right-3 w-4 h-4 lg:w-5 lg:h-5 text-accent animate-pulse" style={{ animationDelay: '0.5s' }} />
-              <Sparkles className="absolute -bottom-1 left-0 w-3 h-3 lg:w-4 lg:h-4 text-emerald animate-pulse" style={{ animationDelay: '1s' }} />
+              {/* Floating sparkles */}
+              <Sparkles className="absolute -top-3 -left-3 w-6 h-6 lg:w-8 lg:h-8 text-primary animate-pulse" />
+              <Sparkles className="absolute -top-2 -right-4 w-5 h-5 lg:w-6 lg:h-6 text-accent animate-pulse" style={{ animationDelay: '0.5s' }} />
+              <Sparkles className="absolute -bottom-2 left-0 w-4 h-4 lg:w-5 lg:h-5 text-emerald animate-pulse" style={{ animationDelay: '1s' }} />
+              <Sparkles className="absolute bottom-4 -right-2 w-5 h-5 lg:w-6 lg:h-6 text-primary animate-pulse" style={{ animationDelay: '0.7s' }} />
             </div>
             
-            <h3 className="text-xl lg:text-3xl font-bold font-display text-center mt-6">
+            <h3 className="text-2xl lg:text-4xl font-bold font-display text-center mt-8">
               <span className="text-gradient-gold">Financial Freedom</span> Achieved! 🎉
             </h3>
-            <p className="text-muted-foreground text-center mt-2 max-w-md text-sm lg:text-base px-4">
+            <p className="text-muted-foreground text-center mt-3 max-w-lg text-sm lg:text-base px-4">
               You've mastered the skills to earn ₹1 Lakh+ per month and build lasting wealth
             </p>
           </div>

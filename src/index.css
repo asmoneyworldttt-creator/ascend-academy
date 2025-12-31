@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,39 +6,43 @@
 
 @layer base {
   :root {
-    /* Premium Ed-Tech Color Palette - Gold/Teal/Green inspired by logo */
-    --background: 45 20% 97%;
-    --foreground: 220 25% 15%;
+    /* Premium Futuristic Ed-Tech Color Palette */
+    --background: 220 40% 6%;
+    --foreground: 45 20% 97%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 25% 15%;
+    --card: 220 35% 10%;
+    --card-foreground: 45 20% 97%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 15%;
+    --popover: 220 35% 10%;
+    --popover-foreground: 45 20% 97%;
 
     /* Primary - Rich Gold/Amber from logo */
     --primary: 43 96% 56%;
     --primary-foreground: 220 25% 10%;
 
     /* Secondary - Deep Slate/Navy */
-    --secondary: 220 30% 25%;
+    --secondary: 220 30% 18%;
     --secondary-foreground: 45 20% 97%;
 
     /* Accent - Teal/Cyan from logo */
     --accent: 177 70% 45%;
-    --accent-foreground: 0 0% 100%;
+    --accent-foreground: 220 40% 6%;
+
+    /* Electric Blue - New futuristic accent */
+    --electric: 195 100% 50%;
+    --electric-glow: 195 100% 60%;
 
     /* Muted */
-    --muted: 220 15% 94%;
-    --muted-foreground: 220 15% 45%;
+    --muted: 220 25% 15%;
+    --muted-foreground: 220 15% 60%;
 
     /* Destructive */
-    --destructive: 0 84% 60%;
+    --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
 
     /* Border & Input */
-    --border: 220 15% 88%;
-    --input: 220 15% 88%;
+    --border: 220 25% 18%;
+    --input: 220 25% 18%;
     --ring: 43 96% 56%;
 
     --radius: 0.75rem;
@@ -55,78 +59,35 @@
     --emerald: 145 70% 45%;
     --emerald-light: 142 75% 55%;
     
-    --navy: 220 50% 18%;
+    --navy: 220 50% 12%;
     --slate: 220 25% 35%;
 
-    /* Glassmorphism */
-    --glass: 0 0% 100% / 0.7;
-    --glass-border: 0 0% 100% / 0.3;
-    --glass-blur: 20px;
-
-    /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(45 30% 97%) 0%, hsl(200 25% 96%) 50%, hsl(45 35% 95%) 100%);
-    --gradient-gold: linear-gradient(135deg, hsl(43 96% 56%) 0%, hsl(38 90% 50%) 100%);
-    --gradient-teal: linear-gradient(135deg, hsl(177 70% 45%) 0%, hsl(180 60% 35%) 100%);
-    --gradient-premium: linear-gradient(135deg, hsl(220 50% 18%) 0%, hsl(220 40% 25%) 100%);
-    --gradient-mesh: radial-gradient(ellipse at 20% 20%, hsl(43 96% 56% / 0.15) 0%, transparent 50%), 
-                     radial-gradient(ellipse at 80% 80%, hsl(177 70% 45% / 0.1) 0%, transparent 50%),
-                     radial-gradient(ellipse at 50% 50%, hsl(145 70% 45% / 0.08) 0%, transparent 60%);
-
-    /* Shadows */
-    --shadow-soft: 0 4px 30px hsl(220 25% 15% / 0.08);
-    --shadow-glow-gold: 0 0 40px hsl(43 96% 56% / 0.3);
-    --shadow-glow-teal: 0 0 40px hsl(177 70% 45% / 0.25);
-    --shadow-elevated: 0 20px 60px hsl(220 25% 15% / 0.12);
-    --shadow-card: 0 8px 32px hsl(220 25% 15% / 0.1);
-
-    /* Sidebar */
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 220 25% 25%;
-    --sidebar-primary: 43 96% 56%;
-    --sidebar-primary-foreground: 220 25% 10%;
-    --sidebar-accent: 177 70% 45%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 220 15% 90%;
-    --sidebar-ring: 43 96% 56%;
-  }
-
-  .dark {
-    --background: 220 35% 8%;
-    --foreground: 45 20% 97%;
-
-    --card: 220 30% 12%;
-    --card-foreground: 45 20% 97%;
-
-    --popover: 220 30% 12%;
-    --popover-foreground: 45 20% 97%;
-
-    --primary: 43 96% 56%;
-    --primary-foreground: 220 25% 10%;
-
-    --secondary: 220 25% 20%;
-    --secondary-foreground: 45 20% 95%;
-
-    --accent: 177 70% 50%;
-    --accent-foreground: 220 35% 8%;
-
-    --muted: 220 25% 15%;
-    --muted-foreground: 220 15% 60%;
-
-    --destructive: 0 70% 50%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 220 25% 18%;
-    --input: 220 25% 18%;
-    --ring: 43 96% 56%;
-
+    /* Glassmorphism - Enhanced */
     --glass: 220 30% 12% / 0.8;
     --glass-border: 0 0% 100% / 0.1;
+    --glass-blur: 20px;
 
-    --gradient-hero: linear-gradient(135deg, hsl(220 35% 8%) 0%, hsl(220 40% 12%) 50%, hsl(220 35% 10%) 100%);
+    /* Gradients - Futuristic */
+    --gradient-hero: linear-gradient(135deg, hsl(220 40% 6%) 0%, hsl(220 45% 10%) 50%, hsl(220 40% 8%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(43 96% 56%) 0%, hsl(38 90% 50%) 100%);
+    --gradient-teal: linear-gradient(135deg, hsl(177 70% 45%) 0%, hsl(180 60% 35%) 100%);
+    --gradient-electric: linear-gradient(135deg, hsl(195 100% 50%) 0%, hsl(177 70% 45%) 100%);
+    --gradient-premium: linear-gradient(135deg, hsl(220 50% 12%) 0%, hsl(220 40% 18%) 100%);
     --gradient-mesh: radial-gradient(ellipse at 20% 20%, hsl(43 96% 56% / 0.1) 0%, transparent 50%), 
                      radial-gradient(ellipse at 80% 80%, hsl(177 70% 45% / 0.08) 0%, transparent 50%),
-                     radial-gradient(ellipse at 50% 50%, hsl(145 70% 45% / 0.05) 0%, transparent 60%);
+                     radial-gradient(ellipse at 50% 50%, hsl(195 100% 50% / 0.05) 0%, transparent 60%);
+    --gradient-neon: linear-gradient(135deg, hsl(177 70% 45%) 0%, hsl(195 100% 50%) 50%, hsl(145 70% 45%) 100%);
 
+    /* Shadows - Enhanced glow effects */
+    --shadow-soft: 0 4px 30px hsl(220 25% 5% / 0.3);
+    --shadow-glow-gold: 0 0 40px hsl(43 96% 56% / 0.4);
+    --shadow-glow-teal: 0 0 40px hsl(177 70% 45% / 0.35);
+    --shadow-glow-electric: 0 0 50px hsl(195 100% 50% / 0.4);
+    --shadow-glow-neon: 0 0 30px hsl(177 70% 45% / 0.5), 0 0 60px hsl(195 100% 50% / 0.3);
+    --shadow-elevated: 0 20px 60px hsl(220 25% 5% / 0.4);
+    --shadow-card: 0 8px 32px hsl(220 25% 5% / 0.3);
+
+    /* Sidebar */
     --sidebar-background: 220 35% 10%;
     --sidebar-foreground: 45 20% 95%;
     --sidebar-primary: 43 96% 56%;
@@ -134,6 +95,54 @@
     --sidebar-accent: 177 70% 50%;
     --sidebar-accent-foreground: 220 35% 8%;
     --sidebar-border: 220 25% 15%;
+    --sidebar-ring: 43 96% 56%;
+  }
+
+  .dark {
+    /* Dark mode inherits root since we're already dark by default */
+    --background: 220 40% 4%;
+    --foreground: 45 20% 97%;
+
+    --card: 220 35% 8%;
+    --card-foreground: 45 20% 97%;
+
+    --popover: 220 35% 8%;
+    --popover-foreground: 45 20% 97%;
+
+    --primary: 43 96% 56%;
+    --primary-foreground: 220 25% 10%;
+
+    --secondary: 220 30% 15%;
+    --secondary-foreground: 45 20% 97%;
+
+    --accent: 177 70% 50%;
+    --accent-foreground: 220 40% 4%;
+
+    --muted: 220 25% 12%;
+    --muted-foreground: 220 15% 55%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 25% 15%;
+    --input: 220 25% 15%;
+    --ring: 43 96% 56%;
+
+    --glass: 220 30% 8% / 0.85;
+    --glass-border: 0 0% 100% / 0.08;
+
+    --gradient-hero: linear-gradient(135deg, hsl(220 40% 4%) 0%, hsl(220 45% 8%) 50%, hsl(220 40% 6%) 100%);
+    --gradient-mesh: radial-gradient(ellipse at 20% 20%, hsl(43 96% 56% / 0.08) 0%, transparent 50%), 
+                     radial-gradient(ellipse at 80% 80%, hsl(177 70% 45% / 0.06) 0%, transparent 50%),
+                     radial-gradient(ellipse at 50% 50%, hsl(195 100% 50% / 0.04) 0%, transparent 60%);
+
+    --sidebar-background: 220 40% 6%;
+    --sidebar-foreground: 45 20% 95%;
+    --sidebar-primary: 43 96% 56%;
+    --sidebar-primary-foreground: 220 25% 10%;
+    --sidebar-accent: 177 70% 50%;
+    --sidebar-accent-foreground: 220 40% 4%;
+    --sidebar-border: 220 25% 12%;
     --sidebar-ring: 43 96% 56%;
   }
 }
@@ -153,8 +162,14 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Montserrat', 'Space Grotesk', sans-serif;
     @apply font-bold tracking-tight;
+  }
+
+  /* Tier names use Rajdhani for futuristic look */
+  .font-tier {
+    font-family: 'Rajdhani', 'Montserrat', sans-serif;
+    @apply font-bold uppercase tracking-wider;
   }
 }
 
@@ -193,6 +208,14 @@
     background: var(--gradient-premium);
   }
 
+  .bg-gradient-electric {
+    background: var(--gradient-electric);
+  }
+
+  .bg-gradient-neon {
+    background: var(--gradient-neon);
+  }
+
   /* Glow effects */
   .glow-gold {
     box-shadow: var(--shadow-glow-gold);
@@ -200,6 +223,93 @@
 
   .glow-teal {
     box-shadow: var(--shadow-glow-teal);
+  }
+
+  .glow-electric {
+    box-shadow: var(--shadow-glow-electric);
+  }
+
+  .glow-neon {
+    box-shadow: var(--shadow-glow-neon);
+  }
+
+  /* Neon border animation */
+  .neon-border {
+    position: relative;
+    z-index: 1;
+  }
+
+  .neon-border::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    padding: 2px;
+    background: var(--gradient-neon);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: neon-pulse 2s ease-in-out infinite;
+    z-index: -1;
+  }
+
+  @keyframes neon-pulse {
+    0%, 100% {
+      opacity: 0.8;
+      filter: blur(0px);
+    }
+    50% {
+      opacity: 1;
+      filter: blur(2px);
+    }
+  }
+
+  /* Glassmorphism card - enhanced */
+  .glass-card-premium {
+    @apply bg-card/60 backdrop-blur-2xl border border-border/30 rounded-2xl;
+    box-shadow: var(--shadow-card), inset 0 1px 0 0 hsl(0 0% 100% / 0.05);
+  }
+
+  /* Hover lift animation */
+  .hover-lift {
+    @apply transition-all duration-300;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-elevated);
+  }
+
+  /* Micro bounce on hover */
+  .micro-bounce {
+    @apply transition-transform duration-200;
+  }
+
+  .micro-bounce:hover {
+    animation: micro-bounce 0.3s ease;
+  }
+
+  @keyframes micro-bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  /* Parallax layers */
+  .parallax-container {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .parallax-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .parallax-element {
+    will-change: transform;
+    transition: transform 0.1s ease-out;
   }
 
   /* Floating animation for coins */
