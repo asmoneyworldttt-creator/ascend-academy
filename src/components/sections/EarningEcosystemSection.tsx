@@ -1,220 +1,163 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Zap, Target, Users, TrendingUp, Crown, Gem, Shield, BadgeCheck } from "lucide-react";
+import { ArrowRight, Zap, Target, Users, TrendingUp, Crown, Shield, BookOpen, Briefcase, Coins, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const EarningEcosystemSection = () => {
   const benefits = [
     {
-      icon: Zap,
-      title: "Learn & Earn",
-      subtitle: "Simultaneously",
-      description: "Start generating income while you're still learning. Apply skills in real-time projects.",
+      icon: BookOpen,
+      title: "Skill Development",
+      description: "Master in-demand skills like digital marketing, trading, content creation, and e-commerce that enable freelancing success.",
       color: "from-amber-400 to-yellow-500",
-      glowColor: "#f59e0b",
     },
     {
-      icon: Target,
-      title: "Multiple",
-      subtitle: "Income Streams",
-      description: "Unlock 7+ revenue channels through freelancing, affiliate programs, and digital products.",
+      icon: Briefcase,
+      title: "Working Income",
+      description: "Apply your skills immediately to earn active income through freelancing, client projects, and digital services.",
       color: "from-violet-500 to-purple-600",
-      glowColor: "#8b5cf6",
     },
     {
       icon: Users,
-      title: "Referral",
-      subtitle: "Rewards",
-      description: "Earn 10-30% commission by sharing knowledge and inviting others to join.",
+      title: "Referral Rewards",
+      description: "Earn 10-30% commission when you help others join and succeed. Share knowledge, grow together.",
       color: "from-emerald-400 to-teal-500",
-      glowColor: "#10b981",
     },
     {
-      icon: TrendingUp,
-      title: "Passive",
-      subtitle: "Income",
-      description: "Build systems that generate income even when you're not actively working.",
+      icon: Coins,
+      title: "Passive Income",
+      description: "Revenue sharing based on seniority and company sales volume. Earn even when not actively working.",
       color: "from-blue-500 to-indigo-600",
-      glowColor: "#3b82f6",
     },
   ];
 
   const stats = [
     { value: "1000+", label: "Active Students" },
-    { value: "₹5L+", label: "Total Payouts" },
     { value: "7", label: "Income Streams" },
     { value: "24/7", label: "Support" },
   ];
 
   return (
-    <section className="py-28 lg:py-40 relative overflow-hidden">
+    <section className="py-16 lg:py-24 relative overflow-hidden">
       {/* Royal Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 dark:from-background dark:via-muted/30 dark:to-background" />
-      <div className="absolute inset-0 bg-mesh-gradient opacity-50" />
+      <div className="absolute inset-0 bg-mesh-gradient opacity-40" />
       
-      {/* Decorative Royal Orbs */}
-      <div className="absolute top-1/4 left-[5%] w-96 h-96 rounded-full bg-primary/10 blur-[150px]" />
-      <div className="absolute bottom-1/4 right-[5%] w-80 h-80 rounded-full bg-accent/10 blur-[120px]" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[200px]" />
-
-      {/* Crown Decorative Element */}
-      <div className="absolute top-20 right-[15%] opacity-10">
-        <Crown className="w-40 h-40 text-primary" />
-      </div>
-      <div className="absolute bottom-20 left-[10%] opacity-10">
-        <Gem className="w-32 h-32 text-accent" />
-      </div>
+      {/* Decorative Elements - Smaller */}
+      <div className="absolute top-1/4 left-[5%] w-64 h-64 rounded-full bg-primary/10 blur-[100px]" />
+      <div className="absolute bottom-1/4 right-[5%] w-56 h-56 rounded-full bg-accent/10 blur-[80px]" />
 
       <div className="container relative mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary/15 rounded-full border border-primary/30 mb-8 backdrop-blur-sm">
-            <Crown className="w-5 h-5 text-primary" />
-            <span className="text-sm font-bold text-primary tracking-wider uppercase">Premium Ecosystem</span>
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/15 rounded-full border border-primary/30 mb-6 backdrop-blur-sm">
+            <Crown className="w-4 h-4 text-primary" />
+            <span className="text-xs font-bold text-primary tracking-wider uppercase">Premium Ecosystem</span>
           </div>
           
-          <h2 className="text-4xl lg:text-6xl xl:text-7xl font-bold font-display mb-6 text-white dark:text-foreground leading-tight">
+          <h2 className="text-3xl lg:text-5xl font-bold font-display mb-4 text-white dark:text-foreground leading-tight">
             The <span className="text-gradient-gold">Earning</span> Ecosystem
           </h2>
           
-          <p className="text-lg lg:text-xl text-white/70 dark:text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            At Skill Learners, education is an investment that pays dividends. 
-            Our unique ecosystem allows you to start earning while you're still learning.
+          <p className="text-base lg:text-lg text-white/70 dark:text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            We sell premium online courses to help you develop high-value skills for freelancing and multiple income streams. 
+            Plus, bonus earning opportunities to maximize your returns.
           </p>
         </div>
 
-        {/* Stats Bar */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-20">
+        {/* Stats Bar - Compact */}
+        <div className="grid grid-cols-3 gap-3 mb-12 max-w-xl mx-auto">
           {stats.map((stat, index) => (
             <div 
               key={stat.label}
-              className="text-center p-6 rounded-2xl bg-white/5 dark:bg-card/50 border border-white/10 dark:border-border/30 backdrop-blur-xl"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="text-center p-4 rounded-xl bg-white/5 dark:bg-card/50 border border-white/10 dark:border-border/30 backdrop-blur-lg"
             >
-              <div className="text-3xl lg:text-4xl font-bold font-display text-gradient-gold mb-2">
+              <div className="text-2xl lg:text-3xl font-bold font-display text-gradient-gold mb-1">
                 {stat.value}
               </div>
-              <p className="text-sm text-white/60 dark:text-muted-foreground font-medium">
+              <p className="text-xs text-white/60 dark:text-muted-foreground font-medium">
                 {stat.label}
               </p>
             </div>
           ))}
         </div>
 
-        {/* Benefits Bento Grid */}
-        <div className="grid lg:grid-cols-12 gap-6 mb-20">
-          {/* Large Feature Card */}
-          <div className="lg:col-span-7 glass-card-premium p-8 lg:p-10 rounded-3xl bg-white/5 dark:bg-card/60 border border-white/10 dark:border-border/30 group hover:-translate-y-2 transition-all duration-500">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center shadow-xl relative">
-                <div className="absolute inset-0 rounded-2xl blur-xl opacity-50 bg-gradient-to-br from-amber-400 to-yellow-500" />
-                <Zap className="w-8 h-8 text-white relative z-10" />
-              </div>
-              <div>
-                <h3 className="text-2xl lg:text-3xl font-bold font-display text-white dark:text-foreground">
-                  {benefits[0].title}
-                </h3>
-                <p className="text-lg text-primary font-semibold">{benefits[0].subtitle}</p>
-              </div>
-            </div>
-            <p className="text-white/70 dark:text-muted-foreground text-lg leading-relaxed mb-6">
-              {benefits[0].description}
-            </p>
-            <div className="flex items-center gap-2 text-primary">
-              <BadgeCheck className="w-5 h-5" />
-              <span className="text-sm font-semibold">Start earning from day one</span>
-            </div>
-          </div>
-
-          {/* Right Stack */}
-          <div className="lg:col-span-5 flex flex-col gap-6">
-            {benefits.slice(1, 3).map((benefit, index) => {
-              const Icon = benefit.icon;
-              return (
-                <div 
-                  key={benefit.title}
-                  className="flex-1 glass-card-premium p-6 rounded-2xl bg-white/5 dark:bg-card/60 border border-white/10 dark:border-border/30 group hover:-translate-y-1 transition-all duration-500"
-                >
-                  <div className="flex items-start gap-4">
-                    <div 
-                      className={`w-14 h-14 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center shadow-lg relative flex-shrink-0`}
-                    >
-                      <div className={`absolute inset-0 rounded-xl blur-lg opacity-40 bg-gradient-to-br ${benefit.color}`} />
-                      <Icon className="w-7 h-7 text-white relative z-10" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold font-display text-white dark:text-foreground mb-1">
-                        {benefit.title} <span className="text-primary">{benefit.subtitle}</span>
-                      </h3>
-                      <p className="text-sm text-white/60 dark:text-muted-foreground leading-relaxed">
-                        {benefit.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Bottom Full Width */}
-          <div className="lg:col-span-12 glass-card-premium p-8 rounded-3xl bg-white/5 dark:bg-card/60 border border-white/10 dark:border-border/30 group hover:-translate-y-1 transition-all duration-500">
-            <div className="flex flex-col lg:flex-row items-center gap-8">
+        {/* Benefits Grid - Compact */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+          {benefits.map((benefit) => {
+            const Icon = benefit.icon;
+            return (
               <div 
-                className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${benefits[3].color} flex items-center justify-center shadow-xl relative flex-shrink-0`}
+                key={benefit.title}
+                className="p-5 rounded-xl bg-white/5 dark:bg-card/50 border border-white/10 dark:border-border/30 backdrop-blur-lg group hover:-translate-y-1 transition-all duration-300"
               >
-                <div className={`absolute inset-0 rounded-2xl blur-xl opacity-50 bg-gradient-to-br ${benefits[3].color}`} />
-                <TrendingUp className="w-10 h-10 text-white relative z-10" />
-              </div>
-              <div className="text-center lg:text-left flex-1">
-                <h3 className="text-2xl lg:text-3xl font-bold font-display text-white dark:text-foreground mb-2">
-                  {benefits[3].title} <span className="text-primary">{benefits[3].subtitle}</span>
+                <div 
+                  className={`w-12 h-12 mb-4 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center shadow-lg`}
+                >
+                  <Icon className="w-6 h-6 text-white" />
+                </div>
+                
+                <h3 className="text-lg font-bold font-display text-white dark:text-foreground mb-2">
+                  {benefit.title}
                 </h3>
-                <p className="text-white/70 dark:text-muted-foreground text-lg leading-relaxed max-w-2xl">
-                  {benefits[3].description}
+                <p className="text-sm text-white/60 dark:text-muted-foreground leading-relaxed">
+                  {benefit.description}
                 </p>
               </div>
-              <div className="flex-shrink-0">
-                <Link to="/register">
-                  <Button variant="hero" size="lg" className="group shadow-xl">
-                    Start Earning Now
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
+            );
+          })}
+        </div>
+
+        {/* Business Model Explanation */}
+        <div className="grid lg:grid-cols-2 gap-6 mb-12">
+          <div className="p-6 rounded-xl bg-white/5 dark:bg-card/50 border border-white/10 dark:border-border/30 backdrop-blur-lg">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center">
+                <Zap className="w-5 h-5 text-white" />
               </div>
+              <h4 className="text-lg font-bold text-white dark:text-foreground">Working Income</h4>
             </div>
+            <p className="text-sm text-white/70 dark:text-muted-foreground leading-relaxed">
+              Apply your newly learned skills to earn actively. Take on freelance projects, create digital products, 
+              or offer services. Your effort directly translates to income based on the skills you develop.
+            </p>
+          </div>
+
+          <div className="p-6 rounded-xl bg-white/5 dark:bg-card/50 border border-white/10 dark:border-border/30 backdrop-blur-lg">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 text-white" />
+              </div>
+              <h4 className="text-lg font-bold text-white dark:text-foreground">Passive Income</h4>
+            </div>
+            <p className="text-sm text-white/70 dark:text-muted-foreground leading-relaxed">
+              Based on your seniority and the company's overall sales performance, you receive revenue sharing. 
+              This is linked to the platform's growth—transparent and based on collective success.
+            </p>
           </div>
         </div>
 
-        {/* Future Ready Section */}
-        <div className="relative rounded-3xl overflow-hidden">
-          {/* Background */}
+        {/* Future Ready Section - Compact */}
+        <div className="relative rounded-2xl overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/10 to-primary/20" />
           <div className="absolute inset-0 backdrop-blur-xl" />
           
-          <div className="relative p-8 lg:p-12 border border-primary/20 rounded-3xl">
-            <div className="flex items-center justify-center gap-4 mb-8">
-              <Shield className="w-8 h-8 text-primary" />
-              <h3 className="text-2xl lg:text-4xl font-bold font-display text-white dark:text-foreground">
-                Future-Ready for the <span className="text-gradient-gold">AI Economy</span>
-              </h3>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-8 text-white/80 dark:text-foreground/80 text-lg">
-              <p className="leading-relaxed">
-                The world is rapidly evolving with AI, automation, and Web 3.0 technologies reshaping 
-                every industry. At Skill Learners, we're committed to preparing you for this future 
-                with constantly updated curriculum.
-              </p>
-              <p className="leading-relaxed">
-                From AI prompt engineering to blockchain basics, from e-commerce empires to viral 
-                digital marketing—we equip you with skills that remain relevant and profitable for 
-                decades to come.
-              </p>
-            </div>
-
-            <div className="mt-10 flex justify-center">
-              <Link to="/register">
-                <Button variant="hero" size="lg" className="group shadow-xl px-10">
-                  Join the Future
+          <div className="relative p-6 lg:p-8 border border-primary/20 rounded-2xl">
+            <div className="flex flex-col lg:flex-row items-center gap-6">
+              <div className="flex items-center gap-3">
+                <Shield className="w-8 h-8 text-primary" />
+                <div>
+                  <h3 className="text-xl lg:text-2xl font-bold font-display text-white dark:text-foreground">
+                    Future-Ready for the <span className="text-gradient-gold">AI Economy</span>
+                  </h3>
+                  <p className="text-sm text-white/70 dark:text-muted-foreground mt-1">
+                    Our curriculum evolves with industry trends—AI, Web3, automation, and beyond.
+                  </p>
+                </div>
+              </div>
+              
+              <Link to="/register" className="flex-shrink-0">
+                <Button variant="hero" size="lg" className="group shadow-lg">
+                  Start Your Journey
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
