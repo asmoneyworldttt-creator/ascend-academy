@@ -59,11 +59,9 @@ const planIcons: Record<string, React.ComponentType<{ className?: string }>> = {
 
 const navItems = [
   { icon: Home, label: "Home", href: "/user-home" },
+  { icon: BookOpen, label: "My Courses", href: "/dashboard/courses" },
+  { icon: Wallet, label: "Affiliate", href: "/dashboard/affiliate" },
   { icon: User, label: "Profile", href: "/dashboard/profile" },
-  { icon: Wallet, label: "Wallet", href: "/dashboard/affiliate" },
-  { icon: BookOpen, label: "Courses", href: "/dashboard/courses" },
-  { icon: Users, label: "Referrals", href: "/dashboard/referrals" },
-  { icon: Settings, label: "Settings", href: "/dashboard/settings" },
 ];
 
 const UserHome = () => {
@@ -137,7 +135,7 @@ const UserHome = () => {
   const availableCourses = packages.filter(p => p.name !== purchasedPlan);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       {/* Payment Reminder Bar */}
       {!hasPurchased && purchasedPlan && showReminderBar && (
         <PaymentReminderBar 

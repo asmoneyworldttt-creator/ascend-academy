@@ -68,10 +68,12 @@ const HeroSection = () => {
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Button variant="heroOutline" size="xl" className="w-full sm:w-auto group">
-                <Play className="w-5 h-5" />
-                Watch Demo
-              </Button>
+              <a href="https://youtube.com/@skilllearners" target="_blank" rel="noopener noreferrer">
+                <Button variant="heroOutline" size="xl" className="w-full sm:w-auto group">
+                  <Play className="w-5 h-5" />
+                  Watch Demo
+                </Button>
+              </a>
             </div>
             
             {/* Trust badges */}
