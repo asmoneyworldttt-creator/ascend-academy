@@ -26,7 +26,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-background relative overflow-x-hidden">
       {/* Parallax Background Elements */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         {/* Large gradient orbs */}

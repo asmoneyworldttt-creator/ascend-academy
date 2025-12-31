@@ -9,16 +9,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg hover:-translate-y-0.5",
+        default: "bg-primary text-foreground hover:bg-primary/90 shadow-md hover:shadow-lg hover:-translate-y-0.5",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-md",
-        outline: "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground",
+        outline: "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-foreground",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-md",
         ghost: "hover:bg-accent/10 hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        // Premium variants
-        hero: "bg-gradient-to-r from-primary to-gold-dark text-primary-foreground shadow-glow-gold hover:shadow-xl hover:-translate-y-1 font-bold",
-        heroOutline: "border-2 border-secondary bg-transparent text-secondary hover:bg-secondary hover:text-secondary-foreground",
-        teal: "bg-gradient-to-r from-teal to-teal-dark text-accent-foreground shadow-glow-teal hover:shadow-xl hover:-translate-y-0.5",
+        // Premium variants - Fixed yellow buttons with proper text contrast
+        hero: "bg-gradient-to-r from-primary via-gold to-gold-dark text-foreground shadow-glow-gold hover:shadow-xl hover:-translate-y-1 font-bold",
+        heroOutline: "border-2 border-foreground/70 bg-transparent text-foreground hover:bg-foreground/10 hover:border-foreground dark:border-foreground/50 dark:hover:border-foreground",
+        teal: "bg-gradient-to-r from-teal to-teal-dark text-white shadow-glow-teal hover:shadow-xl hover:-translate-y-0.5",
         glass: "bg-card/70 backdrop-blur-lg border border-border/50 text-foreground hover:bg-card/90 shadow-soft",
         premium: "bg-gradient-to-r from-secondary to-navy text-secondary-foreground shadow-elevated hover:-translate-y-1",
       },
