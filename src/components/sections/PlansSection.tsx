@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Check, Gift, Users, Layers, PieChart, CheckSquare, ArrowDownRight, Zap, Crown, Sparkles, Smartphone, BookOpen, ChevronDown, ChevronUp } from "lucide-react";
+import { Check, Gift, Users, Layers, PieChart, CheckSquare, ArrowDownRight, Zap, Crown, Sparkles, Smartphone, BookOpen, Star, TrendingUp, Shield, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { packages, incomeTypes, futureIncomeTypes } from "@/data/packages";
 
@@ -13,69 +13,100 @@ const PlansSection = () => {
 
   return (
     <section id="plans" className="py-20 lg:py-32 relative overflow-hidden">
-      {/* Background with parallax elements */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/20 to-background" />
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/30 to-background" />
       
-      {/* Decorative geometric shapes */}
+      {/* Decorative elements */}
       <div className="parallax-bg">
-        <div className="absolute top-20 left-[10%] w-32 h-32 border border-primary/20 rotate-45 parallax-element" />
-        <div className="absolute top-40 right-[15%] w-24 h-24 rounded-full bg-accent/5 blur-xl parallax-element" />
-        <div className="absolute bottom-32 left-[20%] w-40 h-40 rounded-full bg-primary/5 blur-2xl parallax-element" />
-        <div className="absolute top-1/2 right-[10%] w-20 h-20 border border-accent/10 rotate-12 parallax-element" />
+        <div className="absolute top-20 left-[5%] w-40 h-40 rounded-full bg-primary/5 blur-3xl" />
+        <div className="absolute top-1/3 right-[10%] w-60 h-60 rounded-full bg-accent/5 blur-3xl" />
+        <div className="absolute bottom-20 left-[15%] w-48 h-48 rounded-full bg-electric/5 blur-3xl" />
       </div>
 
       <div className="container relative mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-12 lg:mb-16">
-          <h2 className="text-3xl lg:text-5xl font-bold font-display mb-4">
-            Choose Your <span className="text-gradient-gold">Learning Path</span>
+        <div className="text-center mb-12 lg:mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20 mb-6">
+            <Sparkles className="w-4 h-4 text-primary" />
+            <span className="text-sm font-medium text-primary">Choose Your Path</span>
+          </div>
+          
+          <h2 className="text-3xl lg:text-5xl xl:text-6xl font-bold font-display mb-4">
+            Premium <span className="text-gradient-gold">Learning Tiers</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
-            Elevate your journey with our elite tier system. Higher tiers include all previous packages for FREE!
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
+            Unlock your potential with our expertly crafted packages. Each tier builds on the previous, giving you more value and skills.
           </p>
           
-          {/* Income Types Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full border border-primary/20">
-            <Gift className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium">Every tier unlocks 7 Income Streams!</span>
+          {/* Trust badges */}
+          <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <Shield className="w-4 h-4 text-emerald" />
+              <span>Lifetime Access</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Award className="w-4 h-4 text-primary" />
+              <span>7 Income Streams</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-accent" />
+              <span>1000+ Students</span>
+            </div>
           </div>
         </div>
 
-        {/* Plans Grid - Horizontal scroll on mobile */}
-        <div className="lg:hidden">
-          <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide px-2">
+        {/* Plans - Mobile Horizontal Scroll */}
+        <div className="lg:hidden mb-12">
+          <div className="flex gap-4 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide px-2 -mx-2">
             {packages.map((plan, index) => (
               <div key={plan.name} className="snap-center flex-shrink-0 w-[85%] sm:w-[48%]">
                 <PlanCard plan={plan} index={index} />
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-muted-foreground mt-2">
-            ← Swipe to see all tiers →
+          <p className="text-center text-sm text-muted-foreground">
+            ← Swipe to explore all tiers →
           </p>
         </div>
 
-        {/* Plans Grid - Desktop */}
-        <div className="hidden lg:grid lg:grid-cols-5 gap-5">
-          {packages.map((plan, index) => (
-            <PlanCard key={plan.name} plan={plan} index={index} />
-          ))}
+        {/* Plans - Desktop Masonry Grid */}
+        <div className="hidden lg:grid grid-cols-12 gap-6 items-start mb-16">
+          {/* First row - 3 cards */}
+          <div className="col-span-3">
+            <PlanCard plan={packages[0]} index={0} />
+          </div>
+          <div className="col-span-4">
+            <PlanCard plan={packages[1]} index={1} />
+          </div>
+          <div className="col-span-5">
+            <PlanCard plan={packages[2]} index={2} />
+          </div>
+          
+          {/* Second row - 2 cards (popular larger) */}
+          <div className="col-span-7">
+            <PlanCard plan={packages[3]} index={3} />
+          </div>
+          <div className="col-span-5">
+            <PlanCard plan={packages[4]} index={4} />
+          </div>
         </div>
 
         {/* Income Opportunities Section */}
-        <div className="mt-16 glass-card-premium p-6 lg:p-8 rounded-3xl border border-border/30">
-          <div className="text-center mb-6 lg:mb-8">
-            <h3 className="text-xl lg:text-2xl font-bold font-display mb-2">
-              <Sparkles className="w-5 h-5 inline mr-2 text-primary" />
-              7 Income Streams Unlocked
-              <Sparkles className="w-5 h-5 inline ml-2 text-primary" />
+        <div className="glass-card-premium p-6 lg:p-10 rounded-3xl border border-border/30">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald/10 rounded-full mb-4">
+              <Gift className="w-4 h-4 text-emerald" />
+              <span className="text-sm font-medium text-emerald">Included in Every Tier</span>
+            </div>
+            <h3 className="text-2xl lg:text-3xl font-bold font-display mb-2">
+              7 Ways to <span className="text-gradient-gold">Earn Income</span>
             </h3>
-            <p className="text-muted-foreground text-sm lg:text-base">
-              Click on any income type to learn more
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Every package unlocks multiple income streams. Build passive income while you learn.
             </p>
           </div>
           
-          {/* Income Types Grid - Interactive Accordion */}
+          {/* Income Types Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 lg:gap-4">
             {incomeTypes.map((income) => {
               const IconComponent = incomeIcons[income.icon];
@@ -85,60 +116,59 @@ const PlansSection = () => {
                 <button 
                   key={income.name}
                   onClick={() => setExpandedIncome(isExpanded ? null : income.name)}
-                  className={`text-center p-4 glass-card rounded-2xl transition-all duration-300 group relative ${
-                    income.upcoming ? 'opacity-70 border border-dashed border-primary/30' : 'hover:-translate-y-1'
-                  } ${isExpanded ? 'ring-2 ring-primary shadow-glow-gold' : ''}`}
-                >
-                  <div className={`w-10 h-10 mx-auto mb-2 rounded-xl ${
+                  className={`text-center p-4 rounded-2xl transition-all duration-300 group relative ${
                     income.upcoming 
-                      ? 'bg-gradient-to-br from-primary/20 to-gold-dark/20' 
-                      : 'bg-gradient-to-br from-primary to-gold-dark'
-                  } flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
-                    {IconComponent && <IconComponent className={`w-5 h-5 ${income.upcoming ? 'text-primary/50' : 'text-primary-foreground'}`} />}
+                      ? 'bg-muted/50 border border-dashed border-primary/30' 
+                      : 'bg-card hover:bg-card/80 border border-border/50 hover:-translate-y-1 hover:shadow-lg'
+                  } ${isExpanded ? 'ring-2 ring-primary shadow-lg' : ''}`}
+                >
+                  <div className={`w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center shadow-md transition-transform group-hover:scale-110 ${
+                    income.upcoming 
+                      ? 'bg-muted' 
+                      : 'bg-gradient-to-br from-primary to-primary/80'
+                  }`}>
+                    {IconComponent && <IconComponent className={`w-5 h-5 ${income.upcoming ? 'text-muted-foreground' : 'text-primary-foreground'}`} />}
                   </div>
-                  <h4 className="font-bold text-xs lg:text-sm leading-tight">{income.name}</h4>
-                  <p className="text-xs text-muted-foreground mt-1 hidden lg:block opacity-0 group-hover:opacity-100 transition-opacity">
+                  <h4 className="font-bold text-sm leading-tight mb-1">{income.name}</h4>
+                  <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
                     {income.description}
                   </p>
                   {income.upcoming && (
-                    <span className="inline-block mt-1 px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">Soon</span>
-                  )}
-                  
-                  {/* Expanded details */}
-                  {isExpanded && income.details && (
-                    <div className="absolute top-full left-0 right-0 mt-2 p-3 bg-card border border-border rounded-xl shadow-elevated z-10 text-left">
-                      <p className="text-xs text-foreground">{income.details}</p>
-                    </div>
+                    <span className="inline-block mt-2 px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">
+                      Coming Soon
+                    </span>
                   )}
                 </button>
               );
             })}
           </div>
 
-          {/* Future-Ready Earnings Section */}
+          {/* Future Earnings */}
           <div className="mt-8 p-6 bg-gradient-to-r from-electric/5 via-accent/5 to-electric/5 rounded-2xl border border-electric/20">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-electric flex items-center justify-center shadow-glow-electric">
-                <Zap className="w-5 h-5 text-background" />
+            <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-electric to-accent flex items-center justify-center shadow-lg">
+                  <Zap className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-bold font-display">Ecosystem Expansion</h4>
+                  <p className="text-xs text-muted-foreground">More ways to earn coming soon</p>
+                </div>
               </div>
-              <div>
-                <h4 className="font-bold font-display text-sm lg:text-base">Ecosystem Expansion</h4>
-                <p className="text-xs text-muted-foreground">Future-Ready Earning Methods</p>
-              </div>
-              <span className="ml-auto px-3 py-1 bg-electric/20 text-electric rounded-full text-xs font-bold animate-pulse">
+              <span className="px-3 py-1 bg-electric/20 text-electric rounded-full text-xs font-bold animate-pulse">
                 COMING SOON
               </span>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {futureIncomeTypes.map((income) => {
                 const IconComponent = incomeIcons[income.icon];
                 return (
                   <div 
                     key={income.name}
-                    className="flex items-center gap-3 p-3 bg-card/50 backdrop-blur-sm rounded-xl border border-border/30"
+                    className="flex items-center gap-3 p-4 bg-card/50 backdrop-blur-sm rounded-xl border border-border/30"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-muted/50 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
                       {IconComponent && <IconComponent className="w-5 h-5 text-muted-foreground" />}
                     </div>
                     <div>
@@ -150,83 +180,6 @@ const PlansSection = () => {
               })}
             </div>
           </div>
-          
-          <p className="text-center text-xs text-muted-foreground mt-6 opacity-70">
-            * More innovative income streams will be added as our ecosystem grows!
-          </p>
-        </div>
-
-        {/* Comparison Table - Desktop */}
-        <div className="mt-12 hidden lg:block">
-          <div className="glass-card-premium rounded-3xl p-6 overflow-hidden border border-border/30">
-            <h3 className="text-xl font-bold font-display text-center mb-6">Tier Comparison</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left py-3 px-4">What's Included</th>
-                    {packages.map(p => (
-                      <th key={p.name} className="text-center py-3 px-2">
-                        <span className={`text-xs px-2 py-1 rounded-full bg-gradient-to-br ${p.color} text-white font-tier`}>
-                          {p.name}
-                        </span>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-border/50">
-                    <td className="py-3 px-4">Editing Assets (100GB+)</td>
-                    {packages.map((p, i) => (
-                      <td key={p.name} className="text-center">
-                        <Check className="w-5 h-5 text-emerald mx-auto" />
-                      </td>
-                    ))}
-                  </tr>
-                  <tr className="border-b border-border/50">
-                    <td className="py-3 px-4">Social Media Courses</td>
-                    {packages.map((p, i) => (
-                      <td key={p.name} className="text-center">
-                        {i >= 1 ? <Check className="w-5 h-5 text-emerald mx-auto" /> : <span className="text-muted-foreground">-</span>}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr className="border-b border-border/50">
-                    <td className="py-3 px-4">Business & E-commerce</td>
-                    {packages.map((p, i) => (
-                      <td key={p.name} className="text-center">
-                        {i >= 2 ? <Check className="w-5 h-5 text-emerald mx-auto" /> : <span className="text-muted-foreground">-</span>}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr className="border-b border-border/50">
-                    <td className="py-3 px-4">Digital Marketing Pro</td>
-                    {packages.map((p, i) => (
-                      <td key={p.name} className="text-center">
-                        {i >= 3 ? <Check className="w-5 h-5 text-emerald mx-auto" /> : <span className="text-muted-foreground">-</span>}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr className="border-b border-border/50">
-                    <td className="py-3 px-4">Financial Trading</td>
-                    {packages.map((p, i) => (
-                      <td key={p.name} className="text-center">
-                        {i >= 4 ? <Check className="w-5 h-5 text-emerald mx-auto" /> : <span className="text-muted-foreground">-</span>}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td className="py-3 px-4 font-bold">7 Income Streams</td>
-                    {packages.map(p => (
-                      <td key={p.name} className="text-center">
-                        <Check className="w-5 h-5 text-emerald mx-auto" />
-                      </td>
-                    ))}
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -236,79 +189,105 @@ const PlansSection = () => {
 const PlanCard = ({ plan, index }: { plan: typeof packages[0]; index: number }) => {
   const Icon = plan.icon;
   const isPopular = plan.popular;
+  const [showAllFeatures, setShowAllFeatures] = useState(false);
+  
+  // Determine card height based on position
+  const getCardStyle = () => {
+    if (isPopular) return "min-h-[520px]";
+    if (index === 2) return "min-h-[480px]";
+    return "min-h-[440px]";
+  };
   
   return (
     <div
-      className={`relative rounded-3xl overflow-hidden transition-all duration-500 h-full flex flex-col ${
+      className={`relative rounded-3xl overflow-hidden transition-all duration-500 h-full flex flex-col group ${getCardStyle()} ${
         isPopular 
-          ? "neon-border glass-card-premium scale-[1.02] lg:scale-105 shadow-glow-gold" 
-          : "glass-card hover:-translate-y-2"
+          ? "neon-border bg-gradient-to-b from-card via-card to-primary/5 shadow-2xl" 
+          : "glass-card hover:-translate-y-2 hover:shadow-xl"
       }`}
-      style={{ 
-        animationDelay: `${index * 0.1}s`,
-      }}
     >
-      {/* Popular ribbon */}
+      {/* Popular badge */}
       {isPopular && (
-        <div className="absolute -right-12 top-6 rotate-45 px-12 py-1 bg-gradient-gold text-sm font-bold text-primary-foreground z-10">
-          BEST VALUE
+        <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-primary via-primary to-amber-400 text-primary-foreground text-center py-2 text-sm font-bold tracking-wide">
+          <Star className="w-4 h-4 inline mr-2" />
+          MOST POPULAR CHOICE
+          <Star className="w-4 h-4 inline ml-2" />
         </div>
       )}
 
-      <div className="p-5 flex flex-col flex-1">
+      <div className={`p-6 flex flex-col flex-1 ${isPopular ? 'pt-12' : ''}`}>
         {/* Header */}
-        <div className={`w-12 h-12 mb-3 rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center shadow-lg`}
-             style={{ boxShadow: `0 8px 24px ${plan.glowColor}40` }}>
-          <Icon className="w-6 h-6 text-white" />
+        <div className="flex items-start justify-between mb-4">
+          <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${plan.color} flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform`}
+               style={{ boxShadow: `0 8px 24px ${plan.glowColor}50` }}>
+            <Icon className="w-7 h-7 text-white" />
+          </div>
+          <span className="text-xs px-3 py-1 rounded-full bg-muted/80 text-muted-foreground font-medium">
+            {plan.level}
+          </span>
         </div>
 
-        <div className="flex items-center gap-2 mb-1">
-          <h3 className="text-lg font-tier tracking-wider" style={{ color: plan.glowColor }}>{plan.name}</h3>
+        {/* Name & Tagline */}
+        <div className="mb-4">
+          <div className="flex items-center gap-2 mb-1">
+            <h3 className="text-2xl font-tier tracking-wider" style={{ color: plan.glowColor }}>
+              {plan.name}
+            </h3>
+            <span className="text-xs px-2 py-0.5 rounded bg-muted text-muted-foreground">
+              {plan.nickname}
+            </span>
+          </div>
+          <p className="text-sm text-accent font-medium">{plan.tagline}</p>
         </div>
-        <p className="text-xs text-accent mb-1">{plan.tagline}</p>
-        <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground w-fit mb-2">
-          {plan.level}
-        </span>
 
-        <p className="text-xs text-muted-foreground mb-3 line-clamp-2">
+        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
           {plan.shortDesc}
         </p>
 
         {/* Pricing */}
-        <div className="mb-4">
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-display">₹{plan.price.toLocaleString()}</span>
+        <div className="mb-4 p-4 rounded-xl bg-muted/30 border border-border/50">
+          <div className="flex items-baseline gap-2 mb-1">
+            <span className="text-3xl font-bold font-display">₹{plan.price.toLocaleString()}</span>
             <span className="text-sm text-muted-foreground line-through">₹{plan.mrp.toLocaleString()}</span>
           </div>
-          <div className="mt-1 flex flex-wrap gap-1">
-            <span className="inline-block px-2 py-0.5 rounded bg-emerald/10 text-emerald text-xs font-medium">
-              Save {Math.round((1 - plan.price / plan.mrp) * 100)}%
+          <div className="flex items-center gap-2">
+            <span className="inline-block px-2 py-0.5 rounded bg-emerald/20 text-emerald text-xs font-bold">
+              SAVE {Math.round((1 - plan.price / plan.mrp) * 100)}%
             </span>
+            {plan.period === "lifetime" && (
+              <span className="text-xs text-muted-foreground">Lifetime Access</span>
+            )}
           </div>
         </div>
 
         {/* Included Packages */}
         {plan.includes.length > 0 && (
-          <div className="mb-3 p-2 bg-primary/5 rounded-xl border border-primary/20">
-            <p className="text-xs text-primary font-medium mb-1">✨ FREE: ₹{plan.savings.toLocaleString()}+ value</p>
-            <p className="text-xs text-muted-foreground line-clamp-2">
-              Includes: {plan.includes.join(", ")}
+          <div className="mb-4 p-3 bg-primary/5 rounded-xl border border-primary/20">
+            <div className="flex items-center gap-2 mb-1">
+              <Gift className="w-4 h-4 text-primary" />
+              <span className="text-xs text-primary font-bold">FREE BONUS: ₹{plan.savings.toLocaleString()}+ value</span>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Includes: {plan.includes.join(" + ")}
             </p>
           </div>
         )}
 
         {/* Features */}
-        <ul className="space-y-1.5 mb-4 flex-1">
-          {plan.features.slice(0, 4).map((feature) => (
-            <li key={feature} className="flex items-start gap-2 text-xs">
-              <Check className="w-3.5 h-3.5 text-emerald mt-0.5 flex-shrink-0" />
+        <ul className="space-y-2 mb-4 flex-1">
+          {plan.features.slice(0, showAllFeatures ? undefined : 5).map((feature) => (
+            <li key={feature} className="flex items-start gap-2 text-sm">
+              <Check className="w-4 h-4 text-emerald mt-0.5 flex-shrink-0" />
               <span className="text-foreground/80">{feature}</span>
             </li>
           ))}
-          {plan.features.length > 4 && (
-            <li className="text-xs text-muted-foreground pl-5">
-              +{plan.features.length - 4} more
-            </li>
+          {plan.features.length > 5 && !showAllFeatures && (
+            <button 
+              onClick={() => setShowAllFeatures(true)}
+              className="text-xs text-primary hover:text-primary/80 font-medium pl-6 transition-colors"
+            >
+              +{plan.features.length - 5} more features →
+            </button>
           )}
         </ul>
 
@@ -316,10 +295,9 @@ const PlanCard = ({ plan, index }: { plan: typeof packages[0]; index: number }) 
         <Link to={`/register?plan=${plan.name}`} className="block mt-auto">
           <Button
             variant={isPopular ? "hero" : "outline"}
-            className={`w-full micro-bounce ${isPopular ? 'shadow-glow-gold' : ''}`}
-            size="sm"
+            className={`w-full h-12 text-base font-semibold ${isPopular ? 'shadow-lg' : 'hover:bg-primary hover:text-primary-foreground'}`}
           >
-            Get Started
+            Get {plan.displayName}
           </Button>
         </Link>
       </div>

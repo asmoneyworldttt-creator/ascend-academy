@@ -6,12 +6,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/logo.png";
 
-const planData: Record<string, { name: string; displayName: string; tagline: string; icon: React.ComponentType<any>; color: string; benefits: string[] }> = {
-  IGNITE: { name: "IGNITE", displayName: "Ignite", tagline: "Spark Your Journey", icon: Star, color: "from-rose-500 to-pink-600", benefits: ["100GB+ Editing Assets", "Video Templates", "Audio & SFX Library", "Commercial License"] },
-  VELOCITY: { name: "VELOCITY", displayName: "Velocity", tagline: "Accelerate Growth", icon: Sparkles, color: "from-blue-500 to-indigo-600", benefits: ["Social Media Courses", "YouTube Monetization", "Instagram Growth", "Content Templates"] },
-  APEX: { name: "APEX", displayName: "Apex", tagline: "Reach New Heights", icon: Crown, color: "from-emerald-500 to-green-600", benefits: ["Affiliate Marketing", "E-commerce Training", "Direct Selling", "Sales Funnels"] },
-  ZENITH: { name: "ZENITH", displayName: "Zenith", tagline: "Peak Performance", icon: Gem, color: "from-primary to-gold-dark", benefits: ["Digital Marketing Pro", "Facebook & Google Ads", "SEO Mastery", "Lead Generation"] },
-  PINNACLE: { name: "PINNACLE", displayName: "Pinnacle", tagline: "Ultimate Mastery", icon: Trophy, color: "from-purple-600 to-violet-700", benefits: ["Financial Trading", "Crypto Basics", "Live Sessions", "Trading Signals"] },
+const planData: Record<string, { name: string; displayName: string; nickname: string; tagline: string; icon: React.ComponentType<any>; color: string; benefits: string[] }> = {
+  SPARK: { name: "SPARK", displayName: "Spark", nickname: "Pro-Lite", tagline: "Ignite Your Creative Fire", icon: Star, color: "from-orange-500 to-rose-600", benefits: ["100GB+ Editing Assets", "4K Video Templates", "Audio & SFX Library", "Commercial License"] },
+  MOMENTUM: { name: "MOMENTUM", displayName: "Momentum", nickname: "Grow-Fast", tagline: "Build Unstoppable Growth", icon: Sparkles, color: "from-cyan-500 to-blue-600", benefits: ["Social Media Courses", "YouTube Monetization", "Instagram Growth", "Content Templates"] },
+  SUMMIT: { name: "SUMMIT", displayName: "Summit", nickname: "Biz-Pro", tagline: "Conquer Every Market", icon: Crown, color: "from-emerald-500 to-teal-600", benefits: ["Affiliate Marketing", "E-commerce Training", "Direct Selling", "Sales Funnels"] },
+  TITAN: { name: "TITAN", displayName: "Titan", nickname: "Elite-Flow", tagline: "Dominate Digital Marketing", icon: Gem, color: "from-amber-500 to-yellow-500", benefits: ["Digital Marketing Pro", "Facebook & Google Ads", "SEO Mastery", "Lead Generation"] },
+  LEGACY: { name: "LEGACY", displayName: "Legacy", nickname: "Ultra-Max", tagline: "Build Generational Wealth", icon: Trophy, color: "from-violet-600 to-purple-700", benefits: ["Financial Trading", "Crypto Basics", "Live Sessions", "Trading Signals"] },
 };
 
 const Register = () => {

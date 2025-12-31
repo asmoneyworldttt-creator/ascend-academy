@@ -6,100 +6,100 @@
 
 @layer base {
   :root {
-    /* Premium Futuristic Ed-Tech Color Palette */
-    --background: 220 40% 6%;
-    --foreground: 45 20% 97%;
+    /* Light Mode - Fresh & Clean */
+    --background: 220 20% 98%;
+    --foreground: 220 25% 12%;
 
-    --card: 220 35% 10%;
-    --card-foreground: 45 20% 97%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 12%;
 
-    --popover: 220 35% 10%;
-    --popover-foreground: 45 20% 97%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 12%;
 
     /* Primary - Rich Gold/Amber from logo */
-    --primary: 43 96% 56%;
-    --primary-foreground: 220 25% 10%;
+    --primary: 43 96% 46%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Deep Slate/Navy */
-    --secondary: 220 30% 18%;
-    --secondary-foreground: 45 20% 97%;
+    /* Secondary - Soft Slate */
+    --secondary: 220 15% 92%;
+    --secondary-foreground: 220 25% 20%;
 
     /* Accent - Teal/Cyan from logo */
-    --accent: 177 70% 45%;
-    --accent-foreground: 220 40% 6%;
+    --accent: 177 70% 38%;
+    --accent-foreground: 0 0% 100%;
 
-    /* Electric Blue - New futuristic accent */
-    --electric: 195 100% 50%;
-    --electric-glow: 195 100% 60%;
+    /* Electric Blue */
+    --electric: 195 100% 45%;
+    --electric-glow: 195 100% 55%;
 
     /* Muted */
-    --muted: 220 25% 15%;
-    --muted-foreground: 220 15% 60%;
+    --muted: 220 15% 94%;
+    --muted-foreground: 220 15% 45%;
 
     /* Destructive */
     --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
 
     /* Border & Input */
-    --border: 220 25% 18%;
-    --input: 220 25% 18%;
-    --ring: 43 96% 56%;
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 43 96% 46%;
 
     --radius: 0.75rem;
 
     /* Extended Design Tokens */
-    --gold: 43 96% 56%;
-    --gold-light: 45 100% 70%;
-    --gold-dark: 38 90% 45%;
+    --gold: 43 96% 46%;
+    --gold-light: 45 100% 60%;
+    --gold-dark: 38 90% 38%;
     
-    --teal: 177 70% 45%;
-    --teal-light: 175 80% 60%;
-    --teal-dark: 180 60% 35%;
+    --teal: 177 70% 38%;
+    --teal-light: 175 80% 50%;
+    --teal-dark: 180 60% 30%;
     
-    --emerald: 145 70% 45%;
-    --emerald-light: 142 75% 55%;
+    --emerald: 145 70% 40%;
+    --emerald-light: 142 75% 50%;
     
-    --navy: 220 50% 12%;
-    --slate: 220 25% 35%;
+    --navy: 220 50% 25%;
+    --slate: 220 25% 50%;
 
-    /* Glassmorphism - Enhanced */
-    --glass: 220 30% 12% / 0.8;
-    --glass-border: 0 0% 100% / 0.1;
+    /* Glassmorphism - Light */
+    --glass: 0 0% 100% / 0.7;
+    --glass-border: 220 25% 80% / 0.5;
     --glass-blur: 20px;
 
-    /* Gradients - Futuristic */
-    --gradient-hero: linear-gradient(135deg, hsl(220 40% 6%) 0%, hsl(220 45% 10%) 50%, hsl(220 40% 8%) 100%);
-    --gradient-gold: linear-gradient(135deg, hsl(43 96% 56%) 0%, hsl(38 90% 50%) 100%);
-    --gradient-teal: linear-gradient(135deg, hsl(177 70% 45%) 0%, hsl(180 60% 35%) 100%);
-    --gradient-electric: linear-gradient(135deg, hsl(195 100% 50%) 0%, hsl(177 70% 45%) 100%);
-    --gradient-premium: linear-gradient(135deg, hsl(220 50% 12%) 0%, hsl(220 40% 18%) 100%);
-    --gradient-mesh: radial-gradient(ellipse at 20% 20%, hsl(43 96% 56% / 0.1) 0%, transparent 50%), 
-                     radial-gradient(ellipse at 80% 80%, hsl(177 70% 45% / 0.08) 0%, transparent 50%),
-                     radial-gradient(ellipse at 50% 50%, hsl(195 100% 50% / 0.05) 0%, transparent 60%);
-    --gradient-neon: linear-gradient(135deg, hsl(177 70% 45%) 0%, hsl(195 100% 50%) 50%, hsl(145 70% 45%) 100%);
+    /* Gradients - Light Mode */
+    --gradient-hero: linear-gradient(135deg, hsl(220 20% 98%) 0%, hsl(220 25% 95%) 50%, hsl(220 20% 97%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(43 96% 46%) 0%, hsl(38 90% 42%) 100%);
+    --gradient-teal: linear-gradient(135deg, hsl(177 70% 38%) 0%, hsl(180 60% 30%) 100%);
+    --gradient-electric: linear-gradient(135deg, hsl(195 100% 45%) 0%, hsl(177 70% 38%) 100%);
+    --gradient-premium: linear-gradient(135deg, hsl(220 15% 96%) 0%, hsl(220 20% 92%) 100%);
+    --gradient-mesh: radial-gradient(ellipse at 20% 20%, hsl(43 96% 46% / 0.08) 0%, transparent 50%), 
+                     radial-gradient(ellipse at 80% 80%, hsl(177 70% 38% / 0.06) 0%, transparent 50%),
+                     radial-gradient(ellipse at 50% 50%, hsl(195 100% 45% / 0.04) 0%, transparent 60%);
+    --gradient-neon: linear-gradient(135deg, hsl(177 70% 38%) 0%, hsl(195 100% 45%) 50%, hsl(145 70% 40%) 100%);
 
-    /* Shadows - Enhanced glow effects */
-    --shadow-soft: 0 4px 30px hsl(220 25% 5% / 0.3);
-    --shadow-glow-gold: 0 0 40px hsl(43 96% 56% / 0.4);
-    --shadow-glow-teal: 0 0 40px hsl(177 70% 45% / 0.35);
-    --shadow-glow-electric: 0 0 50px hsl(195 100% 50% / 0.4);
-    --shadow-glow-neon: 0 0 30px hsl(177 70% 45% / 0.5), 0 0 60px hsl(195 100% 50% / 0.3);
-    --shadow-elevated: 0 20px 60px hsl(220 25% 5% / 0.4);
-    --shadow-card: 0 8px 32px hsl(220 25% 5% / 0.3);
+    /* Shadows - Light Mode */
+    --shadow-soft: 0 4px 30px hsl(220 25% 80% / 0.2);
+    --shadow-glow-gold: 0 0 40px hsl(43 96% 46% / 0.25);
+    --shadow-glow-teal: 0 0 40px hsl(177 70% 38% / 0.2);
+    --shadow-glow-electric: 0 0 50px hsl(195 100% 45% / 0.25);
+    --shadow-glow-neon: 0 0 30px hsl(177 70% 38% / 0.3), 0 0 60px hsl(195 100% 45% / 0.2);
+    --shadow-elevated: 0 20px 60px hsl(220 25% 70% / 0.15);
+    --shadow-card: 0 8px 32px hsl(220 25% 70% / 0.1);
 
-    /* Sidebar */
-    --sidebar-background: 220 35% 10%;
-    --sidebar-foreground: 45 20% 95%;
-    --sidebar-primary: 43 96% 56%;
-    --sidebar-primary-foreground: 220 25% 10%;
-    --sidebar-accent: 177 70% 50%;
-    --sidebar-accent-foreground: 220 35% 8%;
-    --sidebar-border: 220 25% 15%;
-    --sidebar-ring: 43 96% 56%;
+    /* Sidebar - Light */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 25% 20%;
+    --sidebar-primary: 43 96% 46%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 177 70% 45%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 220 15% 90%;
+    --sidebar-ring: 43 96% 46%;
   }
 
   .dark {
-    /* Dark mode inherits root since we're already dark by default */
+    /* Dark Mode - Premium Futuristic */
     --background: 220 40% 4%;
     --foreground: 45 20% 97%;
 
@@ -118,6 +118,9 @@
     --accent: 177 70% 50%;
     --accent-foreground: 220 40% 4%;
 
+    --electric: 195 100% 50%;
+    --electric-glow: 195 100% 60%;
+
     --muted: 220 25% 12%;
     --muted-foreground: 220 15% 55%;
 
@@ -128,6 +131,21 @@
     --input: 220 25% 15%;
     --ring: 43 96% 56%;
 
+    /* Extended Design Tokens - Dark */
+    --gold: 43 96% 56%;
+    --gold-light: 45 100% 70%;
+    --gold-dark: 38 90% 45%;
+    
+    --teal: 177 70% 45%;
+    --teal-light: 175 80% 60%;
+    --teal-dark: 180 60% 35%;
+    
+    --emerald: 145 70% 45%;
+    --emerald-light: 142 75% 55%;
+    
+    --navy: 220 50% 12%;
+    --slate: 220 25% 35%;
+
     --glass: 220 30% 8% / 0.85;
     --glass-border: 0 0% 100% / 0.08;
 
@@ -135,6 +153,15 @@
     --gradient-mesh: radial-gradient(ellipse at 20% 20%, hsl(43 96% 56% / 0.08) 0%, transparent 50%), 
                      radial-gradient(ellipse at 80% 80%, hsl(177 70% 45% / 0.06) 0%, transparent 50%),
                      radial-gradient(ellipse at 50% 50%, hsl(195 100% 50% / 0.04) 0%, transparent 60%);
+    --gradient-premium: linear-gradient(135deg, hsl(220 50% 12%) 0%, hsl(220 40% 18%) 100%);
+
+    --shadow-soft: 0 4px 30px hsl(220 25% 5% / 0.3);
+    --shadow-glow-gold: 0 0 40px hsl(43 96% 56% / 0.4);
+    --shadow-glow-teal: 0 0 40px hsl(177 70% 45% / 0.35);
+    --shadow-glow-electric: 0 0 50px hsl(195 100% 50% / 0.4);
+    --shadow-glow-neon: 0 0 30px hsl(177 70% 45% / 0.5), 0 0 60px hsl(195 100% 50% / 0.3);
+    --shadow-elevated: 0 20px 60px hsl(220 25% 5% / 0.4);
+    --shadow-card: 0 8px 32px hsl(220 25% 5% / 0.3);
 
     --sidebar-background: 220 40% 6%;
     --sidebar-foreground: 45 20% 95%;
