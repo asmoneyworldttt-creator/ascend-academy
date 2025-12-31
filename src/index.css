@@ -6,8 +6,8 @@
 
 @layer base {
   :root {
-    /* Light Mode - Fresh & Clean */
-    --background: 220 20% 98%;
+    /* Light Mode - Premium & Royal */
+    --background: 40 20% 97%;
     --foreground: 220 25% 12%;
 
     --card: 0 0% 100%;
@@ -16,16 +16,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 25% 12%;
 
-    /* Primary - Sophisticated Warm Gold (softer, refined) */
-    --primary: 42 78% 52%;
-    --primary-foreground: 30 25% 12%;
+    /* Primary - Premium Aesthetic Gold (softer, warmer) */
+    --primary: 45 85% 55%;
+    --primary-foreground: 30 25% 10%;
 
-    /* Secondary - Elegant Slate */
-    --secondary: 220 18% 90%;
+    /* Secondary - Warm Cream */
+    --secondary: 40 25% 92%;
     --secondary-foreground: 220 25% 18%;
 
     /* Accent - Royal Teal */
-    --accent: 175 65% 42%;
+    --accent: 175 65% 40%;
     --accent-foreground: 0 0% 100%;
 
     /* Electric Blue - Premium */
@@ -37,70 +37,70 @@
     --royal-light: 265 80% 65%;
     --royal-dark: 265 60% 45%;
 
-    /* Muted */
-    --muted: 220 18% 93%;
-    --muted-foreground: 220 12% 48%;
+    /* Muted - Warmer tones */
+    --muted: 40 20% 93%;
+    --muted-foreground: 220 15% 42%;
 
     /* Destructive */
     --destructive: 0 65% 50%;
     --destructive-foreground: 0 0% 100%;
 
     /* Border & Input */
-    --border: 220 18% 86%;
-    --input: 220 18% 86%;
-    --ring: 42 78% 52%;
+    --border: 40 18% 84%;
+    --input: 40 18% 84%;
+    --ring: 45 85% 55%;
 
     --radius: 0.75rem;
 
-    /* Extended Design Tokens - Refined */
-    --gold: 42 78% 52%;
-    --gold-light: 44 85% 62%;
-    --gold-dark: 38 75% 42%;
+    /* Extended Design Tokens - Premium Gold */
+    --gold: 45 85% 55%;
+    --gold-light: 48 90% 65%;
+    --gold-dark: 42 80% 45%;
     
-    --teal: 175 65% 42%;
-    --teal-light: 172 70% 52%;
+    --teal: 175 65% 40%;
+    --teal-light: 172 70% 50%;
     --teal-dark: 178 55% 32%;
     
     --emerald: 152 65% 42%;
     --emerald-light: 150 70% 52%;
     
     --navy: 225 45% 22%;
-    --slate: 220 22% 48%;
+    --slate: 220 22% 42%;
 
     /* Glassmorphism - Light */
-    --glass: 0 0% 100% / 0.7;
-    --glass-border: 220 25% 80% / 0.5;
+    --glass: 0 0% 100% / 0.85;
+    --glass-border: 40 25% 75% / 0.4;
     --glass-blur: 20px;
 
-    /* Gradients - Light Mode */
-    --gradient-hero: linear-gradient(135deg, hsl(220 20% 98%) 0%, hsl(220 25% 95%) 50%, hsl(220 20% 97%) 100%);
-    --gradient-gold: linear-gradient(135deg, hsl(43 96% 46%) 0%, hsl(38 90% 42%) 100%);
-    --gradient-teal: linear-gradient(135deg, hsl(177 70% 38%) 0%, hsl(180 60% 30%) 100%);
-    --gradient-electric: linear-gradient(135deg, hsl(195 100% 45%) 0%, hsl(177 70% 38%) 100%);
-    --gradient-premium: linear-gradient(135deg, hsl(220 15% 96%) 0%, hsl(220 20% 92%) 100%);
-    --gradient-mesh: radial-gradient(ellipse at 20% 20%, hsl(43 96% 46% / 0.08) 0%, transparent 50%), 
-                     radial-gradient(ellipse at 80% 80%, hsl(177 70% 38% / 0.06) 0%, transparent 50%),
-                     radial-gradient(ellipse at 50% 50%, hsl(195 100% 45% / 0.04) 0%, transparent 60%);
-    --gradient-neon: linear-gradient(135deg, hsl(177 70% 38%) 0%, hsl(195 100% 45%) 50%, hsl(145 70% 40%) 100%);
+    /* Gradients - Light Mode (warmer, premium) */
+    --gradient-hero: linear-gradient(135deg, hsl(40 20% 97%) 0%, hsl(45 25% 94%) 50%, hsl(40 20% 96%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(45 88% 58%) 0%, hsl(40 85% 50%) 100%);
+    --gradient-teal: linear-gradient(135deg, hsl(175 70% 38%) 0%, hsl(178 60% 30%) 100%);
+    --gradient-electric: linear-gradient(135deg, hsl(195 100% 45%) 0%, hsl(175 70% 38%) 100%);
+    --gradient-premium: linear-gradient(135deg, hsl(40 20% 95%) 0%, hsl(45 25% 90%) 100%);
+    --gradient-mesh: radial-gradient(ellipse at 20% 20%, hsl(45 88% 58% / 0.1) 0%, transparent 50%), 
+                     radial-gradient(ellipse at 80% 80%, hsl(175 70% 38% / 0.08) 0%, transparent 50%),
+                     radial-gradient(ellipse at 50% 50%, hsl(195 100% 45% / 0.05) 0%, transparent 60%);
+    --gradient-neon: linear-gradient(135deg, hsl(175 70% 38%) 0%, hsl(195 100% 45%) 50%, hsl(145 70% 40%) 100%);
 
     /* Shadows - Light Mode */
-    --shadow-soft: 0 4px 30px hsl(220 25% 80% / 0.2);
-    --shadow-glow-gold: 0 0 40px hsl(43 96% 46% / 0.25);
-    --shadow-glow-teal: 0 0 40px hsl(177 70% 38% / 0.2);
-    --shadow-glow-electric: 0 0 50px hsl(195 100% 45% / 0.25);
-    --shadow-glow-neon: 0 0 30px hsl(177 70% 38% / 0.3), 0 0 60px hsl(195 100% 45% / 0.2);
-    --shadow-elevated: 0 20px 60px hsl(220 25% 70% / 0.15);
-    --shadow-card: 0 8px 32px hsl(220 25% 70% / 0.1);
+    --shadow-soft: 0 4px 30px hsl(40 25% 75% / 0.25);
+    --shadow-glow-gold: 0 0 40px hsl(45 88% 58% / 0.3);
+    --shadow-glow-teal: 0 0 40px hsl(175 70% 38% / 0.25);
+    --shadow-glow-electric: 0 0 50px hsl(195 100% 45% / 0.3);
+    --shadow-glow-neon: 0 0 30px hsl(175 70% 38% / 0.35), 0 0 60px hsl(195 100% 45% / 0.25);
+    --shadow-elevated: 0 20px 60px hsl(40 25% 65% / 0.2);
+    --shadow-card: 0 8px 32px hsl(40 25% 70% / 0.15);
 
     /* Sidebar - Light */
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 220 25% 20%;
-    --sidebar-primary: 43 96% 46%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 177 70% 45%;
+    --sidebar-primary: 45 88% 55%;
+    --sidebar-primary-foreground: 30 25% 10%;
+    --sidebar-accent: 175 70% 42%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 220 15% 90%;
-    --sidebar-ring: 43 96% 46%;
+    --sidebar-border: 40 18% 88%;
+    --sidebar-ring: 45 88% 55%;
   }
 
   .dark {
