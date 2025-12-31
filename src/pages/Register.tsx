@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Eye, EyeOff, ArrowRight, CheckCircle, Sparkles, GraduationCap, Wallet, Users, Crown, Star, Gem, Trophy, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -36,9 +36,15 @@ const Register = () => {
     terms: false,
   });
 
-  // If already logged in, redirect
+  // If already logged in, redirect using useEffect
+  React.useEffect(() => {
+    if (user) {
+      navigate("/user-home", { replace: true });
+    }
+  }, [user, navigate]);
+
+  // Show nothing while redirecting
   if (user) {
-    navigate("/user-home", { replace: true });
     return null;
   }
 
