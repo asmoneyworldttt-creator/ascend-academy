@@ -15,7 +15,8 @@ export default {
     extend: {
       fontFamily: {
         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-        display: ['"Space Grotesk"', 'sans-serif'],
+        display: ['"Montserrat"', '"Space Grotesk"', 'sans-serif'],
+        tier: ['"Rajdhani"', '"Montserrat"', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -66,7 +67,12 @@ export default {
           DEFAULT: "hsl(var(--emerald))",
           light: "hsl(var(--emerald-light))",
         },
+        electric: {
+          DEFAULT: "hsl(var(--electric))",
+          glow: "hsl(var(--electric-glow))",
+        },
         navy: "hsl(var(--navy))",
+        slate: "hsl(var(--slate))",
         slate: "hsl(var(--slate))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -93,6 +99,9 @@ export default {
         card: "var(--shadow-card)",
         "glow-gold": "var(--shadow-glow-gold)",
         "glow-teal": "var(--shadow-glow-teal)",
+        "glow-electric": "var(--shadow-glow-electric)",
+        "glow-neon": "var(--shadow-glow-neon)",
+      },
       },
       keyframes: {
         "accordion-down": {

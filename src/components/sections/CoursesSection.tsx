@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Star, Clock, Users, Play, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -12,6 +12,7 @@ const courses = [
     level: "Beginner",
     image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=250&fit=crop",
     color: "from-blue-500 to-blue-600",
+    recommendedPlan: "VELOCITY",
   },
   {
     title: "Python for Beginners",
@@ -22,6 +23,7 @@ const courses = [
     level: "Beginner",
     image: "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=400&h=250&fit=crop",
     color: "from-emerald to-teal",
+    recommendedPlan: "APEX",
   },
   {
     title: "Digital Marketing Mastery",
@@ -32,6 +34,7 @@ const courses = [
     level: "Intermediate",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop",
     color: "from-primary to-gold-dark",
+    recommendedPlan: "ZENITH",
   },
   {
     title: "AI & Prompt Engineering",
@@ -42,6 +45,7 @@ const courses = [
     level: "All Levels",
     image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=250&fit=crop",
     color: "from-purple-500 to-purple-600",
+    recommendedPlan: "ZENITH",
   },
   {
     title: "E-commerce & Dropshipping",
@@ -52,6 +56,7 @@ const courses = [
     level: "Intermediate",
     image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=250&fit=crop",
     color: "from-orange-500 to-red-500",
+    recommendedPlan: "APEX",
   },
   {
     title: "Cryptocurrency Fundamentals",
@@ -62,14 +67,22 @@ const courses = [
     level: "Beginner",
     image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=400&h=250&fit=crop",
     color: "from-yellow-500 to-orange-500",
+    recommendedPlan: "PINNACLE",
   },
 ];
 
 const CoursesSection = () => {
+  const navigate = useNavigate();
+
+  const handleCourseClick = (course: typeof courses[0]) => {
+    // Navigate to register with course and recommended plan
+    navigate(`/register?course=${encodeURIComponent(course.title)}&plan=${course.recommendedPlan}`);
+  };
+
   return (
     <section id="courses" className="py-20 lg:py-32 relative overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-muted/30" />
+      <div className="absolute inset-0 bg-muted/20" />
 
       <div className="container relative mx-auto px-4">
         {/* Header */}
@@ -88,7 +101,8 @@ const CoursesSection = () => {
           {courses.map((course, index) => (
             <div
               key={course.title}
-              className="glass-card rounded-3xl overflow-hidden group hover:-translate-y-2 transition-all duration-500"
+              onClick={() => handleCourseClick(course)}
+              className="glass-card rounded-3xl overflow-hidden group hover:-translate-y-2 transition-all duration-500 cursor-pointer"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               {/* Image */}
@@ -110,6 +124,11 @@ const CoursesSection = () => {
                 {/* Level badge */}
                 <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r ${course.color} text-white`}>
                   {course.level}
+                </span>
+
+                {/* Recommended plan badge */}
+                <span className="absolute top-4 right-4 px-2 py-1 rounded bg-card/80 backdrop-blur-sm text-xs font-medium text-foreground">
+                  Best with {course.recommendedPlan}
                 </span>
               </div>
 
@@ -139,12 +158,10 @@ const CoursesSection = () => {
                 </div>
 
                 {/* CTA */}
-                <Link to="/register">
-                  <Button variant="outline" className="w-full group/btn">
-                    Enroll Now
-                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
+                <Button variant="outline" className="w-full group/btn">
+                  Enroll Now
+                  <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                </Button>
               </div>
             </div>
           ))}
