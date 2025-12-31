@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      course_submissions: {
+        Row: {
+          admin_notes: string | null
+          contact_number: string
+          course_description: string
+          course_link: string
+          created_at: string
+          email: string
+          id: string
+          price: number | null
+          reviewed_at: string | null
+          status: string | null
+          user_id: string
+          username: string
+          whatsapp_number: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          contact_number: string
+          course_description: string
+          course_link: string
+          created_at?: string
+          email: string
+          id?: string
+          price?: number | null
+          reviewed_at?: string | null
+          status?: string | null
+          user_id: string
+          username: string
+          whatsapp_number: string
+        }
+        Update: {
+          admin_notes?: string | null
+          contact_number?: string
+          course_description?: string
+          course_link?: string
+          created_at?: string
+          email?: string
+          id?: string
+          price?: number | null
+          reviewed_at?: string | null
+          status?: string | null
+          user_id?: string
+          username?: string
+          whatsapp_number?: string
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           admin_notes: string | null
@@ -55,44 +103,59 @@ export type Database = {
       }
       profiles: {
         Row: {
+          address: string | null
           avatar_url: string | null
+          country: string | null
           created_at: string
+          dob: string | null
           email: string | null
           full_name: string | null
           has_purchased: boolean | null
           id: string
           phone: string | null
+          pincode: string | null
           purchased_plan: string | null
           referral_code: string | null
           referred_by: string | null
+          state: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          address?: string | null
           avatar_url?: string | null
+          country?: string | null
           created_at?: string
+          dob?: string | null
           email?: string | null
           full_name?: string | null
           has_purchased?: boolean | null
           id?: string
           phone?: string | null
+          pincode?: string | null
           purchased_plan?: string | null
           referral_code?: string | null
           referred_by?: string | null
+          state?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          address?: string | null
           avatar_url?: string | null
+          country?: string | null
           created_at?: string
+          dob?: string | null
           email?: string | null
           full_name?: string | null
           has_purchased?: boolean | null
           id?: string
           phone?: string | null
+          pincode?: string | null
           purchased_plan?: string | null
           referral_code?: string | null
           referred_by?: string | null
+          state?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -106,15 +169,75 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      withdrawal_requests: {
+        Row: {
+          admin_notes: string | null
+          amount: number
+          bank_details: Json | null
+          created_at: string
+          id: string
+          processed_at: string | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          amount: number
+          bank_details?: Json | null
+          created_at?: string
+          id?: string
+          processed_at?: string | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          amount?: number
+          bank_details?: Json | null
+          created_at?: string
+          id?: string
+          processed_at?: string | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -241,6 +364,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const

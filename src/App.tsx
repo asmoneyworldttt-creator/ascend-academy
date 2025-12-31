@@ -24,6 +24,7 @@ const LeaderboardPage = lazy(() => import("./pages/affiliate/LeaderboardPage"));
 const TasksPage = lazy(() => import("./pages/affiliate/TasksPage"));
 const ProfilePage = lazy(() => import("./pages/affiliate/ProfilePage"));
 const AdminPanel = lazy(() => import("./pages/admin/AdminPanel"));
+const SubmitCoursePage = lazy(() => import("./pages/affiliate/SubmitCoursePage"));
 
 const queryClient = new QueryClient();
 
@@ -99,9 +100,18 @@ const App = () => (
                   <ProfilePage />
                 </ProtectedRoute>
               } />
+              <Route path="/dashboard/submit-course" element={
+                <ProtectedRoute>
+                  <SubmitCoursePage />
+                </ProtectedRoute>
+              } />
               
               {/* Admin Routes */}
-              <Route path="/admin" element={<AdminPanel />} />
+              <Route path="/admin" element={
+                <ProtectedRoute>
+                  <AdminPanel />
+                </ProtectedRoute>
+              } />
               
               {/* 404 */}
               <Route path="*" element={<NotFound />} />

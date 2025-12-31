@@ -11,12 +11,15 @@ import {
   AlertCircle,
   CheckCircle2,
   Smartphone,
-  IndianRupee
+  IndianRupee,
+  Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo.png";
 import { packages } from "@/data/packages";
 
@@ -33,9 +36,9 @@ const PaymentGateway = () => {
   
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const upiId = "skillhonors@upi";
-  const upiQrData = `upi://pay?pa=${upiId}&pn=Skill%20Honors&am=${selectedPlan.price}&cu=INR`;
 
   const copyUPI = () => {
     navigator.clipboard.writeText(upiId);
@@ -52,21 +55,60 @@ const PaymentGateway = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!transactionId.trim()) {
       toast({ title: "Error", description: "Please enter the Transaction ID/UTR", variant: "destructive" });
       return;
     }
+
+    if (!user) {
+      toast({ 
+        title: "Login Required", 
+        description: "Please login to submit payment", 
+        variant: "destructive" 
+      });
+      navigate("/login");
+      return;
+    }
     
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    try {
+      // Insert payment record into database
+      const { error } = await supabase
+        .from("payments")
+        .insert({
+          user_id: user.id,
+          amount: selectedPlan.price,
+          plan_name: selectedPlan.name,
+          transaction_id: transactionId.trim(),
+          status: "pending",
+        });
+
+      if (error) throw error;
+
+      // Update profile with selected plan (not purchased yet, just selected)
+      await supabase
+        .from("profiles")
+        .update({ purchased_plan: selectedPlan.name })
+        .eq("user_id", user.id);
+
+      setIsSubmitted(true);
+      
+      toast({ 
+        title: "Payment Submitted!", 
+        description: "Your payment is under verification. You'll be notified once approved." 
+      });
+    } catch (error) {
+      console.error("Error submitting payment:", error);
+      toast({ 
+        title: "Submission Failed", 
+        description: "Please try again or contact support.", 
+        variant: "destructive" 
+      });
+    }
+
     setIsSubmitting(false);
-    setIsSubmitted(true);
-    
-    toast({ 
-      title: "Payment Submitted!", 
-      description: "Your payment is under verification. You'll be notified once approved." 
-    });
   };
 
   if (isSubmitted) {
@@ -117,7 +159,7 @@ const PaymentGateway = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       {/* Header */}
       <header className="bg-card/80 backdrop-blur-xl border-b border-border sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
@@ -125,7 +167,7 @@ const PaymentGateway = () => {
             <ArrowLeft className="w-5 h-5" />
           </button>
           <Link to="/">
-            <img src={logo} alt="Skill Honors" className="h-10 w-auto drop-shadow-[0_0_10px_rgba(251,191,36,0.3)]" />
+            <img src={logo} alt="Skill Learners" className="h-10 w-auto drop-shadow-[0_0_10px_rgba(251,191,36,0.3)]" />
           </Link>
           <span className="text-xl font-bold font-display ml-2">Payment</span>
         </div>
@@ -286,7 +328,7 @@ const PaymentGateway = () => {
                 >
                   {isSubmitting ? (
                     <>
-                      <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin mr-2" />
+                      <Loader2 className="w-5 h-5 animate-spin mr-2" />
                       Submitting...
                     </>
                   ) : (
