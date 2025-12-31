@@ -15,7 +15,8 @@ import {
   Crown,
   ChevronRight,
   X,
-  Menu
+  Menu,
+  BookOpen
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -64,6 +65,12 @@ const sidebarLinks = [
     label: "Tasks", 
     href: "/dashboard/tasks",
     description: "Earn by completing"
+  },
+  { 
+    icon: BookOpen, 
+    label: "Submit Your Course", 
+    href: "/dashboard/submit-course",
+    description: "Become a creator"
   },
   { 
     icon: User, 
