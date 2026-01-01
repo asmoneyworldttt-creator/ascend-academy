@@ -26,6 +26,8 @@ const TasksPage = lazy(() => import("./pages/affiliate/TasksPage"));
 const ProfilePage = lazy(() => import("./pages/affiliate/ProfilePage"));
 const AdminPanel = lazy(() => import("./pages/admin/AdminPanel"));
 const AdminLogin = lazy(() => import("./pages/AdminLogin"));
+const AdminForgotPassword = lazy(() => import("./pages/AdminForgotPassword"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const SubmitCoursePage = lazy(() => import("./pages/affiliate/SubmitCoursePage"));
 
 const queryClient = new QueryClient();
@@ -56,6 +58,8 @@ const App = () => (
               <Route path="/registration-success" element={<RegistrationSuccess />} />
               <Route path="/payment" element={<PaymentGateway />} />
               <Route path="/admin-login" element={<AdminLogin />} />
+              <Route path="/admin-forgot-password" element={<AdminForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               
               {/* Protected Routes */}
               <Route path="/user-home" element={
