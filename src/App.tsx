@@ -25,6 +25,7 @@ const LeaderboardPage = lazy(() => import("./pages/affiliate/LeaderboardPage"));
 const TasksPage = lazy(() => import("./pages/affiliate/TasksPage"));
 const ProfilePage = lazy(() => import("./pages/affiliate/ProfilePage"));
 const AdminPanel = lazy(() => import("./pages/admin/AdminPanel"));
+const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const SubmitCoursePage = lazy(() => import("./pages/affiliate/SubmitCoursePage"));
 
 const queryClient = new QueryClient();
@@ -54,6 +55,7 @@ const App = () => (
               <Route path="/register" element={<Register />} />
               <Route path="/registration-success" element={<RegistrationSuccess />} />
               <Route path="/payment" element={<PaymentGateway />} />
+              <Route path="/admin-login" element={<AdminLogin />} />
               
               {/* Protected Routes */}
               <Route path="/user-home" element={
