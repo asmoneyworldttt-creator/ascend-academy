@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      course_progress: {
+        Row: {
+          completed: boolean
+          completed_at: string | null
+          course_id: string
+          created_at: string
+          episode_id: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          completed_at?: string | null
+          course_id: string
+          created_at?: string
+          episode_id: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          completed_at?: string | null
+          course_id?: string
+          created_at?: string
+          episode_id?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       course_submissions: {
         Row: {
           admin_notes: string | null

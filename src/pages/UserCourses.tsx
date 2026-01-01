@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { 
   ArrowLeft,
@@ -21,6 +21,7 @@ import { packages } from "@/data/packages";
 import CourseViewer from "@/components/CourseViewer";
 import CourseQuiz from "@/components/CourseQuiz";
 import CourseCertificate from "@/components/CourseCertificate";
+import { useAllCourseProgress } from "@/hooks/useCourseProgress";
 
 // Sample course data with modules and episodes
 const courseData = {
@@ -217,19 +218,36 @@ const planIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   "Financial Trading Expert": Trophy,
 };
 
+// Episode count per course for progress calculation
+const courseEpisodeCounts: Record<string, number> = {
+  "dm-001": 14, // Digital Marketing Mastery
+  "ai-001": 13, // AI & Prompt Engineering
+  "ec-001": 12, // E-commerce & Dropshipping
+};
+
 const UserCourses = () => {
   const [activeTab, setActiveTab] = useState<"enrolled" | "all">("enrolled");
   const [viewingCourse, setViewingCourse] = useState<string | null>(null);
   const [showQuiz, setShowQuiz] = useState<string | null>(null);
   const [showCertificate, setShowCertificate] = useState<string | null>(null);
   const navigate = useNavigate();
+  
+  // Load all course progress from database
+  const { progressMap, isLoading: isProgressLoading } = useAllCourseProgress();
 
-  const courses = [
-    { ...courseData["Digital Marketing Mastery"] },
-    { title: "AI & Prompt Engineering", description: "Leverage AI tools like ChatGPT & Midjourney", image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=250&fit=crop", duration: "25 hours", students: 1800, rating: 4.9, progress: 45, enrolled: true },
-    { title: "E-commerce & Dropshipping", description: "Build and scale your online store", image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=250&fit=crop", duration: "45 hours", students: 2900, rating: 4.7, progress: 90, enrolled: true },
-    { title: "Web Development Bootcamp", description: "Learn HTML, CSS, JavaScript & modern frameworks", image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=250&fit=crop", duration: "40 hours", students: 2500, rating: 4.9, progress: 0, enrolled: false },
-  ];
+  // Calculate progress percentage from database
+  const getProgress = (courseId: string) => {
+    const completed = progressMap[courseId] || 0;
+    const total = courseEpisodeCounts[courseId] || 1;
+    return Math.round((completed / total) * 100);
+  };
+
+  const courses = useMemo(() => [
+    { ...courseData["Digital Marketing Mastery"], progress: getProgress("dm-001") },
+    { ...courseData["AI & Prompt Engineering"], progress: getProgress("ai-001") },
+    { ...courseData["E-commerce & Dropshipping"], progress: getProgress("ec-001") },
+    { id: "wd-001", title: "Web Development Bootcamp", description: "Learn HTML, CSS, JavaScript & modern frameworks", image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=250&fit=crop", duration: "40 hours", students: 2500, rating: 4.9, progress: 0, enrolled: false },
+  ], [progressMap]);
 
   const enrolledCourses = courses.filter(c => c.enrolled);
   const displayCourses = activeTab === "enrolled" ? enrolledCourses : courses;
