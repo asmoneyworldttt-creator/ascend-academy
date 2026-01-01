@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   Search,
   Filter,
@@ -12,6 +13,7 @@ import {
   Edit,
   Trash2,
   Eye,
+  ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +26,8 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import RoleManagementDialog from "./RoleManagementDialog";
 
 interface UserProfile {
   id: string;
@@ -60,6 +64,39 @@ export const UsersTable = ({
   onPlanFilterChange,
   onViewUser,
 }: UsersTableProps) => {
+  const [roleManageUser, setRoleManageUser] = useState<UserProfile | null>(null);
+  const [userRoles, setUserRoles] = useState<Record<string, string>>({});
+
+  // Fetch user roles
+  useEffect(() => {
+    const fetchUserRoles = async () => {
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("user_id, role");
+
+      if (!error && data) {
+        const rolesMap: Record<string, string> = {};
+        data.forEach((r) => {
+          rolesMap[r.user_id] = r.role;
+        });
+        setUserRoles(rolesMap);
+      }
+    };
+    fetchUserRoles();
+  }, [users]);
+
+  const handleRoleUpdated = async () => {
+    // Refresh roles
+    const { data } = await supabase.from("user_roles").select("user_id, role");
+    if (data) {
+      const rolesMap: Record<string, string> = {};
+      data.forEach((r) => {
+        rolesMap[r.user_id] = r.role;
+      });
+      setUserRoles(rolesMap);
+    }
+  };
+
   const filteredUsers = users.filter((u) => {
     const matchesSearch =
       u.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -154,9 +191,23 @@ export const UsersTable = ({
                         </span>
                       </div>
                       <div>
-                        <p className="font-medium text-sm">
-                          {profile.full_name || "Unknown"}
-                        </p>
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium text-sm">
+                            {profile.full_name || "Unknown"}
+                          </p>
+                          {userRoles[profile.user_id] === "admin" && (
+                            <Badge className="bg-red-500/10 text-red-500 border-red-500/20 text-xs">
+                              <ShieldCheck className="w-3 h-3 mr-1" />
+                              Admin
+                            </Badge>
+                          )}
+                          {userRoles[profile.user_id] === "moderator" && (
+                            <Badge className="bg-orange-500/10 text-orange-500 border-orange-500/20 text-xs">
+                              <Shield className="w-3 h-3 mr-1" />
+                              Mod
+                            </Badge>
+                          )}
+                        </div>
                         <p className="text-xs text-muted-foreground">
                           ID: {profile.user_id.slice(0, 8)}...
                         </p>
@@ -218,7 +269,10 @@ export const UsersTable = ({
                           <DropdownMenuItem className="gap-2">
                             <Edit className="w-4 h-4" /> Edit Profile
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="gap-2">
+                          <DropdownMenuItem 
+                            className="gap-2"
+                            onClick={() => setRoleManageUser(profile)}
+                          >
                             <Shield className="w-4 h-4" /> Manage Role
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
@@ -235,6 +289,18 @@ export const UsersTable = ({
           </table>
         </div>
       </div>
+
+      {/* Role Management Dialog */}
+      {roleManageUser && (
+        <RoleManagementDialog
+          isOpen={!!roleManageUser}
+          onClose={() => setRoleManageUser(null)}
+          userId={roleManageUser.user_id}
+          userName={roleManageUser.full_name || "Unknown User"}
+          currentRole={userRoles[roleManageUser.user_id] || "user"}
+          onRoleUpdated={handleRoleUpdated}
+        />
+      )}
     </div>
   );
 };

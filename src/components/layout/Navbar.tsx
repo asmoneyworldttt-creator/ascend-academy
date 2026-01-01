@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, X, Sun, Moon, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { useAdminCheck } from "@/hooks/useAdminCheck";
 import logo from "@/assets/logo.png";
 
 const navLinks = [
@@ -17,6 +19,8 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isDark, setIsDark] = useState(true); // Default to dark
   const location = useLocation();
+  const { user } = useAuth();
+  const { isAdmin } = useAdminCheck();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -112,16 +116,34 @@ const Navbar = () => {
                 <Moon className="w-5 h-5 text-secondary" />
               )}
             </button>
-            <Link to="/login">
-              <Button variant="ghost" size="default">
-                Login
-              </Button>
-            </Link>
-            <Link to="/register">
-              <Button variant="hero" size="default">
-                Get Started
-              </Button>
-            </Link>
+            {isAdmin && (
+              <Link to="/admin">
+                <Button variant="outline" size="default" className="gap-2 border-red-500/30 text-red-500 hover:bg-red-500/10">
+                  <Shield className="w-4 h-4" />
+                  Admin
+                </Button>
+              </Link>
+            )}
+            {user ? (
+              <Link to="/user-home">
+                <Button variant="hero" size="default">
+                  Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/login">
+                  <Button variant="ghost" size="default">
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button variant="hero" size="default">
+                    Get Started
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -165,16 +187,34 @@ const Navbar = () => {
             </button>
           ))}
           <div className="flex flex-col gap-3 pt-4 border-t border-border/50">
-            <Link to="/login" onClick={() => setIsOpen(false)}>
-              <Button variant="outline" className="w-full">
-                Login
-              </Button>
-            </Link>
-            <Link to="/register" onClick={() => setIsOpen(false)}>
-              <Button variant="hero" className="w-full">
-                Get Started
-              </Button>
-            </Link>
+            {isAdmin && (
+              <Link to="/admin" onClick={() => setIsOpen(false)}>
+                <Button variant="outline" className="w-full gap-2 border-red-500/30 text-red-500">
+                  <Shield className="w-4 h-4" />
+                  Admin Panel
+                </Button>
+              </Link>
+            )}
+            {user ? (
+              <Link to="/user-home" onClick={() => setIsOpen(false)}>
+                <Button variant="hero" className="w-full">
+                  Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/login" onClick={() => setIsOpen(false)}>
+                  <Button variant="outline" className="w-full">
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/register" onClick={() => setIsOpen(false)}>
+                  <Button variant="hero" className="w-full">
+                    Get Started
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
