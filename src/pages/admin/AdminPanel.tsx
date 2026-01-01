@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { RefreshCw, Loader2, Bell, Menu } from "lucide-react";
+import { RefreshCw, Loader2, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
@@ -14,6 +14,8 @@ import UsersTable from "@/components/admin/UsersTable";
 import WithdrawalsTable from "@/components/admin/WithdrawalsTable";
 import CourseSubmissionsTable from "@/components/admin/CourseSubmissionsTable";
 import PaymentDetailModal from "@/components/admin/PaymentDetailModal";
+import UserDetailModal from "@/components/admin/UserDetailModal";
+import AdminNotifications from "@/components/admin/AdminNotifications";
 
 type TabType = "dashboard" | "payments" | "users" | "courses" | "withdrawals";
 
@@ -46,6 +48,9 @@ interface UserProfile {
   created_at: string;
   country: string | null;
   state: string | null;
+  address: string | null;
+  dob: string | null;
+  pincode: string | null;
 }
 
 interface CourseSubmission {
@@ -75,6 +80,15 @@ interface Withdrawal {
   };
 }
 
+interface Notification {
+  id: string;
+  type: "payment" | "withdrawal" | "course";
+  title: string;
+  message: string;
+  timestamp: Date;
+  read: boolean;
+}
+
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState<TabType>("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -83,8 +97,10 @@ const AdminPanel = () => {
   const [courseSubmissions, setCourseSubmissions] = useState<CourseSubmission[]>([]);
   const [withdrawals, setWithdrawals] = useState<Withdrawal[]>([]);
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   
   // Filter states
   const [searchTerm, setSearchTerm] = useState("");
@@ -96,6 +112,24 @@ const AdminPanel = () => {
   const { toast } = useToast();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+
+  const addNotification = useCallback((type: "payment" | "withdrawal" | "course", title: string, message: string) => {
+    const newNotification: Notification = {
+      id: `${Date.now()}-${Math.random()}`,
+      type,
+      title,
+      message,
+      timestamp: new Date(),
+      read: false,
+    };
+    setNotifications((prev) => [newNotification, ...prev].slice(0, 50));
+    
+    // Show toast for immediate feedback
+    toast({
+      title,
+      description: message,
+    });
+  }, [toast]);
 
   useEffect(() => {
     const checkAdminAndFetch = async () => {
@@ -127,6 +161,127 @@ const AdminPanel = () => {
 
     checkAdminAndFetch();
   }, [user, navigate]);
+
+  // Real-time subscriptions
+  useEffect(() => {
+    if (!isAdmin) return;
+
+    console.log("Setting up realtime subscriptions...");
+
+    // Subscribe to payments changes
+    const paymentsChannel = supabase
+      .channel("payments-changes")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "payments" },
+        async (payload) => {
+          console.log("New payment received:", payload);
+          // Fetch the payment with profile data
+          const { data: newPayment } = await supabase
+            .from("payments")
+            .select(`*, profiles!payments_user_id_fkey(full_name, email, phone)`)
+            .eq("id", payload.new.id)
+            .single();
+          
+          if (newPayment) {
+            setPayments((prev) => [newPayment as any, ...prev]);
+            addNotification(
+              "payment",
+              "New Payment Received",
+              `${(newPayment as any).profiles?.full_name || "A user"} submitted ₹${newPayment.amount} for ${newPayment.plan_name}`
+            );
+          }
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "payments" },
+        (payload) => {
+          console.log("Payment updated:", payload);
+          setPayments((prev) =>
+            prev.map((p) =>
+              p.id === payload.new.id ? { ...p, ...payload.new } : p
+            )
+          );
+        }
+      )
+      .subscribe();
+
+    // Subscribe to withdrawal requests changes
+    const withdrawalsChannel = supabase
+      .channel("withdrawals-changes")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "withdrawal_requests" },
+        async (payload) => {
+          console.log("New withdrawal request received:", payload);
+          const { data: newWithdrawal } = await supabase
+            .from("withdrawal_requests")
+            .select(`*, profiles!withdrawal_requests_user_id_fkey(full_name, email)`)
+            .eq("id", payload.new.id)
+            .single();
+          
+          if (newWithdrawal) {
+            setWithdrawals((prev) => [newWithdrawal as any, ...prev]);
+            addNotification(
+              "withdrawal",
+              "New Withdrawal Request",
+              `${(newWithdrawal as any).profiles?.full_name || "A user"} requested ₹${newWithdrawal.amount}`
+            );
+          }
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "withdrawal_requests" },
+        (payload) => {
+          console.log("Withdrawal updated:", payload);
+          setWithdrawals((prev) =>
+            prev.map((w) =>
+              w.id === payload.new.id ? { ...w, ...payload.new } : w
+            )
+          );
+        }
+      )
+      .subscribe();
+
+    // Subscribe to course submissions changes
+    const coursesChannel = supabase
+      .channel("courses-changes")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "course_submissions" },
+        (payload) => {
+          console.log("New course submission:", payload);
+          setCourseSubmissions((prev) => [payload.new as any, ...prev]);
+          addNotification(
+            "course",
+            "New Course Submission",
+            `${(payload.new as any).username} submitted a course for review`
+          );
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "course_submissions" },
+        (payload) => {
+          console.log("Course submission updated:", payload);
+          setCourseSubmissions((prev) =>
+            prev.map((c) =>
+              c.id === payload.new.id ? { ...c, ...payload.new } : c
+            )
+          );
+        }
+      )
+      .subscribe();
+
+    return () => {
+      console.log("Cleaning up realtime subscriptions...");
+      supabase.removeChannel(paymentsChannel);
+      supabase.removeChannel(withdrawalsChannel);
+      supabase.removeChannel(coursesChannel);
+    };
+  }, [isAdmin, addNotification]);
 
   const fetchAllData = async () => {
     setLoading(true);
@@ -246,11 +401,21 @@ const AdminPanel = () => {
     navigate("/");
   };
 
+  const markNotificationAsRead = (id: string) => {
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+    );
+  };
+
+  const markAllNotificationsAsRead = () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+  };
+
+  const clearAllNotifications = () => {
+    setNotifications([]);
+  };
+
   const pendingPayments = payments.filter(p => p.status === "pending");
-  const activeUsers = users.filter(u => u.has_purchased);
-  const pendingWithdrawals = withdrawals.filter(w => w.status === "pending");
-  const pendingCourses = courseSubmissions.filter(c => c.status === "pending");
-  const approvedToday = payments.filter(p => p.status === "approved" && new Date(p.created_at).toDateString() === new Date().toDateString()).length;
 
   if (!isAdmin) {
     return (
@@ -274,6 +439,13 @@ const AdminPanel = () => {
         />
       )}
 
+      {selectedUser && (
+        <UserDetailModal
+          user={selectedUser}
+          onClose={() => setSelectedUser(null)}
+        />
+      )}
+
       <AdminSidebar
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
@@ -291,10 +463,12 @@ const AdminPanel = () => {
                 <RefreshCw className={cn("w-4 h-4 mr-2", loading && "animate-spin")} />
                 Refresh
               </Button>
-              <button className="relative p-2 rounded-full hover:bg-muted">
-                <Bell className="w-5 h-5" />
-                {pendingPayments.length > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />}
-              </button>
+              <AdminNotifications
+                notifications={notifications}
+                onMarkAsRead={markNotificationAsRead}
+                onMarkAllAsRead={markAllNotificationsAsRead}
+                onClearAll={clearAllNotifications}
+              />
             </div>
           </div>
         </header>
@@ -334,6 +508,7 @@ const AdminPanel = () => {
                   onSearchChange={setSearchTerm}
                   planFilter={userPlanFilter}
                   onPlanFilterChange={setUserPlanFilter}
+                  onViewUser={setSelectedUser}
                 />
               )}
               {activeTab === "courses" && (
