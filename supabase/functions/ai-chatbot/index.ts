@@ -161,7 +161,33 @@ serve(async (req) => {
       throw new Error(`AI gateway error: ${response.status}`);
     }
 
-    const data = await response.json();
+    // Handle potentially empty response
+    const responseText = await response.text();
+    console.log("Raw response length:", responseText.length);
+    
+    if (!responseText || responseText.trim() === '') {
+      console.error("Empty response from AI gateway");
+      return new Response(JSON.stringify({ 
+        message: "I'm having trouble connecting right now. Please try again.",
+        role: "assistant"
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error("JSON parse error:", parseError, "Response:", responseText.substring(0, 200));
+      return new Response(JSON.stringify({ 
+        message: "I encountered an issue processing the response. Please try again.",
+        role: "assistant"
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    
     console.log("AI response received successfully");
     
     const content = data.choices?.[0]?.message?.content || "I'm sorry, I couldn't process your request. Please try again.";
