@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Search,
   Filter,
@@ -39,6 +38,9 @@ interface UserProfile {
   created_at: string;
   country: string | null;
   state: string | null;
+  address: string | null;
+  dob: string | null;
+  pincode: string | null;
 }
 
 interface UsersTableProps {
@@ -47,6 +49,7 @@ interface UsersTableProps {
   onSearchChange: (value: string) => void;
   planFilter: string;
   onPlanFilterChange: (plan: string) => void;
+  onViewUser: (user: UserProfile) => void;
 }
 
 export const UsersTable = ({
@@ -55,6 +58,7 @@ export const UsersTable = ({
   onSearchChange,
   planFilter,
   onPlanFilterChange,
+  onViewUser,
 }: UsersTableProps) => {
   const filteredUsers = users.filter((u) => {
     const matchesSearch =
@@ -208,7 +212,7 @@ export const UsersTable = ({
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem className="gap-2">
+                          <DropdownMenuItem className="gap-2" onClick={() => onViewUser(profile)}>
                             <Eye className="w-4 h-4" /> View Details
                           </DropdownMenuItem>
                           <DropdownMenuItem className="gap-2">
