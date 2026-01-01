@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Lock, ArrowLeft, CheckCircle, KeyRound } from "lucide-react";
+import { Eye, EyeOff, Lock, ArrowLeft, CheckCircle, KeyRound, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
 
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
@@ -17,26 +18,50 @@ const ResetPassword = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isValidating, setIsValidating] = useState(true);
+  const [isValidSession, setIsValidSession] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { updatePassword, session } = useAuth();
+  const { updatePassword } = useAuth();
 
   // Check if user has a valid recovery session
   useEffect(() => {
-    if (!session) {
-      // Give some time for the session to load from the URL hash
-      const timer = setTimeout(() => {
-        if (!session) {
-          toast({
-            title: "Invalid or Expired Link",
-            description: "Please request a new password reset link",
-            variant: "destructive",
-          });
-        }
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [session, toast]);
+    const checkSession = async () => {
+      setIsValidating(true);
+      
+      // Wait for Supabase to process the URL hash/token (up to 30 seconds with retries)
+      let attempts = 0;
+      const maxAttempts = 30; // 30 attempts * 1 second = 30 seconds total
+      
+      const checkForSession = async (): Promise<boolean> => {
+        const { data: { session } } = await supabase.auth.getSession();
+        return !!session;
+      };
+      
+      // Initial check
+      let hasSession = await checkForSession();
+      
+      while (!hasSession && attempts < maxAttempts) {
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
+        hasSession = await checkForSession();
+        attempts++;
+      }
+      
+      if (hasSession) {
+        setIsValidSession(true);
+      } else {
+        toast({
+          title: "Invalid or Expired Link",
+          description: "Please request a new password reset link. The link may have expired.",
+          variant: "destructive",
+        });
+      }
+      
+      setIsValidating(false);
+    };
+
+    checkSession();
+  }, [toast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,6 +122,51 @@ const ResetPassword = () => {
       setIsLoading(false);
     }
   };
+
+  // Show loading state while validating
+  if (isValidating) {
+    return (
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-background">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10" />
+        </div>
+        <div className="relative z-10 text-center">
+          <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-foreground mb-2">Validating Reset Link</h2>
+          <p className="text-muted-foreground">Please wait while we verify your password reset link...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error if session is invalid
+  if (!isValidSession && !isValidating) {
+    return (
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-background">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10" />
+        </div>
+        <div className="relative z-10 w-full max-w-md px-6">
+          <div className="glass-card p-8 rounded-3xl border border-destructive/20 bg-card/80 backdrop-blur-xl shadow-2xl">
+            <div className="text-center">
+              <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mx-auto mb-4">
+                <KeyRound className="w-8 h-8 text-destructive" />
+              </div>
+              <h2 className="text-xl font-semibold text-foreground mb-2">Link Expired or Invalid</h2>
+              <p className="text-muted-foreground mb-6">
+                This password reset link has expired or is invalid. Please request a new one.
+              </p>
+              <Link to="/admin-forgot-password">
+                <Button className="w-full bg-gradient-to-r from-primary to-accent">
+                  Request New Link
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-background">
