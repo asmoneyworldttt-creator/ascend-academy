@@ -1,7 +1,6 @@
 import { useState, useEffect, createContext, useContext, ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
 interface AuthContextType {
@@ -11,7 +10,8 @@ interface AuthContextType {
   signUp: (email: string, password: string, metadata: UserMetadata) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
-  resetPassword: (email: string) => Promise<{ error: Error | null }>;
+  resetPasswordWithOTP: (email: string) => Promise<{ error: Error | null }>;
+  verifyOTPAndResetPassword: (email: string, otp: string, newPassword: string) => Promise<{ error: Error | null }>;
   updatePassword: (newPassword: string) => Promise<{ error: Error | null }>;
   profile: UserProfile | null;
 }
@@ -164,16 +164,45 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setProfile(null);
   };
 
-  const resetPassword = async (email: string) => {
+  // Send OTP code for password reset (no clickable link)
+  const resetPasswordWithOTP = async (email: string) => {
     try {
-      const redirectUrl = `${window.location.origin}/reset-password`;
-      
+      // This sends an OTP code to the user's email
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: redirectUrl,
+        // Don't include redirectTo - this will send an OTP code instead of a link
       });
 
       if (error) {
         return { error };
+      }
+
+      return { error: null };
+    } catch (error) {
+      return { error: error as Error };
+    }
+  };
+
+  // Verify OTP and set new password
+  const verifyOTPAndResetPassword = async (email: string, otp: string, newPassword: string) => {
+    try {
+      // First verify the OTP
+      const { error: verifyError } = await supabase.auth.verifyOtp({
+        email,
+        token: otp,
+        type: 'recovery',
+      });
+
+      if (verifyError) {
+        return { error: verifyError };
+      }
+
+      // Now update the password
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (updateError) {
+        return { error: updateError };
       }
 
       return { error: null };
@@ -199,7 +228,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signUp, signIn, signOut, resetPassword, updatePassword, profile }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      session, 
+      loading, 
+      signUp, 
+      signIn, 
+      signOut, 
+      resetPasswordWithOTP, 
+      verifyOTPAndResetPassword, 
+      updatePassword, 
+      profile 
+    }}>
       {children}
     </AuthContext.Provider>
   );
