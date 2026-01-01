@@ -8,9 +8,14 @@ import {
   Clock, 
   Award,
   ExternalLink,
-  BookOpen
+  BookOpen,
+  ChevronDown,
+  ChevronUp,
+  Folder,
+  PlayCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface Episode {
   id: string;
@@ -22,11 +27,19 @@ interface Episode {
   completed: boolean;
 }
 
-interface Course {
+interface Module {
   id: string;
   title: string;
   description: string;
   episodes: Episode[];
+}
+
+interface Course {
+  id: string;
+  title: string;
+  description: string;
+  modules?: Module[];
+  episodes?: Episode[]; // For backward compatibility
 }
 
 interface CourseViewerProps {
@@ -36,30 +49,95 @@ interface CourseViewerProps {
 }
 
 const CourseViewer = ({ course, onClose, onComplete }: CourseViewerProps) => {
-  const [currentEpisode, setCurrentEpisode] = useState(0);
+  // Convert flat episodes to modules if needed
+  const modules: Module[] = course.modules || [{
+    id: 'default',
+    title: 'Course Content',
+    description: course.description,
+    episodes: course.episodes || []
+  }];
+
+  const allEpisodes = modules.flatMap(m => m.episodes);
+  
+  const [currentModuleIdx, setCurrentModuleIdx] = useState(0);
+  const [currentEpisodeIdx, setCurrentEpisodeIdx] = useState(0);
   const [completedEpisodes, setCompletedEpisodes] = useState<Set<string>>(
-    new Set(course.episodes.filter(e => e.completed).map(e => e.id))
+    new Set(allEpisodes.filter(e => e.completed).map(e => e.id))
   );
   const [isPlaying, setIsPlaying] = useState(false);
+  const [expandedModules, setExpandedModules] = useState<Set<string>>(
+    new Set([modules[0]?.id])
+  );
 
-  const episode = course.episodes[currentEpisode];
-  const progress = Math.round((completedEpisodes.size / course.episodes.length) * 100);
-  const allCompleted = completedEpisodes.size === course.episodes.length;
+  const currentModule = modules[currentModuleIdx];
+  const episode = currentModule?.episodes[currentEpisodeIdx];
+  const totalEpisodes = allEpisodes.length;
+  const progress = Math.round((completedEpisodes.size / totalEpisodes) * 100);
+  const allCompleted = completedEpisodes.size === totalEpisodes;
+
+  const toggleModule = (moduleId: string) => {
+    const newExpanded = new Set(expandedModules);
+    if (newExpanded.has(moduleId)) {
+      newExpanded.delete(moduleId);
+    } else {
+      newExpanded.add(moduleId);
+    }
+    setExpandedModules(newExpanded);
+  };
+
+  const selectEpisode = (moduleIdx: number, episodeIdx: number) => {
+    setCurrentModuleIdx(moduleIdx);
+    setCurrentEpisodeIdx(episodeIdx);
+    // Expand the module
+    setExpandedModules(prev => new Set([...prev, modules[moduleIdx].id]));
+  };
 
   const markComplete = () => {
+    if (!episode) return;
     const newCompleted = new Set(completedEpisodes);
     newCompleted.add(episode.id);
     setCompletedEpisodes(newCompleted);
 
-    // Auto-advance to next episode if available
-    if (currentEpisode < course.episodes.length - 1) {
-      setTimeout(() => setCurrentEpisode(currentEpisode + 1), 1000);
+    // Auto-advance to next episode
+    if (currentEpisodeIdx < currentModule.episodes.length - 1) {
+      setTimeout(() => setCurrentEpisodeIdx(currentEpisodeIdx + 1), 1000);
+    } else if (currentModuleIdx < modules.length - 1) {
+      // Move to next module
+      setTimeout(() => {
+        setCurrentModuleIdx(currentModuleIdx + 1);
+        setCurrentEpisodeIdx(0);
+        setExpandedModules(prev => new Set([...prev, modules[currentModuleIdx + 1].id]));
+      }, 1000);
     }
   };
 
   const handleCompleteAll = () => {
     onComplete(course.id);
   };
+
+  const getModuleProgress = (module: Module) => {
+    const completed = module.episodes.filter(e => completedEpisodes.has(e.id)).length;
+    return { completed, total: module.episodes.length };
+  };
+
+  const getGlobalEpisodeNumber = (moduleIdx: number, episodeIdx: number) => {
+    let count = 0;
+    for (let i = 0; i < moduleIdx; i++) {
+      count += modules[i].episodes.length;
+    }
+    return count + episodeIdx + 1;
+  };
+
+  if (!episode) {
+    return (
+      <div className="fixed inset-0 z-50 bg-background flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-muted-foreground mb-4">No episodes available</p>
+          <Button onClick={onClose}>Close</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 bg-background">
@@ -72,7 +150,9 @@ const CourseViewer = ({ course, onClose, onComplete }: CourseViewerProps) => {
             </button>
             <div>
               <h1 className="font-bold text-lg line-clamp-1">{course.title}</h1>
-              <p className="text-xs text-muted-foreground">Episode {currentEpisode + 1} of {course.episodes.length}</p>
+              <p className="text-xs text-muted-foreground">
+                Episode {getGlobalEpisodeNumber(currentModuleIdx, currentEpisodeIdx)} of {totalEpisodes}
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -92,10 +172,11 @@ const CourseViewer = ({ course, onClose, onComplete }: CourseViewerProps) => {
 
       <div className="flex h-[calc(100vh-60px)]">
         {/* Main Content */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col overflow-hidden">
           {/* Video Player */}
-          <div className="relative bg-secondary aspect-video w-full max-h-[60vh]">
+          <div className="relative bg-secondary aspect-video w-full max-h-[60vh] flex-shrink-0">
             <video 
+              key={episode.id}
               src={episode.videoUrl}
               className="w-full h-full object-contain"
               controls
@@ -108,6 +189,12 @@ const CourseViewer = ({ course, onClose, onComplete }: CourseViewerProps) => {
           {/* Episode Content */}
           <div className="flex-1 overflow-y-auto p-6">
             <div className="max-w-3xl">
+              {/* Module Badge */}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-full text-sm text-primary mb-4">
+                <Folder className="w-4 h-4" />
+                <span className="font-medium">{currentModule.title}</span>
+              </div>
+
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h2 className="text-xl font-bold font-display mb-2">{episode.title}</h2>
@@ -174,86 +261,166 @@ const CourseViewer = ({ course, onClose, onComplete }: CourseViewerProps) => {
           </div>
         </div>
 
-        {/* Episode List Sidebar - Desktop */}
-        <div className="hidden lg:block w-80 border-l border-border bg-card overflow-y-auto">
-          <div className="p-4 border-b border-border">
-            <h3 className="font-bold">Course Content</h3>
-            <p className="text-xs text-muted-foreground">{completedEpisodes.size}/{course.episodes.length} completed</p>
+        {/* Module/Episode List Sidebar - Desktop */}
+        <div className="hidden lg:flex lg:flex-col w-96 border-l border-border bg-card overflow-hidden">
+          <div className="p-4 border-b border-border bg-card/80 backdrop-blur-sm">
+            <h3 className="font-bold text-lg">Course Content</h3>
+            <p className="text-sm text-muted-foreground mt-1">
+              {completedEpisodes.size} of {totalEpisodes} episodes completed
+            </p>
+            <div className="mt-3 h-2 bg-muted rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-gold rounded-full transition-all duration-500"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
           </div>
-          <div className="p-2">
-            {course.episodes.map((ep, idx) => {
-              const isCompleted = completedEpisodes.has(ep.id);
-              const isCurrent = idx === currentEpisode;
+          
+          <div className="flex-1 overflow-y-auto p-2">
+            {modules.map((module, moduleIdx) => {
+              const { completed, total } = getModuleProgress(module);
+              const isExpanded = expandedModules.has(module.id);
+              const isCurrentModule = moduleIdx === currentModuleIdx;
+              
               return (
-                <button
-                  key={ep.id}
-                  onClick={() => setCurrentEpisode(idx)}
-                  className={`w-full text-left p-3 rounded-xl mb-1 transition-colors ${
-                    isCurrent 
-                      ? 'bg-primary/10 border border-primary/20' 
-                      : 'hover:bg-muted'
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                      isCompleted 
-                        ? 'bg-emerald/10 text-emerald' 
-                        : isCurrent 
-                          ? 'bg-primary text-primary-foreground' 
-                          : 'bg-muted text-muted-foreground'
-                    }`}>
-                      {isCompleted ? (
-                        <CheckCircle className="w-4 h-4" />
-                      ) : isCurrent ? (
-                        <Play className="w-4 h-4" />
+                <div key={module.id} className="mb-2">
+                  {/* Module Header */}
+                  <button
+                    onClick={() => toggleModule(module.id)}
+                    className={cn(
+                      "w-full text-left p-4 rounded-xl transition-colors flex items-start gap-3",
+                      isCurrentModule ? "bg-primary/10 border border-primary/20" : "hover:bg-muted"
+                    )}
+                  >
+                    <div className={cn(
+                      "w-10 h-10 rounded-lg flex items-center justify-center shrink-0",
+                      completed === total ? "bg-emerald/10 text-emerald" : "bg-primary/10 text-primary"
+                    )}>
+                      {completed === total ? (
+                        <CheckCircle className="w-5 h-5" />
                       ) : (
-                        <span className="text-sm font-medium">{idx + 1}</span>
+                        <Folder className="w-5 h-5" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className={`font-medium text-sm line-clamp-2 ${isCurrent ? 'text-primary' : ''}`}>
-                        {ep.title}
+                      <div className="flex items-center justify-between">
+                        <p className="font-semibold text-sm line-clamp-1">{module.title}</p>
+                        {isExpanded ? (
+                          <ChevronUp className="w-4 h-4 text-muted-foreground shrink-0" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {completed}/{total} episodes • {module.description?.slice(0, 40)}...
                       </p>
-                      <p className="text-xs text-muted-foreground mt-1">{ep.duration}</p>
                     </div>
-                  </div>
-                </button>
+                  </button>
+                  
+                  {/* Episodes */}
+                  {isExpanded && (
+                    <div className="pl-4 mt-1 space-y-1">
+                      {module.episodes.map((ep, episodeIdx) => {
+                        const isCompleted = completedEpisodes.has(ep.id);
+                        const isCurrent = moduleIdx === currentModuleIdx && episodeIdx === currentEpisodeIdx;
+                        
+                        return (
+                          <button
+                            key={ep.id}
+                            onClick={() => selectEpisode(moduleIdx, episodeIdx)}
+                            className={cn(
+                              "w-full text-left p-3 rounded-lg transition-colors flex items-start gap-3",
+                              isCurrent ? "bg-primary/10 border border-primary/20" : "hover:bg-muted/50"
+                            )}
+                          >
+                            <div className={cn(
+                              "w-8 h-8 rounded-lg flex items-center justify-center shrink-0",
+                              isCompleted 
+                                ? "bg-emerald/10 text-emerald" 
+                                : isCurrent 
+                                  ? "bg-primary text-primary-foreground" 
+                                  : "bg-muted text-muted-foreground"
+                            )}>
+                              {isCompleted ? (
+                                <CheckCircle className="w-4 h-4" />
+                              ) : isCurrent ? (
+                                <PlayCircle className="w-4 h-4" />
+                              ) : (
+                                <span className="text-xs font-medium">{episodeIdx + 1}</span>
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className={cn(
+                                "font-medium text-sm line-clamp-2",
+                                isCurrent && "text-primary"
+                              )}>
+                                {ep.title}
+                              </p>
+                              <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
+                                <Clock className="w-3 h-3" />
+                                {ep.duration}
+                              </p>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               );
             })}
           </div>
         </div>
       </div>
 
-      {/* Mobile Episode Playlist - Below Video */}
+      {/* Mobile Episode Playlist */}
       <div className="lg:hidden border-t border-border bg-card">
         <div className="p-3 border-b border-border flex items-center justify-between">
           <h3 className="font-bold text-sm">Course Playlist</h3>
-          <span className="text-xs text-muted-foreground">{completedEpisodes.size}/{course.episodes.length}</span>
+          <span className="text-xs text-muted-foreground">{completedEpisodes.size}/{totalEpisodes}</span>
         </div>
         <div className="max-h-48 overflow-y-auto">
-          {course.episodes.map((ep, idx) => {
-            const isCompleted = completedEpisodes.has(ep.id);
-            const isCurrent = idx === currentEpisode;
-            return (
-              <button
-                key={ep.id}
-                onClick={() => setCurrentEpisode(idx)}
-                className={`w-full text-left p-3 flex items-center gap-3 border-b border-border/50 ${
-                  isCurrent ? 'bg-primary/10' : 'hover:bg-muted/50'
-                }`}
-              >
-                <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
-                  isCompleted ? 'bg-emerald/10 text-emerald' : isCurrent ? 'bg-primary text-primary-foreground' : 'bg-muted'
-                }`}>
-                  {isCompleted ? <CheckCircle className="w-3.5 h-3.5" /> : <span className="text-xs font-medium">{idx + 1}</span>}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className={`text-sm line-clamp-1 ${isCurrent ? 'font-medium text-primary' : ''}`}>{ep.title}</p>
-                  <p className="text-xs text-muted-foreground">{ep.duration}</p>
-                </div>
-              </button>
-            );
-          })}
+          {modules.map((module, moduleIdx) => (
+            <div key={module.id}>
+              {/* Module Header - Mobile */}
+              <div className="px-4 py-2 bg-muted/50 border-b border-border/50">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                  {module.title}
+                </p>
+              </div>
+              {module.episodes.map((ep, episodeIdx) => {
+                const isCompleted = completedEpisodes.has(ep.id);
+                const isCurrent = moduleIdx === currentModuleIdx && episodeIdx === currentEpisodeIdx;
+                return (
+                  <button
+                    key={ep.id}
+                    onClick={() => selectEpisode(moduleIdx, episodeIdx)}
+                    className={cn(
+                      "w-full text-left p-3 flex items-center gap-3 border-b border-border/50",
+                      isCurrent ? "bg-primary/10" : "hover:bg-muted/50"
+                    )}
+                  >
+                    <div className={cn(
+                      "w-7 h-7 rounded-lg flex items-center justify-center shrink-0",
+                      isCompleted ? "bg-emerald/10 text-emerald" : isCurrent ? "bg-primary text-primary-foreground" : "bg-muted"
+                    )}>
+                      {isCompleted ? (
+                        <CheckCircle className="w-3.5 h-3.5" />
+                      ) : (
+                        <span className="text-xs font-medium">{episodeIdx + 1}</span>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className={cn("text-sm line-clamp-1", isCurrent && "font-medium text-primary")}>
+                        {ep.title}
+                      </p>
+                      <p className="text-xs text-muted-foreground">{ep.duration}</p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          ))}
         </div>
       </div>
     </div>

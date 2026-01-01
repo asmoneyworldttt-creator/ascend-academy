@@ -34,6 +34,7 @@ import logo from "@/assets/logo.png";
 import DailyWelcomePopup from "@/components/DailyWelcomePopup";
 import PaymentReminderBar from "@/components/PaymentReminderBar";
 import PaymentReminderPopup from "@/components/PaymentReminderPopup";
+import AIRecommendations from "@/components/AIRecommendations";
 import { packages } from "@/data/packages";
 
 // Ads data
@@ -337,6 +338,11 @@ const UserHome = () => {
             </div>
           </div>
         )}
+
+        {/* AI Recommendations Widget */}
+        <div className="mb-8">
+          <AIRecommendations userName={userName} purchasedPlan={purchasedPlan} />
+        </div>
 
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
