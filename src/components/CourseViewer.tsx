@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   X, 
   Play, 
@@ -12,10 +12,13 @@ import {
   ChevronDown,
   ChevronUp,
   Folder,
-  PlayCircle
+  PlayCircle,
+  Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useCourseProgress } from "@/hooks/useCourseProgress";
+import { toast } from "sonner";
 
 interface Episode {
   id: string;
@@ -59,12 +62,19 @@ const CourseViewer = ({ course, onClose, onComplete }: CourseViewerProps) => {
 
   const allEpisodes = modules.flatMap(m => m.episodes);
   
+  // Use database-backed progress tracking
+  const { 
+    completedEpisodes, 
+    isLoading: isProgressLoading,
+    markEpisodeComplete, 
+    markAllComplete,
+    isEpisodeComplete 
+  } = useCourseProgress(course.id);
+  
   const [currentModuleIdx, setCurrentModuleIdx] = useState(0);
   const [currentEpisodeIdx, setCurrentEpisodeIdx] = useState(0);
-  const [completedEpisodes, setCompletedEpisodes] = useState<Set<string>>(
-    new Set(allEpisodes.filter(e => e.completed).map(e => e.id))
-  );
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [expandedModules, setExpandedModules] = useState<Set<string>>(
     new Set([modules[0]?.id])
   );
@@ -92,31 +102,47 @@ const CourseViewer = ({ course, onClose, onComplete }: CourseViewerProps) => {
     setExpandedModules(prev => new Set([...prev, modules[moduleIdx].id]));
   };
 
-  const markComplete = () => {
-    if (!episode) return;
-    const newCompleted = new Set(completedEpisodes);
-    newCompleted.add(episode.id);
-    setCompletedEpisodes(newCompleted);
-
-    // Auto-advance to next episode
-    if (currentEpisodeIdx < currentModule.episodes.length - 1) {
-      setTimeout(() => setCurrentEpisodeIdx(currentEpisodeIdx + 1), 1000);
-    } else if (currentModuleIdx < modules.length - 1) {
-      // Move to next module
-      setTimeout(() => {
-        setCurrentModuleIdx(currentModuleIdx + 1);
-        setCurrentEpisodeIdx(0);
-        setExpandedModules(prev => new Set([...prev, modules[currentModuleIdx + 1].id]));
-      }, 1000);
+  const markComplete = async () => {
+    if (!episode || isSaving) return;
+    
+    setIsSaving(true);
+    const success = await markEpisodeComplete(episode.id);
+    setIsSaving(false);
+    
+    if (success) {
+      toast.success("Progress saved!");
+      
+      // Auto-advance to next episode
+      if (currentEpisodeIdx < currentModule.episodes.length - 1) {
+        setTimeout(() => setCurrentEpisodeIdx(currentEpisodeIdx + 1), 1000);
+      } else if (currentModuleIdx < modules.length - 1) {
+        // Move to next module
+        setTimeout(() => {
+          setCurrentModuleIdx(currentModuleIdx + 1);
+          setCurrentEpisodeIdx(0);
+          setExpandedModules(prev => new Set([...prev, modules[currentModuleIdx + 1].id]));
+        }, 1000);
+      }
+    } else {
+      toast.error("Failed to save progress. Please try again.");
     }
   };
 
-  const handleCompleteAll = () => {
-    onComplete(course.id);
+  const handleCompleteAll = async () => {
+    setIsSaving(true);
+    const allEpisodeIds = allEpisodes.map(e => e.id);
+    const success = await markAllComplete(allEpisodeIds);
+    setIsSaving(false);
+    
+    if (success) {
+      onComplete(course.id);
+    } else {
+      toast.error("Failed to save progress.");
+    }
   };
 
   const getModuleProgress = (module: Module) => {
-    const completed = module.episodes.filter(e => completedEpisodes.has(e.id)).length;
+    const completed = module.episodes.filter(e => isEpisodeComplete(e.id)).length;
     return { completed, total: module.episodes.length };
   };
 
@@ -203,7 +229,7 @@ const CourseViewer = ({ course, onClose, onComplete }: CourseViewerProps) => {
                       <Clock className="w-4 h-4" />
                       {episode.duration}
                     </span>
-                    {completedEpisodes.has(episode.id) && (
+                    {isEpisodeComplete(episode.id) && (
                       <span className="flex items-center gap-1 text-emerald">
                         <CheckCircle className="w-4 h-4" />
                         Completed
@@ -211,10 +237,10 @@ const CourseViewer = ({ course, onClose, onComplete }: CourseViewerProps) => {
                     )}
                   </div>
                 </div>
-                {!completedEpisodes.has(episode.id) && (
-                  <Button variant="hero" onClick={markComplete}>
-                    <CheckCircle className="w-4 h-4 mr-2" />
-                    Mark Complete
+                {!isEpisodeComplete(episode.id) && (
+                  <Button variant="hero" onClick={markComplete} disabled={isSaving}>
+                    {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <CheckCircle className="w-4 h-4 mr-2" />}
+                    {isSaving ? "Saving..." : "Mark Complete"}
                   </Button>
                 )}
               </div>
@@ -321,7 +347,7 @@ const CourseViewer = ({ course, onClose, onComplete }: CourseViewerProps) => {
                   {isExpanded && (
                     <div className="pl-4 mt-1 space-y-1">
                       {module.episodes.map((ep, episodeIdx) => {
-                        const isCompleted = completedEpisodes.has(ep.id);
+                        const isCompleted = isEpisodeComplete(ep.id);
                         const isCurrent = moduleIdx === currentModuleIdx && episodeIdx === currentEpisodeIdx;
                         
                         return (
@@ -389,7 +415,7 @@ const CourseViewer = ({ course, onClose, onComplete }: CourseViewerProps) => {
                 </p>
               </div>
               {module.episodes.map((ep, episodeIdx) => {
-                const isCompleted = completedEpisodes.has(ep.id);
+                const isCompleted = isEpisodeComplete(ep.id);
                 const isCurrent = moduleIdx === currentModuleIdx && episodeIdx === currentEpisodeIdx;
                 return (
                   <button
