@@ -25,7 +25,7 @@ const AdminForgotPassword = () => {
   const [step, setStep] = useState<Step>("email");
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { resetPasswordWithOTP, verifyOTPAndResetPassword } = useAuth();
+  const { sendEmailOTP, verifyEmailOTP, updatePassword } = useAuth();
 
   const handleSendOTP = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,14 +44,23 @@ const AdminForgotPassword = () => {
     setIsLoading(true);
 
     try {
-      const { error } = await resetPasswordWithOTP(email);
+      const { error } = await sendEmailOTP(email);
 
       if (error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
+        // Handle specific error for non-existent user
+        if (error.message.includes("Signups not allowed")) {
+          toast({
+            title: "Account Not Found",
+            description: "No account exists with this email address.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: error.message,
+            variant: "destructive",
+          });
+        }
         setIsLoading(false);
         return;
       }
@@ -109,12 +118,26 @@ const AdminForgotPassword = () => {
     setIsLoading(true);
 
     try {
-      const { error } = await verifyOTPAndResetPassword(email, otp, password);
+      // First verify the OTP - this will sign the user in
+      const { error: verifyError } = await verifyEmailOTP(email, otp);
 
-      if (error) {
+      if (verifyError) {
+        toast({
+          title: "Invalid Code",
+          description: verifyError.message || "The code you entered is invalid or expired. Please try again.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Now update the password (user is now authenticated)
+      const { error: updateError } = await updatePassword(password);
+
+      if (updateError) {
         toast({
           title: "Error",
-          description: error.message,
+          description: updateError.message,
           variant: "destructive",
         });
         setIsLoading(false);
@@ -145,7 +168,7 @@ const AdminForgotPassword = () => {
   const handleResendCode = async () => {
     setIsLoading(true);
     try {
-      const { error } = await resetPasswordWithOTP(email);
+      const { error } = await sendEmailOTP(email);
       if (error) {
         toast({
           title: "Error",
