@@ -26,42 +26,54 @@ const ResetPassword = () => {
 
   // Check if user has a valid recovery session
   useEffect(() => {
-    const checkSession = async () => {
-      setIsValidating(true);
+    let timeoutId: NodeJS.Timeout;
+    
+    // Set up auth state listener to detect PASSWORD_RECOVERY event
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("Auth event:", event, "Session:", !!session);
       
-      // Wait for Supabase to process the URL hash/token (up to 30 seconds with retries)
-      let attempts = 0;
-      const maxAttempts = 30; // 30 attempts * 1 second = 30 seconds total
-      
-      const checkForSession = async (): Promise<boolean> => {
-        const { data: { session } } = await supabase.auth.getSession();
-        return !!session;
-      };
-      
-      // Initial check
-      let hasSession = await checkForSession();
-      
-      while (!hasSession && attempts < maxAttempts) {
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
-        hasSession = await checkForSession();
-        attempts++;
-      }
-      
-      if (hasSession) {
+      if (event === "PASSWORD_RECOVERY" || (event === "SIGNED_IN" && session)) {
+        // User clicked valid recovery link - they can now reset password
         setIsValidSession(true);
-      } else {
-        toast({
-          title: "Invalid or Expired Link",
-          description: "Please request a new password reset link. The link may have expired.",
-          variant: "destructive",
-        });
+        setIsValidating(false);
+        if (timeoutId) clearTimeout(timeoutId);
+      } else if (event === "SIGNED_OUT") {
+        setIsValidSession(false);
       }
-      
-      setIsValidating(false);
-    };
+    });
 
-    checkSession();
-  }, [toast]);
+    // Also check if there's already a session (user might already be authenticated from the link)
+    const checkExistingSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        setIsValidSession(true);
+        setIsValidating(false);
+        if (timeoutId) clearTimeout(timeoutId);
+      }
+    };
+    
+    checkExistingSession();
+
+    // Give a reasonable timeout (10 seconds) for the auth event to fire
+    timeoutId = setTimeout(() => {
+      if (isValidating) {
+        setIsValidating(false);
+        // Only show error if we still don't have a valid session
+        if (!isValidSession) {
+          toast({
+            title: "Invalid or Expired Link",
+            description: "Please request a new password reset link. The link may have expired.",
+            variant: "destructive",
+          });
+        }
+      }
+    }, 10000);
+
+    return () => {
+      subscription.unsubscribe();
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
