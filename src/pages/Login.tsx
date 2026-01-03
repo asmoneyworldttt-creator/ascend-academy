@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Eye, EyeOff, ArrowRight, Shield, Sparkles, Users, Lock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -14,6 +14,21 @@ const Login = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+
+  // Get plan/course from URL params to persist
+  const selectedPlan = searchParams.get("plan");
+  const selectedCourse = searchParams.get("course");
+
+  // Store plan/course selection in sessionStorage for post-login popup
+  useEffect(() => {
+    if (selectedPlan) {
+      sessionStorage.setItem("selectedPlan", selectedPlan);
+    }
+    if (selectedCourse) {
+      sessionStorage.setItem("selectedCourse", selectedCourse);
+    }
+  }, [selectedPlan, selectedCourse]);
 
   // Get the redirect path from location state or default to user-home
   const from = (location.state as any)?.from?.pathname || "/user-home";
