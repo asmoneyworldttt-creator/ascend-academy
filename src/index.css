@@ -629,3 +629,96 @@ h1, h2, h3, h4, p, span, div {
 .animate-bounce-slow {
   animation: bounce-slow 2s ease-in-out infinite;
 }
+
+/* Scroll-triggered animations */
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), 
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.scroll-animate.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-animate-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), 
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.scroll-animate-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-animate-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), 
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.scroll-animate-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-animate-scale {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), 
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.scroll-animate-scale.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Staggered children animation */
+.scroll-stagger > * {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), 
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.scroll-stagger.visible > *:nth-child(1) { transition-delay: 0ms; }
+.scroll-stagger.visible > *:nth-child(2) { transition-delay: 80ms; }
+.scroll-stagger.visible > *:nth-child(3) { transition-delay: 160ms; }
+.scroll-stagger.visible > *:nth-child(4) { transition-delay: 240ms; }
+.scroll-stagger.visible > *:nth-child(5) { transition-delay: 320ms; }
+.scroll-stagger.visible > *:nth-child(6) { transition-delay: 400ms; }
+.scroll-stagger.visible > *:nth-child(7) { transition-delay: 480ms; }
+.scroll-stagger.visible > *:nth-child(8) { transition-delay: 560ms; }
+
+.scroll-stagger.visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  .scroll-animate,
+  .scroll-animate-left,
+  .scroll-animate-right,
+  .scroll-animate-scale,
+  .scroll-stagger > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
