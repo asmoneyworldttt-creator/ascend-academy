@@ -14,31 +14,22 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Premium Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(45,30%,96%)] via-[hsl(200,25%,95%)] to-[hsl(45,35%,94%)] dark:from-[hsl(220,35%,12%)] dark:via-[hsl(220,30%,15%)] dark:to-[hsl(220,35%,14%)]" />
+      {/* Clean Premium Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(45,30%,97%)] via-[hsl(200,20%,96%)] to-[hsl(45,25%,95%)] dark:from-[hsl(220,35%,10%)] dark:via-[hsl(220,30%,12%)] dark:to-[hsl(220,35%,11%)]" />
       
-      {/* Animated Mesh Gradient Background */}
+      {/* Fluid Color Blobs - Subtle and Organic */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute w-[800px] h-[800px] -top-1/4 -left-1/4 bg-gradient-to-br from-primary/20 via-accent/10 to-transparent rounded-full blur-3xl animate-pulse-slow opacity-60" />
-        <div className="absolute w-[600px] h-[600px] top-1/2 -right-1/4 bg-gradient-to-bl from-accent/15 via-emerald/10 to-transparent rounded-full blur-3xl animate-float opacity-50" />
-        <div className="absolute w-[400px] h-[400px] bottom-0 left-1/3 bg-gradient-to-t from-primary/10 via-transparent to-transparent rounded-full blur-2xl animate-pulse opacity-40" />
+        <div className="absolute w-[600px] h-[600px] -top-[20%] -left-[10%] bg-gradient-to-br from-primary/15 via-amber-400/10 to-transparent rounded-full blur-[100px] animate-pulse opacity-50" style={{ animationDuration: '8s' }} />
+        <div className="absolute w-[500px] h-[500px] top-[40%] -right-[15%] bg-gradient-to-bl from-accent/12 via-teal-400/8 to-transparent rounded-full blur-[80px] animate-pulse opacity-40" style={{ animationDuration: '10s', animationDelay: '2s' }} />
+        <div className="absolute w-[400px] h-[400px] bottom-[10%] left-[20%] bg-gradient-to-t from-emerald-400/10 via-cyan-400/5 to-transparent rounded-full blur-[60px] animate-pulse opacity-35" style={{ animationDuration: '12s', animationDelay: '4s' }} />
       </div>
       
-      {/* Subtle Grid Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
-      
       <ParticleBackground />
-      <div className="absolute inset-0 bg-mesh-gradient opacity-40" />
       
-      {/* Animated Floating Orbs */}
-      <div className="absolute top-1/4 left-10 w-20 h-20 rounded-full bg-gradient-to-br from-primary/30 to-accent/20 blur-xl animate-float" />
-      <div className="absolute top-1/3 right-20 w-32 h-32 rounded-full bg-gradient-to-bl from-accent/25 to-emerald/15 blur-2xl animate-float" style={{ animationDelay: '-2s' }} />
-      <div className="absolute bottom-1/4 left-1/4 w-16 h-16 rounded-full bg-gradient-to-tr from-emerald/20 to-primary/15 blur-xl animate-float" style={{ animationDelay: '-4s' }} />
-      <div className="absolute top-1/2 right-1/4 w-12 h-12 rounded-full bg-gradient-to-br from-primary/25 to-transparent blur-lg animate-pulse" />
-      
-      {/* Decorative Lines */}
-      <div className="absolute top-1/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
-      <div className="absolute bottom-1/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent/10 to-transparent" />
+      {/* Soft Floating Orbs */}
+      <div className="absolute top-1/4 left-10 w-24 h-24 rounded-full bg-gradient-to-br from-primary/20 to-amber-400/10 blur-2xl animate-float opacity-60" />
+      <div className="absolute top-1/3 right-16 w-36 h-36 rounded-full bg-gradient-to-bl from-accent/15 to-teal-400/10 blur-3xl animate-float opacity-50" style={{ animationDelay: '-2s' }} />
+      <div className="absolute bottom-1/4 left-1/4 w-20 h-20 rounded-full bg-gradient-to-tr from-emerald-400/15 to-cyan-400/10 blur-2xl animate-float opacity-45" style={{ animationDelay: '-4s' }} />
       
       <div className="container relative mx-auto px-4 py-12 lg:py-20 z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Check, Gift, ChevronLeft, ChevronRight, Shield, Award, TrendingUp, Star, Crown, Gem, Sparkles, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { packages, incomeTypes, futureIncomeTypes } from "@/data/packages";
 
 // Theme backgrounds for each package tier
@@ -178,121 +179,166 @@ const PlansSection = () => {
 const PlanCard = ({ plan, index }: { plan: typeof packages[0]; index: number }) => {
   const Icon = plan.icon;
   const isPopular = plan.popular;
-  const [showAllFeatures, setShowAllFeatures] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const theme = themeStyles[plan.theme || 'bronze'];
   
   return (
-    <div
-      className="snap-center flex-shrink-0 w-[300px] lg:w-[320px]"
-      style={{ animationDelay: `${index * 0.1}s` }}
-    >
+    <>
       <div
-        className={`relative rounded-2xl overflow-hidden transition-all duration-400 h-[540px] flex flex-col group ${theme.bg} ${theme.border} border-2 ${isPopular ? theme.glow : ''} hover:-translate-y-2 hover:shadow-2xl`}
+        className="snap-center flex-shrink-0 w-[280px] lg:w-[300px]"
+        style={{ animationDelay: `${index * 0.1}s` }}
       >
-        {/* Popular badge */}
-        {isPopular && (
-          <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-yellow-500 via-amber-400 to-yellow-500 text-slate-900 text-center py-2 text-xs font-bold tracking-wider">
-            <Star className="w-3 h-3 inline mr-1" />
-            MOST POPULAR
-          </div>
-        )}
-
-        <div className={`p-6 flex flex-col flex-1 ${isPopular ? 'pt-12' : ''}`}>
-          {/* Header with Icon */}
-          <div className="flex items-start justify-between mb-4">
-            <div 
-              className={`w-14 h-14 rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-all duration-400`}
-              style={{ boxShadow: `0 10px 30px ${plan.glowColor}40` }}
-            >
-              <Icon className="w-7 h-7 text-white" />
-            </div>
-            <span className="text-xs px-3 py-1.5 rounded-full bg-white/10 text-white/80 font-semibold border border-white/20">
-              {plan.level}
-            </span>
-          </div>
-
-          {/* Name & Tagline */}
-          <div className="mb-3">
-            <div className="flex items-center gap-2 mb-1">
-              <h3 className={`text-2xl font-bold tracking-wider bg-gradient-to-r ${plan.color} bg-clip-text text-transparent`}>
-                {plan.name}
-              </h3>
-            </div>
-            <p className="text-sm text-white/60 font-medium">{plan.tagline}</p>
-          </div>
-
-          <p className="text-sm text-white/50 mb-4 leading-relaxed line-clamp-2">
-            {plan.shortDesc}
-          </p>
-
-          {/* Pricing */}
-          <div className="mb-4 p-4 rounded-xl bg-black/20 border border-white/10">
-            <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-3xl font-bold text-white">₹{plan.price.toLocaleString()}</span>
-              <span className="text-sm text-white/40 line-through">₹{plan.mrp.toLocaleString()}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="inline-block px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 text-xs font-bold">
-                SAVE {Math.round((1 - plan.price / plan.mrp) * 100)}%
-              </span>
-              {plan.period === "lifetime" && (
-                <span className="text-xs text-white/50 font-medium">Lifetime</span>
-              )}
-            </div>
-          </div>
-
-          {/* Included Packages */}
-          {plan.includes.length > 0 && (
-            <div className="mb-4 p-3 bg-primary/10 rounded-xl border border-primary/20">
-              <div className="flex items-center gap-1.5 mb-1">
-                <Gift className="w-4 h-4 text-primary" />
-                <span className="text-xs text-primary font-bold">INCLUDES ₹{plan.savings.toLocaleString()} VALUE</span>
+        <div
+          className={`relative rounded-2xl overflow-hidden transition-all duration-400 h-[500px] flex flex-col group ${theme.bg} ${theme.border} border-2 hover:-translate-y-2 hover:shadow-2xl`}
+        >
+          {/* Corner Ribbon for Popular */}
+          {isPopular && (
+            <div className="absolute -right-12 top-6 z-20 rotate-45">
+              <div className="bg-gradient-to-r from-yellow-500 via-amber-400 to-yellow-500 text-slate-900 text-[10px] font-bold tracking-wider py-1.5 px-12 shadow-lg">
+                ⭐ BEST VALUE
               </div>
-              <p className="text-xs text-white/50 line-clamp-1">
-                {plan.includes.join(" + ")}
-              </p>
             </div>
           )}
 
-          {/* Features */}
-          <ul className="space-y-2 mb-4 flex-1">
-            {plan.features.slice(0, showAllFeatures ? undefined : 4).map((feature) => (
-              <li key={feature} className="flex items-start gap-2 text-sm">
-                <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Check className="w-3 h-3 text-emerald-400" />
-                </div>
-                <span className="text-white/70 leading-relaxed line-clamp-1">{feature}</span>
-              </li>
-            ))}
-            {plan.features.length > 4 && !showAllFeatures && (
-              <button 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowAllFeatures(true);
-                }}
-                className="text-xs text-primary hover:text-primary/80 font-semibold pl-7 transition-colors"
+          <div className="p-5 flex flex-col flex-1">
+            {/* Header with Icon */}
+            <div className="flex items-start justify-between mb-3">
+              <div 
+                className={`w-12 h-12 rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-all duration-400`}
               >
-                +{plan.features.length - 4} more features →
-              </button>
-            )}
-          </ul>
+                <Icon className="w-6 h-6 text-white" />
+              </div>
+              <span className="text-[10px] px-2.5 py-1 rounded-full bg-white/10 text-white/80 font-semibold border border-white/20 uppercase">
+                {plan.level}
+              </span>
+            </div>
 
-          {/* CTA */}
-          <Link to={`/register?plan=${plan.name}`} className="block mt-auto">
-            <Button
-              variant={isPopular ? "hero" : "outline"}
-              className={`w-full h-12 text-sm font-semibold ${
-                isPopular 
-                  ? 'shadow-lg' 
-                  : 'border-white/30 text-white hover:bg-white/10 hover:border-white/50'
-              }`}
-            >
-              Get {plan.displayName}
-            </Button>
-          </Link>
+            {/* Name & Tagline */}
+            <div className="mb-2">
+              <h3 className={`text-xl font-bold tracking-wide bg-gradient-to-r ${plan.color} bg-clip-text text-transparent`}>
+                {plan.name}
+              </h3>
+              <p className="text-xs text-white/50 font-medium">{plan.tagline}</p>
+            </div>
+
+            <p className="text-xs text-white/40 mb-3 leading-relaxed line-clamp-2">
+              {plan.shortDesc}
+            </p>
+
+            {/* Pricing */}
+            <div className="mb-3 p-3 rounded-xl bg-black/20 border border-white/10">
+              <div className="flex items-baseline gap-2 mb-1">
+                <span className="text-2xl font-bold text-white">₹{plan.price.toLocaleString()}</span>
+                <span className="text-xs text-white/40 line-through">₹{plan.mrp.toLocaleString()}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-block px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">
+                  SAVE {Math.round((1 - plan.price / plan.mrp) * 100)}%
+                </span>
+                {plan.period === "lifetime" && (
+                  <span className="text-[10px] text-white/50 font-medium">Lifetime</span>
+                )}
+              </div>
+            </div>
+
+            {/* Included Packages */}
+            {plan.includes.length > 0 && (
+              <div className="mb-3 p-2.5 bg-primary/10 rounded-lg border border-primary/20">
+                <div className="flex items-center gap-1.5 mb-0.5">
+                  <Gift className="w-3.5 h-3.5 text-primary" />
+                  <span className="text-[10px] text-primary font-bold">₹{plan.savings.toLocaleString()} VALUE</span>
+                </div>
+                <p className="text-[10px] text-white/50 line-clamp-1">
+                  {plan.includes.join(" + ")}
+                </p>
+              </div>
+            )}
+
+            {/* Features Preview */}
+            <ul className="space-y-1.5 mb-3 flex-1">
+              {plan.features.slice(0, 3).map((feature) => (
+                <li key={feature} className="flex items-start gap-2 text-xs">
+                  <div className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Check className="w-2.5 h-2.5 text-emerald-400" />
+                  </div>
+                  <span className="text-white/60 leading-relaxed line-clamp-1">{feature}</span>
+                </li>
+              ))}
+              {plan.features.length > 3 && (
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowDetails(true);
+                  }}
+                  className="text-[10px] text-primary hover:text-primary/80 font-semibold pl-6 transition-colors"
+                >
+                  +{plan.features.length - 3} more features →
+                </button>
+              )}
+            </ul>
+
+            {/* CTA */}
+            <Link to={`/register?plan=${plan.name}`} className="block mt-auto">
+              <Button
+                variant={isPopular ? "hero" : "outline"}
+                className={`w-full h-11 text-sm font-semibold ${
+                  isPopular 
+                    ? 'shadow-lg' 
+                    : 'border-white/30 text-white hover:bg-white/10 hover:border-white/50'
+                }`}
+              >
+                Get Started
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Details Modal */}
+      <Dialog open={showDetails} onOpenChange={setShowDetails}>
+        <DialogContent className="max-w-lg p-0 glass-card border-border/50 overflow-hidden mx-4">
+          <div className={`p-6 ${theme.bg} border-b border-white/10`}>
+            <div className="flex items-center gap-4">
+              <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center shadow-lg`}>
+                <Icon className="w-7 h-7 text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-white">{plan.displayName}</h3>
+                <p className="text-sm text-white/60">{plan.tagline}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="p-6 max-h-[60vh] overflow-y-auto">
+            <h4 className="text-sm font-bold text-foreground mb-3">All Features Included:</h4>
+            <ul className="space-y-2">
+              {plan.features.map((feature) => (
+                <li key={feature} className="flex items-start gap-2 text-sm">
+                  <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Check className="w-3 h-3 text-emerald-400" />
+                  </div>
+                  <span className="text-muted-foreground">{feature}</span>
+                </li>
+              ))}
+            </ul>
+            
+            {plan.includes.length > 0 && (
+              <div className="mt-6 p-4 rounded-xl bg-primary/10 border border-primary/20">
+                <h4 className="text-sm font-bold text-foreground mb-2">Bonus Packages Included:</h4>
+                <p className="text-sm text-muted-foreground">{plan.includes.join(", ")}</p>
+                <p className="text-xs text-primary mt-2 font-semibold">Total Value: ₹{plan.savings.toLocaleString()}</p>
+              </div>
+            )}
+            
+            <Link to={`/register?plan=${plan.name}`} className="block mt-6">
+              <Button variant="hero" className="w-full">
+                Enroll Now - ₹{plan.price.toLocaleString()}
+              </Button>
+            </Link>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 

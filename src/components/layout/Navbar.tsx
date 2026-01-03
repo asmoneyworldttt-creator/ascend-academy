@@ -90,18 +90,24 @@ const Navbar = () => {
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
-            {/* Logo with professional glow for light mode visibility */}
+            {/* Logo with glassmorphism container for light mode visibility */}
             <Link to="/" className="flex items-center gap-2 group relative">
-              {/* Professional glow background for light mode */}
-              <div className={`absolute -inset-2 rounded-xl transition-all duration-500 ${
+              {/* Glassmorphism container */}
+              <div className={`absolute -inset-3 rounded-2xl transition-all duration-500 ${
                 isDark 
-                  ? 'opacity-0 group-hover:opacity-100 bg-gradient-to-r from-primary/20 via-accent/10 to-primary/20 blur-lg' 
-                  : 'opacity-100 bg-gradient-to-br from-amber-100/80 via-yellow-50/60 to-orange-100/50 shadow-[0_0_30px_rgba(251,191,36,0.3)]'
+                  ? 'opacity-0 group-hover:opacity-100 bg-gradient-to-r from-primary/15 via-accent/10 to-primary/15 blur-xl' 
+                  : 'opacity-100 bg-gradient-to-br from-white/60 via-amber-50/40 to-white/60 backdrop-blur-sm border border-amber-200/30 shadow-[0_4px_20px_rgba(251,191,36,0.15),_inset_0_1px_0_rgba(255,255,255,0.6)]'
+              }`} />
+              {/* Subtle outer glow for light mode */}
+              <div className={`absolute -inset-4 rounded-3xl transition-all duration-500 ${
+                isDark ? 'opacity-0' : 'opacity-60 bg-gradient-to-r from-amber-400/20 via-yellow-300/15 to-amber-400/20 blur-2xl'
               }`} />
               <img
                 src={logo}
                 alt="Skill Learners"
-                className="relative h-14 md:h-16 w-auto transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_10px_rgba(251,191,36,0.4)]"
+                className={`relative h-14 md:h-16 w-auto transition-all duration-300 group-hover:scale-105 ${
+                  isDark ? 'drop-shadow-[0_2px_12px_rgba(251,191,36,0.5)]' : 'drop-shadow-[0_2px_8px_rgba(180,83,9,0.25)]'
+                }`}
               />
             </Link>
 
