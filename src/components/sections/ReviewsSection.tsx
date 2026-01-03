@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Star, Quote, ChevronLeft, ChevronRight, BadgeCheck, Play, Sparkles } from "lucide-react";
+import { Star, Quote, ChevronLeft, ChevronRight, BadgeCheck, Play, Sparkles, Video, X, Volume2, VolumeX } from "lucide-react";
 import { VerifiedBadge } from "@/components/ui/PremiumIcons";
 
 const reviews = [
@@ -55,10 +55,61 @@ const reviews = [
   },
 ];
 
+// Video testimonials data
+const videoTestimonials = [
+  {
+    id: 1,
+    name: "Arun Kumar",
+    role: "Freelance Developer",
+    thumbnail: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=225&fit=crop",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    duration: "2:45",
+    earnings: "₹75,000/month",
+    course: "Web Development",
+    verified: true,
+  },
+  {
+    id: 2,
+    name: "Sneha Reddy",
+    role: "Digital Marketer",
+    thumbnail: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=225&fit=crop",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    duration: "3:12",
+    earnings: "₹55,000/month",
+    course: "Digital Marketing",
+    verified: true,
+  },
+  {
+    id: 3,
+    name: "Karthik Nair",
+    role: "E-commerce Owner",
+    thumbnail: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=225&fit=crop",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    duration: "4:05",
+    earnings: "₹1.5L/month",
+    course: "E-commerce Mastery",
+    verified: true,
+  },
+  {
+    id: 4,
+    name: "Divya Mehta",
+    role: "AI Consultant",
+    thumbnail: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=225&fit=crop",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    duration: "2:58",
+    earnings: "₹90,000/month",
+    course: "AI & Prompt Engineering",
+    verified: true,
+  },
+];
+
 const ReviewsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [videoIndex, setVideoIndex] = useState(0);
+  const [activeVideo, setActiveVideo] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const videoScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isAutoPlaying) return;
@@ -80,8 +131,16 @@ const ReviewsSection = () => {
     setCurrentIndex((prev) => (prev + 1) % reviews.length);
   };
 
+  const goToVideoPrev = () => {
+    setVideoIndex((prev) => (prev - 1 + videoTestimonials.length) % videoTestimonials.length);
+  };
+
+  const goToVideoNext = () => {
+    setVideoIndex((prev) => (prev + 1) % videoTestimonials.length);
+  };
+
   return (
-    <section className="py-20 lg:py-32 relative overflow-hidden">
+    <section className="py-20 lg:py-32 relative overflow-hidden transition-colors duration-500">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/30 to-background" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-96 bg-gradient-to-b from-primary/5 to-transparent" />
@@ -279,7 +338,7 @@ const ReviewsSection = () => {
           <div className="flex items-center justify-center gap-4 mt-8">
             <button
               onClick={goToPrevious}
-              className="w-12 h-12 rounded-full bg-card shadow-lg flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors border border-border"
+              className="w-12 h-12 rounded-full bg-card shadow-lg flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors duration-300 border border-border"
               aria-label="Previous review"
             >
               <ChevronLeft className="w-6 h-6" />
@@ -305,13 +364,193 @@ const ReviewsSection = () => {
             
             <button
               onClick={goToNext}
-              className="w-12 h-12 rounded-full bg-card shadow-lg flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors border border-border"
+              className="w-12 h-12 rounded-full bg-card shadow-lg flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors duration-300 border border-border"
               aria-label="Next review"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
           </div>
         </div>
+
+        {/* Video Testimonials Section */}
+        <div className="mt-20 lg:mt-28">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-royal/10 border border-royal/20 text-sm font-medium text-royal mb-4">
+              <Video className="w-4 h-4" />
+              Video Testimonials
+            </div>
+            <h3 className="text-2xl lg:text-4xl font-bold font-display mb-3">
+              Hear It <span className="text-gradient-gold">From Them</span>
+            </h3>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Watch real students share their transformation stories
+            </p>
+          </div>
+
+          {/* Video Carousel - Mobile */}
+          <div className="lg:hidden" ref={videoScrollRef}>
+            <div className="flex gap-4 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide -mx-4 px-4">
+              {videoTestimonials.map((video) => (
+                <div
+                  key={video.id}
+                  className="snap-center flex-shrink-0 w-[85vw] max-w-[350px]"
+                >
+                  <div 
+                    className="glass-card rounded-2xl overflow-hidden group cursor-pointer transition-all duration-300 hover:shadow-elevated"
+                    onClick={() => setActiveVideo(video.id)}
+                  >
+                    {/* Thumbnail */}
+                    <div className="relative aspect-video">
+                      <img 
+                        src={video.thumbnail} 
+                        alt={video.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+                      
+                      {/* Play Button */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 glow-gold">
+                          <Play className="w-7 h-7 text-primary-foreground ml-1" fill="currentColor" />
+                        </div>
+                      </div>
+                      
+                      {/* Duration Badge */}
+                      <div className="absolute bottom-3 right-3 px-2 py-1 rounded bg-background/80 backdrop-blur-sm text-xs font-medium">
+                        {video.duration}
+                      </div>
+                    </div>
+                    
+                    {/* Info */}
+                    <div className="p-4">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h4 className="font-bold text-foreground">{video.name}</h4>
+                        {video.verified && <VerifiedBadge className="w-4 h-4" />}
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-2">{video.role}</p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">{video.course}</span>
+                        <span className="text-sm font-bold text-emerald">{video.earnings}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Video Carousel - Desktop */}
+          <div className="hidden lg:block relative">
+            <div className="grid grid-cols-4 gap-6">
+              {videoTestimonials.map((video, index) => (
+                <div
+                  key={video.id}
+                  className={`glass-card rounded-2xl overflow-hidden group cursor-pointer transition-all duration-500 hover:shadow-elevated hover:-translate-y-2 ${
+                    index === videoIndex ? 'ring-2 ring-primary/50 shadow-elevated' : ''
+                  }`}
+                  onClick={() => setActiveVideo(video.id)}
+                >
+                  {/* Thumbnail */}
+                  <div className="relative aspect-video">
+                    <img 
+                      src={video.thumbnail} 
+                      alt={video.name}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+                    
+                    {/* Play Button */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity">
+                      <div className="w-14 h-14 rounded-full bg-primary/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 glow-gold">
+                        <Play className="w-6 h-6 text-primary-foreground ml-1" fill="currentColor" />
+                      </div>
+                    </div>
+                    
+                    {/* Duration Badge */}
+                    <div className="absolute bottom-3 right-3 px-2 py-1 rounded bg-background/80 backdrop-blur-sm text-xs font-medium">
+                      {video.duration}
+                    </div>
+                  </div>
+                  
+                  {/* Info */}
+                  <div className="p-4">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="font-bold text-foreground">{video.name}</h4>
+                      {video.verified && <VerifiedBadge className="w-4 h-4" />}
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-2">{video.role}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">{video.course}</span>
+                      <span className="text-sm font-bold text-emerald">{video.earnings}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop Video Navigation */}
+            <div className="flex items-center justify-center gap-4 mt-8">
+              <button
+                onClick={goToVideoPrev}
+                className="w-10 h-10 rounded-full bg-card shadow-lg flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors duration-300 border border-border"
+                aria-label="Previous video"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              
+              <div className="flex items-center gap-2">
+                {videoTestimonials.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setVideoIndex(index)}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      index === videoIndex
+                        ? "w-6 bg-royal"
+                        : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                    }`}
+                    aria-label={`Go to video ${index + 1}`}
+                  />
+                ))}
+              </div>
+              
+              <button
+                onClick={goToVideoNext}
+                className="w-10 h-10 rounded-full bg-card shadow-lg flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors duration-300 border border-border"
+                aria-label="Next video"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Video Modal */}
+        {activeVideo && (
+          <div 
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-lg animate-fade-in"
+            onClick={() => setActiveVideo(null)}
+          >
+            <div 
+              className="relative w-full max-w-4xl aspect-video glass-card rounded-2xl overflow-hidden shadow-elevated animate-scale-in"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setActiveVideo(null)}
+                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-destructive hover:text-destructive-foreground transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              
+              <iframe
+                src={`${videoTestimonials.find(v => v.id === activeVideo)?.videoUrl}?autoplay=1`}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="Video testimonial"
+              />
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

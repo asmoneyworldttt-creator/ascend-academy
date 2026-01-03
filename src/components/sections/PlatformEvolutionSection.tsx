@@ -103,9 +103,9 @@ const PlatformEvolutionSection = () => {
   const [selectedMilestone, setSelectedMilestone] = useState<typeof platformMilestones[0] | null>(null);
 
   return (
-    <section className="py-20 lg:py-32 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900" />
+    <section className="py-20 lg:py-32 relative overflow-hidden transition-colors duration-500">
+      {/* Background - Works in both themes */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 transition-colors duration-500" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
       
       {/* Animated grid */}
@@ -139,7 +139,7 @@ const PlatformEvolutionSection = () => {
               <button
                 key={milestone.id}
                 onClick={() => setSelectedMilestone(milestone)}
-                className="group relative p-6 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 text-left"
+                className="group relative p-6 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all duration-500 text-left"
               >
                 <div 
                   className="w-14 h-14 rounded-xl flex items-center justify-center mb-4"
