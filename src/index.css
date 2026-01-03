@@ -706,6 +706,125 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Micro-interactions */
+.micro-interaction {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              box-shadow 0.2s ease;
+}
+
+.micro-interaction:hover {
+  transform: scale(1.02);
+}
+
+.micro-interaction:active {
+  transform: scale(0.98);
+}
+
+/* Icon hover effects */
+.icon-hover {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              color 0.2s ease;
+}
+
+.icon-hover:hover {
+  transform: scale(1.15) rotate(5deg);
+}
+
+/* Link underline animation */
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: hsl(var(--primary));
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Card press effect */
+.card-press {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card-press:active {
+  transform: scale(0.98) translateY(2px);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Ripple effect container */
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--ripple-x, 50%) var(--ripple-y, 50%), 
+              hsl(var(--primary) / 0.3) 0%, transparent 70%);
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.ripple-container:active::before {
+  opacity: 1;
+  transform: scale(2);
+}
+
+/* Focus ring enhancement */
+.focus-ring {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+}
+
+/* Shimmer loading effect */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Pulse border animation */
+.pulse-border {
+  position: relative;
+}
+
+.pulse-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  border: 2px solid hsl(var(--primary));
+  animation: pulse-border 2s ease-in-out infinite;
+}
+
+@keyframes pulse-border {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
 /* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -716,9 +835,16 @@ html {
   .scroll-animate-left,
   .scroll-animate-right,
   .scroll-animate-scale,
-  .scroll-stagger > * {
+  .scroll-stagger > *,
+  .micro-interaction,
+  .icon-hover,
+  .link-underline::after,
+  .card-press,
+  .ripple-container::before,
+  .pulse-border::before {
     opacity: 1;
     transform: none;
     transition: none;
+    animation: none;
   }
 }
