@@ -33,7 +33,7 @@ import { useAuth } from "@/hooks/useAuth";
 import logo from "@/assets/logo.png";
 import DailyWelcomePopup from "@/components/DailyWelcomePopup";
 import PaymentReminderBar from "@/components/PaymentReminderBar";
-import PaymentReminderPopup from "@/components/PaymentReminderPopup";
+import PostLoginActionPopup from "@/components/PostLoginActionPopup";
 import AIRecommendations from "@/components/AIRecommendations";
 import { packages } from "@/data/packages";
 
@@ -89,16 +89,20 @@ const UserHome = () => {
     { icon: ShoppingCart, label: "Available Courses", href: "/dashboard/courses", color: "from-emerald to-emerald-light", desc: "Explore plans", locked: false },
   ];
 
-  // Show payment popup on first login if not purchased
+  // Show action popup on first login if not purchased
   useEffect(() => {
-    if (!hasPurchased && purchasedPlan) {
-      const hasSeenPopup = sessionStorage.getItem('hasSeenPaymentPopup');
-      if (!hasSeenPopup) {
+    if (!hasPurchased) {
+      const hasSeenPopup = sessionStorage.getItem('hasSeenPostLoginPopup');
+      const hasSelectedPlan = sessionStorage.getItem('selectedPlan');
+      const hasSelectedCourse = sessionStorage.getItem('selectedCourse');
+      
+      // Show popup if first time or has selected plan/course
+      if (!hasSeenPopup || hasSelectedPlan || hasSelectedCourse) {
         setShowPaymentPopup(true);
-        sessionStorage.setItem('hasSeenPaymentPopup', 'true');
+        sessionStorage.setItem('hasSeenPostLoginPopup', 'true');
       }
     }
-  }, [hasPurchased, purchasedPlan]);
+  }, [hasPurchased]);
 
   useEffect(() => {
     const currentAdData = adsData[currentAd];
@@ -145,10 +149,9 @@ const UserHome = () => {
         />
       )}
 
-      {/* Payment Reminder Popup */}
-      {showPaymentPopup && !hasPurchased && purchasedPlan && (
-        <PaymentReminderPopup 
-          planName={purchasedPlan} 
+      {/* Post-Login Action Popup */}
+      {showPaymentPopup && !hasPurchased && (
+        <PostLoginActionPopup 
           onClose={() => setShowPaymentPopup(false)} 
         />
       )}

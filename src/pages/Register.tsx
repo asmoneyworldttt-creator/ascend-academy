@@ -125,6 +125,14 @@ const Register = () => {
       description: "Your account has been created. Redirecting...",
     });
 
+    // Store selected plan/course in sessionStorage for post-login popup
+    if (selectedPlanName) {
+      sessionStorage.setItem("selectedPlan", selectedPlanName);
+    }
+    if (selectedCourse) {
+      sessionStorage.setItem("selectedCourse", selectedCourse);
+    }
+
     navigate("/registration-success", {
       state: {
         userData: {
