@@ -35,6 +35,7 @@ import DailyWelcomePopup from "@/components/DailyWelcomePopup";
 import PaymentReminderBar from "@/components/PaymentReminderBar";
 import PostLoginActionPopup from "@/components/PostLoginActionPopup";
 import AIRecommendations from "@/components/AIRecommendations";
+import ProgressDashboard from "@/components/dashboard/ProgressDashboard";
 import { packages } from "@/data/packages";
 
 // Ads data
@@ -341,6 +342,11 @@ const UserHome = () => {
             </div>
           </div>
         )}
+
+        {/* Progress Dashboard with Charts */}
+        <div className="mb-8">
+          <ProgressDashboard hasPurchased={hasPurchased} purchasedPlan={purchasedPlan} />
+        </div>
 
         {/* AI Recommendations Widget */}
         <div className="mb-8">

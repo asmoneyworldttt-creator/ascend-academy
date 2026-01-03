@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Sun, Moon, Shield } from "lucide-react";
+import { Menu, X, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdminCheck } from "@/hooks/useAdminCheck";
+import ThemeToggle from "@/components/ThemeToggle";
 import logo from "@/assets/logo.png";
 
 const navLinks = [
@@ -17,7 +18,6 @@ const navLinks = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isDark, setIsDark] = useState(true);
   const location = useLocation();
   const { user } = useAuth();
   const { isAdmin } = useAdminCheck();
@@ -33,18 +33,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "light") {
-      document.documentElement.classList.remove("dark");
-      setIsDark(false);
-    } else {
-      document.documentElement.classList.add("dark");
-      setIsDark(true);
-      if (!savedTheme) localStorage.setItem("theme", "dark");
-    }
-  }, []);
-
   // Close mobile menu when clicking outside
   useEffect(() => {
     if (isOpen) {
@@ -57,16 +45,8 @@ const Navbar = () => {
     };
   }, [isOpen]);
 
-  const toggleTheme = () => {
-    if (isDark) {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    } else {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    }
-    setIsDark(!isDark);
-  };
+  // Check current theme for logo styling
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains("dark");
 
   const handleNavClick = (href: string) => {
     setIsOpen(false);
@@ -120,17 +100,7 @@ const Navbar = () => {
 
             {/* Actions - Different for index vs logged in pages */}
             <div className="hidden lg:flex items-center gap-4">
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-full bg-muted/50 hover:bg-muted transition-colors duration-300"
-                aria-label="Toggle theme"
-              >
-                {isDark ? (
-                  <Sun className="w-5 h-5 text-primary" />
-                ) : (
-                  <Moon className="w-5 h-5 text-secondary-foreground" />
-                )}
-              </button>
+              <ThemeToggle variant="icon" />
               
               {/* Only show Admin button if user is admin AND not on index page */}
               {isAdmin && !isIndexPage && (
@@ -165,18 +135,8 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="flex lg:hidden items-center gap-3">
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-full bg-muted/50"
-                aria-label="Toggle theme"
-              >
-                {isDark ? (
-                  <Sun className="w-5 h-5 text-primary" />
-                ) : (
-                  <Moon className="w-5 h-5 text-secondary-foreground" />
-                )}
-              </button>
+            <div className="flex lg:hidden items-center gap-2">
+              <ThemeToggle variant="icon" />
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="p-2 text-foreground relative z-[60]"
