@@ -59,13 +59,13 @@ const journeySteps = [
 
 const UserJourneySection = () => {
   return (
-    <section className="py-20 lg:py-32 relative overflow-hidden">
+    <section className="py-20 lg:py-32 relative overflow-hidden transition-colors duration-500">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-muted/20 via-background to-muted/20" />
+      <div className="absolute inset-0 bg-gradient-to-b from-muted/20 via-background to-muted/20 transition-colors duration-500" />
       
       {/* Decorative elements */}
-      <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-10 w-80 h-80 bg-emerald/5 rounded-full blur-3xl" />
+      <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl transition-colors duration-500" />
+      <div className="absolute bottom-20 right-10 w-80 h-80 bg-emerald/5 rounded-full blur-3xl transition-colors duration-500" />
 
       <div className="container relative mx-auto px-4">
         {/* Header */}
@@ -101,7 +101,7 @@ const UserJourneySection = () => {
                 >
                   {/* Content */}
                   <div className={`flex-1 ${isLeft ? 'text-right pr-8' : 'text-left pl-8'}`}>
-                    <div className={`inline-block glass-card p-8 rounded-2xl ${isLeft ? 'ml-auto' : 'mr-auto'}`}>
+                    <div className={`inline-block glass-card p-8 rounded-2xl transition-all duration-500 ${isLeft ? 'ml-auto' : 'mr-auto'}`}>
                       <span className={`inline-block px-3 py-1 rounded-full bg-gradient-to-r ${step.color} text-white text-xs font-bold mb-4`}>
                         Step {step.step}
                       </span>
@@ -156,7 +156,7 @@ const UserJourneySection = () => {
                   </div>
 
                   {/* Content */}
-                  <div className="glass-card p-6 rounded-2xl">
+                  <div className="glass-card p-6 rounded-2xl transition-all duration-500">
                     <span className={`inline-block px-3 py-1 rounded-full bg-gradient-to-r ${step.color} text-white text-xs font-bold mb-3`}>
                       Step {step.step}
                     </span>
@@ -181,7 +181,7 @@ const UserJourneySection = () => {
 
         {/* CTA Section */}
         <div className="mt-16 text-center">
-          <div className="glass-card p-8 rounded-3xl max-w-3xl mx-auto">
+          <div className="glass-card p-8 rounded-3xl max-w-3xl mx-auto transition-all duration-500">
             <div className="flex items-center justify-center gap-2 mb-4">
               <Users className="w-6 h-6 text-primary" />
               <span className="text-sm font-medium text-muted-foreground">Join 10,000+ learners who started their journey</span>

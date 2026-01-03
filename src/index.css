@@ -196,6 +196,8 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Plus Jakarta Sans', sans-serif;
+    /* Smooth theme transitions */
+    transition: background-color 0.5s ease, color 0.3s ease;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -207,6 +209,15 @@
   .font-tier {
     font-family: 'Rajdhani', 'Montserrat', sans-serif;
     @apply font-bold uppercase tracking-wider;
+  }
+
+  /* Theme transition utilities */
+  .theme-transition {
+    transition: background-color 0.5s ease, color 0.3s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .theme-transition-fast {
+    transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease;
   }
 }
 
