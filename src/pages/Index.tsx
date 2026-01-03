@@ -9,7 +9,8 @@ import WhySkillLearnersSection from "@/components/sections/WhySkillLearnersSecti
 import EarningEcosystemSection from "@/components/sections/EarningEcosystemSection";
 import CoursesSection from "@/components/sections/CoursesSection";
 import ReviewsSection from "@/components/sections/ReviewsSection";
-import RoadmapSection from "@/components/sections/RoadmapSection";
+import UserJourneySection from "@/components/sections/UserJourneySection";
+import PlatformEvolutionSection from "@/components/sections/PlatformEvolutionSection";
 import FAQSection from "@/components/sections/FAQSection";
 import ContactSection from "@/components/sections/ContactSection";
 
@@ -134,7 +135,8 @@ const Index = () => {
         <EarningEcosystemSection />
         <CoursesSection />
         <ReviewsSection />
-        <RoadmapSection />
+        <UserJourneySection />
+        <PlatformEvolutionSection />
         <FAQSection />
         <ContactSection />
       </main>
