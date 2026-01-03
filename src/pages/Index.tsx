@@ -13,6 +13,7 @@ import UserJourneySection from "@/components/sections/UserJourneySection";
 import PlatformEvolutionSection from "@/components/sections/PlatformEvolutionSection";
 import FAQSection from "@/components/sections/FAQSection";
 import ContactSection from "@/components/sections/ContactSection";
+import { ScrollAnimate } from "@/components/ui/ScrollAnimate";
 
 const Index = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -27,7 +28,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background relative overflow-x-hidden scroll-smooth">
+    <div className="min-h-screen bg-background relative overflow-x-hidden">
       {/* Parallax Background Elements */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         {/* Large gradient orbs */}
@@ -128,17 +129,50 @@ const Index = () => {
       <Navbar />
       <main className="relative z-10">
         <HeroSection />
-        <StatsSection />
-        <AboutSection />
-        <PlansSection />
-        <WhySkillLearnersSection />
-        <EarningEcosystemSection />
-        <CoursesSection />
-        <ReviewsSection />
-        <UserJourneySection />
-        <PlatformEvolutionSection />
-        <FAQSection />
-        <ContactSection />
+        
+        <ScrollAnimate>
+          <StatsSection />
+        </ScrollAnimate>
+        
+        <ScrollAnimate>
+          <AboutSection />
+        </ScrollAnimate>
+        
+        <ScrollAnimate>
+          <PlansSection />
+        </ScrollAnimate>
+        
+        <ScrollAnimate>
+          <WhySkillLearnersSection />
+        </ScrollAnimate>
+        
+        <ScrollAnimate>
+          <EarningEcosystemSection />
+        </ScrollAnimate>
+        
+        <ScrollAnimate>
+          <CoursesSection />
+        </ScrollAnimate>
+        
+        <ScrollAnimate>
+          <ReviewsSection />
+        </ScrollAnimate>
+        
+        <ScrollAnimate>
+          <UserJourneySection />
+        </ScrollAnimate>
+        
+        <ScrollAnimate>
+          <PlatformEvolutionSection />
+        </ScrollAnimate>
+        
+        <ScrollAnimate>
+          <FAQSection />
+        </ScrollAnimate>
+        
+        <ScrollAnimate>
+          <ContactSection />
+        </ScrollAnimate>
       </main>
       <Footer />
     </div>
