@@ -25,7 +25,7 @@ export const packages = [
     ],
     includes: [],
     savings: 0,
-    color: "from-teal-400 to-cyan-500",
+    color: "from-teal-500 to-cyan-600",
     glowColor: "#14b8a6",
     level: "Foundation",
   },
@@ -115,7 +115,7 @@ export const packages = [
     ],
     includes: ["STARTER", "ACCELERATOR", "PROFESSIONAL"],
     savings: 4800,
-    color: "from-amber-400 to-yellow-500",
+    color: "from-amber-500 to-orange-500",
     glowColor: "#f59e0b",
     popular: true,
     level: "Expert",
@@ -157,52 +157,52 @@ export const packages = [
 
 export const incomeTypes = [
   { 
-    name: "Referral Income", 
+    name: "Affiliate Income", 
     description: "Earn 10-30% on direct referrals", 
     icon: Users, 
-    iconColor: "from-emerald-400 to-teal-500",
+    iconColor: "from-emerald-500 to-teal-600",
     details: "Get commission on every successful referral you make." 
   },
   { 
     name: "Level Income", 
     description: "Multi-tier team earnings", 
     icon: TrendingUp, 
-    iconColor: "from-blue-400 to-indigo-500",
+    iconColor: "from-blue-500 to-indigo-600",
     details: "Earn from your team's performance across multiple levels." 
   },
   { 
     name: "Revenue Share", 
     description: "Quarterly profit sharing", 
     icon: DollarSign, 
-    iconColor: "from-amber-400 to-yellow-500",
+    iconColor: "from-amber-500 to-orange-500",
     details: "Participate in quarterly profit sharing based on your tier." 
   },
   { 
     name: "Task Income", 
     description: "Complete tasks, earn rewards", 
     icon: Target, 
-    iconColor: "from-violet-400 to-purple-500",
+    iconColor: "from-violet-500 to-purple-600",
     details: "Earn by completing daily and weekly tasks on the platform." 
   },
   { 
     name: "Spillover Income", 
     description: "Overflow from your upline", 
     icon: Zap, 
-    iconColor: "from-cyan-400 to-blue-500",
+    iconColor: "from-cyan-500 to-blue-600",
     details: "Benefit from excess referrals placed by your upline." 
   },
   { 
     name: "Auto Upgrade", 
     description: "Earn on referral upgrades", 
     icon: Award, 
-    iconColor: "from-rose-400 to-pink-500",
+    iconColor: "from-rose-500 to-pink-600",
     details: "Earn bonuses when your referrals upgrade their packages." 
   },
   { 
     name: "Royal Bonus", 
     description: "Top performer rewards", 
     icon: Star, 
-    iconColor: "from-amber-400 to-orange-500",
+    iconColor: "from-amber-400 to-yellow-500",
     upcoming: true, 
     details: "Exclusive rewards for top performers." 
   },
