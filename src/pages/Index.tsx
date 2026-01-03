@@ -11,6 +11,7 @@ import CoursesSection from "@/components/sections/CoursesSection";
 import ReviewsSection from "@/components/sections/ReviewsSection";
 import UserJourneySection from "@/components/sections/UserJourneySection";
 import PlatformEvolutionSection from "@/components/sections/PlatformEvolutionSection";
+import EcommerceRoadmapSection from "@/components/sections/EcommerceRoadmapSection";
 import FAQSection from "@/components/sections/FAQSection";
 import ContactSection from "@/components/sections/ContactSection";
 import { ScrollAnimate } from "@/components/ui/ScrollAnimate";
@@ -164,6 +165,10 @@ const Index = () => {
         
         <ScrollAnimate>
           <PlatformEvolutionSection />
+        </ScrollAnimate>
+        
+        <ScrollAnimate>
+          <EcommerceRoadmapSection />
         </ScrollAnimate>
         
         <ScrollAnimate>

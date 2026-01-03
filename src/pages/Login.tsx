@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation, useSearchParams } from "react-router-do
 import { Eye, EyeOff, ArrowRight, Shield, Sparkles, Users, Lock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
+import { notify } from "@/lib/notifications";
 import logo from "@/assets/logo.png";
 
 const Login = () => {
@@ -11,7 +11,6 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
   const { signIn, user } = useAuth();
-  const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -46,19 +45,14 @@ const Login = () => {
     const { error } = await signIn(formData.email, formData.password);
 
     if (error) {
-      toast({
-        title: "Login Failed",
-        description: error.message || "Invalid email or password. Please try again.",
-        variant: "destructive",
-      });
+      notify.loginError(error.message || "Invalid email or password. Please try again.");
       setIsLoading(false);
       return;
     }
 
-    toast({
-      title: "Welcome back! 🎉",
-      description: "Login successful. Redirecting...",
-    });
+    // Get user name from email for personalized greeting
+    const userName = formData.email.split("@")[0];
+    notify.loginSuccess(userName);
 
     // Navigate to the intended page or user home
     navigate(from, { replace: true });
