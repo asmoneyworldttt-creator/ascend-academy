@@ -1,8 +1,37 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Check, Gift, ChevronLeft, ChevronRight, Shield, Award, TrendingUp, Sparkles, Star, Crown } from "lucide-react";
+import { Check, Gift, ChevronLeft, ChevronRight, Shield, Award, TrendingUp, Star, Crown, Gem, Sparkles, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { packages, incomeTypes, futureIncomeTypes } from "@/data/packages";
+
+// Theme backgrounds for each package tier
+const themeStyles: Record<string, { bg: string; border: string; glow: string }> = {
+  bronze: {
+    bg: "bg-gradient-to-br from-amber-950/30 via-amber-900/20 to-amber-950/30",
+    border: "border-amber-700/40 hover:border-amber-600/60",
+    glow: "shadow-[0_0_30px_rgba(180,83,9,0.2)]",
+  },
+  silver: {
+    bg: "bg-gradient-to-br from-slate-800/40 via-slate-700/30 to-slate-800/40",
+    border: "border-slate-500/40 hover:border-slate-400/60",
+    glow: "shadow-[0_0_30px_rgba(100,116,139,0.2)]",
+  },
+  gold: {
+    bg: "bg-gradient-to-br from-yellow-950/30 via-amber-900/25 to-yellow-950/30",
+    border: "border-yellow-600/50 hover:border-yellow-500/70",
+    glow: "shadow-[0_0_40px_rgba(234,179,8,0.25)]",
+  },
+  platinum: {
+    bg: "bg-gradient-to-br from-cyan-950/30 via-teal-900/25 to-cyan-950/30",
+    border: "border-cyan-500/40 hover:border-cyan-400/60",
+    glow: "shadow-[0_0_30px_rgba(6,182,212,0.2)]",
+  },
+  diamond: {
+    bg: "bg-gradient-to-br from-violet-950/30 via-purple-900/25 to-violet-950/30",
+    border: "border-violet-500/50 hover:border-violet-400/70",
+    glow: "shadow-[0_0_40px_rgba(139,92,246,0.25)]",
+  },
+};
 
 const PlansSection = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -52,7 +81,7 @@ const PlansSection = () => {
 
   return (
     <section id="plans" className="py-16 lg:py-28 relative overflow-hidden">
-      {/* Premium Background with cohesive dark theme */}
+      {/* Premium Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
 
@@ -108,7 +137,7 @@ const PlansSection = () => {
             </button>
           )}
 
-          {/* Cards Carousel - Uniform cards */}
+          {/* Cards Carousel */}
           <div
             ref={carouselRef}
             className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide px-2 -mx-2"
@@ -150,6 +179,7 @@ const PlanCard = ({ plan, index }: { plan: typeof packages[0]; index: number }) 
   const Icon = plan.icon;
   const isPopular = plan.popular;
   const [showAllFeatures, setShowAllFeatures] = useState(false);
+  const theme = themeStyles[plan.theme || 'bronze'];
   
   return (
     <div
@@ -157,15 +187,11 @@ const PlanCard = ({ plan, index }: { plan: typeof packages[0]; index: number }) 
       style={{ animationDelay: `${index * 0.1}s` }}
     >
       <div
-        className={`relative rounded-2xl overflow-hidden transition-all duration-400 h-[520px] flex flex-col group ${
-          isPopular 
-            ? "bg-gradient-to-b from-card via-card to-primary/5 shadow-xl ring-2 ring-primary/40" 
-            : "bg-card/80 backdrop-blur-sm border border-border/50 hover:-translate-y-2 hover:shadow-xl hover:border-primary/30"
-        }`}
+        className={`relative rounded-2xl overflow-hidden transition-all duration-400 h-[540px] flex flex-col group ${theme.bg} ${theme.border} border-2 ${isPopular ? theme.glow : ''} hover:-translate-y-2 hover:shadow-2xl`}
       >
         {/* Popular badge */}
         {isPopular && (
-          <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-primary via-amber-400 to-primary text-primary-foreground text-center py-2 text-xs font-bold tracking-wider">
+          <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-yellow-500 via-amber-400 to-yellow-500 text-slate-900 text-center py-2 text-xs font-bold tracking-wider">
             <Star className="w-3 h-3 inline mr-1" />
             MOST POPULAR
           </div>
@@ -176,10 +202,11 @@ const PlanCard = ({ plan, index }: { plan: typeof packages[0]; index: number }) 
           <div className="flex items-start justify-between mb-4">
             <div 
               className={`w-14 h-14 rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-all duration-400`}
+              style={{ boxShadow: `0 10px 30px ${plan.glowColor}40` }}
             >
               <Icon className="w-7 h-7 text-white" />
             </div>
-            <span className="text-xs px-3 py-1.5 rounded-full bg-muted/80 text-muted-foreground font-semibold">
+            <span className="text-xs px-3 py-1.5 rounded-full bg-white/10 text-white/80 font-semibold border border-white/20">
               {plan.level}
             </span>
           </div>
@@ -187,44 +214,41 @@ const PlanCard = ({ plan, index }: { plan: typeof packages[0]; index: number }) 
           {/* Name & Tagline */}
           <div className="mb-3">
             <div className="flex items-center gap-2 mb-1">
-              <h3 className="text-xl font-tier tracking-wider text-foreground">
+              <h3 className={`text-2xl font-bold tracking-wider bg-gradient-to-r ${plan.color} bg-clip-text text-transparent`}>
                 {plan.name}
               </h3>
-              <span className="text-xs px-2 py-0.5 rounded bg-primary/10 text-primary font-medium border border-primary/20">
-                {plan.nickname}
-              </span>
             </div>
-            <p className="text-sm text-accent font-medium">{plan.tagline}</p>
+            <p className="text-sm text-white/60 font-medium">{plan.tagline}</p>
           </div>
 
-          <p className="text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-2">
+          <p className="text-sm text-white/50 mb-4 leading-relaxed line-clamp-2">
             {plan.shortDesc}
           </p>
 
           {/* Pricing */}
-          <div className="mb-4 p-4 rounded-xl bg-muted/50 border border-border/50">
+          <div className="mb-4 p-4 rounded-xl bg-black/20 border border-white/10">
             <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-3xl font-bold font-display">₹{plan.price.toLocaleString()}</span>
-              <span className="text-sm text-muted-foreground line-through">₹{plan.mrp.toLocaleString()}</span>
+              <span className="text-3xl font-bold text-white">₹{plan.price.toLocaleString()}</span>
+              <span className="text-sm text-white/40 line-through">₹{plan.mrp.toLocaleString()}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="inline-block px-2 py-0.5 rounded-md bg-emerald/20 text-emerald text-xs font-bold">
+              <span className="inline-block px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 text-xs font-bold">
                 SAVE {Math.round((1 - plan.price / plan.mrp) * 100)}%
               </span>
               {plan.period === "lifetime" && (
-                <span className="text-xs text-muted-foreground font-medium">Lifetime</span>
+                <span className="text-xs text-white/50 font-medium">Lifetime</span>
               )}
             </div>
           </div>
 
           {/* Included Packages */}
           {plan.includes.length > 0 && (
-            <div className="mb-4 p-3 bg-primary/5 rounded-xl border border-primary/20">
+            <div className="mb-4 p-3 bg-primary/10 rounded-xl border border-primary/20">
               <div className="flex items-center gap-1.5 mb-1">
                 <Gift className="w-4 h-4 text-primary" />
                 <span className="text-xs text-primary font-bold">INCLUDES ₹{plan.savings.toLocaleString()} VALUE</span>
               </div>
-              <p className="text-xs text-muted-foreground line-clamp-1">
+              <p className="text-xs text-white/50 line-clamp-1">
                 {plan.includes.join(" + ")}
               </p>
             </div>
@@ -234,10 +258,10 @@ const PlanCard = ({ plan, index }: { plan: typeof packages[0]; index: number }) 
           <ul className="space-y-2 mb-4 flex-1">
             {plan.features.slice(0, showAllFeatures ? undefined : 4).map((feature) => (
               <li key={feature} className="flex items-start gap-2 text-sm">
-                <div className="w-5 h-5 rounded-full bg-emerald/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Check className="w-3 h-3 text-emerald" />
+                <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Check className="w-3 h-3 text-emerald-400" />
                 </div>
-                <span className="text-foreground/80 leading-relaxed line-clamp-1">{feature}</span>
+                <span className="text-white/70 leading-relaxed line-clamp-1">{feature}</span>
               </li>
             ))}
             {plan.features.length > 4 && !showAllFeatures && (
@@ -257,7 +281,11 @@ const PlanCard = ({ plan, index }: { plan: typeof packages[0]; index: number }) 
           <Link to={`/register?plan=${plan.name}`} className="block mt-auto">
             <Button
               variant={isPopular ? "hero" : "outline"}
-              className={`w-full h-12 text-sm font-semibold ${isPopular ? 'shadow-lg' : 'hover:bg-primary hover:text-primary-foreground border-primary/30'}`}
+              className={`w-full h-12 text-sm font-semibold ${
+                isPopular 
+                  ? 'shadow-lg' 
+                  : 'border-white/30 text-white hover:bg-white/10 hover:border-white/50'
+              }`}
             >
               Get {plan.displayName}
             </Button>
@@ -287,7 +315,7 @@ const IncomeSection = () => {
         </p>
       </div>
 
-      {/* Income Cards - Premium Grid */}
+      {/* Income Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
         {incomeTypes.slice(0, 6).map((income) => {
           const Icon = income.icon;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, Target, Crosshair, X, Sparkles, Award, Globe, Users } from "lucide-react";
+import { Eye, Target, Crosshair, Sparkles, Award, Globe, Users, ArrowRight, Lightbulb, Rocket } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const aboutCards = [
@@ -58,13 +58,6 @@ By staying ahead of industry trends and continuously updating our curriculum, we
   },
 ];
 
-const stats = [
-  { value: "10,000+", label: "Active Learners" },
-  { value: "50+", label: "Expert Courses" },
-  { value: "95%", label: "Success Rate" },
-  { value: "24/7", label: "Support" },
-];
-
 const AboutSection = () => {
   const [selectedCard, setSelectedCard] = useState<typeof aboutCards[0] | null>(null);
 
@@ -81,33 +74,67 @@ const AboutSection = () => {
         <div className="text-center mb-16 lg:mb-20">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium text-primary mb-6">
             <Sparkles className="w-4 h-4" />
-            About SkillHonors
+            About Skill Learners
           </div>
           <h2 className="text-3xl lg:text-5xl font-bold font-display mb-6">
             Empowering Your <span className="text-gradient-gold">Digital Future</span>
           </h2>
           <p className="text-base lg:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
-            At SkillHonors, our mission is to help you unlock your potential in the digital world. 
-            We offer high-quality video courses created by industry experts in fields like AI, digital marketing, 
-            trading, and e-commerce. These courses provide practical, hands-on skills to advance your career and create new income streams.
+            At Skill Learners, we're on a mission to empower the next generation of digital entrepreneurs through 
+            a blended ecosystem of learning, earning, and future-tech innovation.
           </p>
         </div>
 
-        {/* Stats Bar */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
-          {stats.map((stat, index) => (
-            <div 
-              key={stat.label}
-              className="glass-card p-6 rounded-2xl text-center group hover:-translate-y-1 transition-all duration-300"
-            >
-              <div className="text-2xl lg:text-3xl font-bold font-display text-gradient-gold mb-1">
-                {stat.value}
+        {/* Storytelling Section */}
+        <div className="max-w-5xl mx-auto mb-16">
+          <div className="glass-card p-8 lg:p-12 rounded-3xl relative overflow-hidden">
+            {/* Decorative Elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/10 to-transparent rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-accent/10 to-transparent rounded-full blur-2xl" />
+            
+            <div className="relative grid lg:grid-cols-2 gap-8 items-center">
+              <div>
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                    <Lightbulb className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold font-display">Our Story</h3>
+                </div>
+                
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  In a world where technology evolves faster than traditional education can keep up, we recognized 
+                  a critical gap. Millions of talented individuals lacked access to the skills and opportunities 
+                  needed to thrive in the digital economy.
+                </p>
+                
+                <p className="text-muted-foreground leading-relaxed mb-6">
+                  That's why we created <strong className="text-foreground">Skill Learners</strong> — not just 
+                  another online learning platform, but a complete ecosystem designed to transform lives through 
+                  practical education and real earning opportunities.
+                </p>
+
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald/10 border border-emerald/20">
+                    <Rocket className="w-4 h-4 text-emerald" />
+                    <span className="text-sm font-medium text-emerald">Future-Focused</span>
+                  </div>
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
+                    <Users className="w-4 h-4 text-primary" />
+                    <span className="text-sm font-medium text-primary">Community-Driven</span>
+                  </div>
+                </div>
               </div>
-              <p className="text-sm text-muted-foreground font-medium">
-                {stat.label}
-              </p>
+              
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl blur-xl" />
+                <img 
+                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=400&fit=crop" 
+                  alt="Team collaboration"
+                  className="relative rounded-2xl shadow-2xl w-full"
+                />
+              </div>
             </div>
-          ))}
+          </div>
         </div>
 
         {/* Premium Cards Grid */}
@@ -143,7 +170,7 @@ const AboutSection = () => {
                   
                   <span className="inline-flex items-center text-primary font-semibold group-hover:gap-3 transition-all text-sm">
                     Discover More
-                    <span className="ml-2 group-hover:translate-x-2 transition-transform">→</span>
+                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform" />
                   </span>
                 </div>
               </div>

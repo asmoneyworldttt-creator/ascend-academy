@@ -1,11 +1,11 @@
-import { Sparkles, Rocket, Crown, Gem, Trophy, Zap, Target, Users, TrendingUp, DollarSign, Award, Star } from "lucide-react";
+import { Sparkles, Rocket, Crown, Gem, Trophy, Zap, Target, Users, TrendingUp, DollarSign, Award, Star, Clock, Smartphone, BookOpen } from "lucide-react";
 
 export const packages = [
   {
     id: 1,
-    name: "STARTER",
-    displayName: "Starter",
-    nickname: "Ignite",
+    name: "BRONZE",
+    displayName: "Bronze",
+    nickname: "Starter",
     tagline: "Begin Your Creative Journey",
     icon: Sparkles,
     price: 600,
@@ -25,15 +25,16 @@ export const packages = [
     ],
     includes: [],
     savings: 0,
-    color: "from-teal-500 to-cyan-600",
-    glowColor: "#14b8a6",
+    color: "from-amber-600 to-amber-700",
+    glowColor: "#b45309",
     level: "Foundation",
+    theme: "bronze",
   },
   {
     id: 2,
-    name: "ACCELERATOR",
-    displayName: "Accelerator",
-    nickname: "Velocity",
+    name: "SILVER",
+    displayName: "Silver",
+    nickname: "Growth",
     tagline: "Amplify Your Growth",
     icon: Rocket,
     price: 1399,
@@ -52,17 +53,18 @@ export const packages = [
       "Viral Content Formulas",
       "Analytics Dashboard Access",
     ],
-    includes: ["STARTER"],
+    includes: ["BRONZE"],
     savings: 600,
-    color: "from-blue-500 to-indigo-600",
-    glowColor: "#3b82f6",
+    color: "from-slate-400 to-slate-500",
+    glowColor: "#64748b",
     level: "Growth",
+    theme: "silver",
   },
   {
     id: 3,
-    name: "PROFESSIONAL",
-    displayName: "Professional",
-    nickname: "Empire",
+    name: "GOLD",
+    displayName: "Gold",
+    nickname: "Business",
     tagline: "Build Your Business Empire",
     icon: Crown,
     price: 2800,
@@ -82,17 +84,19 @@ export const packages = [
       "Supplier Network Access",
       "Private Mastermind Group",
     ],
-    includes: ["STARTER", "ACCELERATOR"],
+    includes: ["BRONZE", "SILVER"],
     savings: 1999,
-    color: "from-violet-500 to-purple-600",
-    glowColor: "#8b5cf6",
+    color: "from-yellow-500 to-amber-500",
+    glowColor: "#eab308",
     level: "Business",
+    theme: "gold",
+    popular: true,
   },
   {
     id: 4,
-    name: "ELITE",
-    displayName: "Elite",
-    nickname: "Dominator",
+    name: "PLATINUM",
+    displayName: "Platinum",
+    nickname: "Expert",
     tagline: "Master Digital Marketing",
     icon: Gem,
     price: 4499,
@@ -113,18 +117,18 @@ export const packages = [
       "Agency Blueprint Included",
       "1-on-1 Strategy Sessions",
     ],
-    includes: ["STARTER", "ACCELERATOR", "PROFESSIONAL"],
+    includes: ["BRONZE", "SILVER", "GOLD"],
     savings: 4800,
-    color: "from-amber-500 to-orange-500",
-    glowColor: "#f59e0b",
-    popular: true,
+    color: "from-cyan-400 to-teal-500",
+    glowColor: "#06b6d4",
     level: "Expert",
+    theme: "platinum",
   },
   {
     id: 5,
-    name: "LEGACY",
-    displayName: "Legacy",
-    nickname: "Titan",
+    name: "DIAMOND",
+    displayName: "Diamond",
+    nickname: "Ultimate",
     tagline: "Achieve Financial Freedom",
     icon: Trophy,
     price: 8599,
@@ -147,11 +151,12 @@ export const packages = [
       "Private Investment Community",
       "Quarterly Strategy Updates",
     ],
-    includes: ["STARTER", "ACCELERATOR", "PROFESSIONAL", "ELITE"],
+    includes: ["BRONZE", "SILVER", "GOLD", "PLATINUM"],
     savings: 9400,
-    color: "from-rose-500 to-pink-600",
-    glowColor: "#ec4899",
+    color: "from-violet-500 to-purple-600",
+    glowColor: "#8b5cf6",
     level: "Legendary",
+    theme: "diamond",
   },
 ];
 
@@ -171,18 +176,18 @@ export const incomeTypes = [
     details: "Earn from your team's performance across multiple levels." 
   },
   { 
-    name: "Revenue Share", 
-    description: "Quarterly profit sharing", 
+    name: "Seniority-Based Profit Share", 
+    description: "Instant profit sharing on every sale", 
     icon: DollarSign, 
     iconColor: "from-amber-500 to-orange-500",
-    details: "Participate in quarterly profit sharing based on your tier." 
+    details: "For every sale in the business, a share of profit is distributed instantly based on your seniority/hierarchy in the system." 
   },
   { 
     name: "Task Income", 
-    description: "Complete tasks, earn rewards", 
+    description: "Earn within 1 hour of task completion", 
     icon: Target, 
     iconColor: "from-violet-500 to-purple-600",
-    details: "Earn by completing daily and weekly tasks on the platform." 
+    details: "Complete tasks like App Installs, Article Reading, and WhatsApp Status updates. Earnings credited within an hour of task completion. This is variable income, not fixed." 
   },
   { 
     name: "Spillover Income", 
@@ -192,11 +197,11 @@ export const incomeTypes = [
     details: "Benefit from excess referrals placed by your upline." 
   },
   { 
-    name: "Auto Upgrade", 
-    description: "Earn on referral upgrades", 
+    name: "Auto Upgrade System", 
+    description: "Automatic growth without extra investment", 
     icon: Award, 
     iconColor: "from-rose-500 to-pink-600",
-    details: "Earn bonuses when your referrals upgrade their packages." 
+    details: "A user starting at the Bronze (₹600) can automatically reach Diamond packages through system progression without further manual investment." 
   },
   { 
     name: "Royal Bonus", 
@@ -209,6 +214,6 @@ export const incomeTypes = [
 ];
 
 export const futureIncomeTypes = [
-  { name: "App Watching Income", description: "Earn by watching app content", icon: "Smartphone", comingSoon: true },
-  { name: "Article Reading Income", description: "Get paid to read & learn", icon: "BookOpen", comingSoon: true },
+  { name: "App Watching Income", description: "Earn by watching app content", icon: Smartphone, comingSoon: true },
+  { name: "Article Reading Income", description: "Get paid to read & learn", icon: BookOpen, comingSoon: true },
 ];

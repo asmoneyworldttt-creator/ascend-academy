@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Zap, Target, Users, TrendingUp, Crown, Shield, BookOpen, Briefcase, Coins, Gift, Sparkles } from "lucide-react";
+import { ArrowRight, Zap, Target, Users, TrendingUp, Crown, Shield, BookOpen, Briefcase, Coins, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const EarningEcosystemSection = () => {
@@ -25,7 +25,7 @@ const EarningEcosystemSection = () => {
     {
       icon: Coins,
       title: "Passive Income",
-      description: "Revenue sharing based on seniority and company sales volume. Earn even when not actively working.",
+      description: "Seniority-based instant profit sharing on every sale. Earn even when not actively working.",
       color: "from-blue-500 to-indigo-600",
     },
   ];
@@ -38,8 +38,8 @@ const EarningEcosystemSection = () => {
 
   return (
     <section className="py-16 lg:py-28 relative overflow-hidden">
-      {/* Professional Dark Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" />
+      {/* Professional Dark Gradient Background - Always dark for visibility */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
       
       {/* Animated gradient overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent opacity-60" />
@@ -111,7 +111,7 @@ const EarningEcosystemSection = () => {
 
         {/* Income Types Comparison Box */}
         <div className="max-w-4xl mx-auto mb-14">
-          <div className="glass-card bg-white/5 border border-white/10 rounded-2xl p-6 lg:p-8">
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-6 lg:p-8 backdrop-blur-lg">
             <h3 className="text-xl lg:text-2xl font-bold font-display text-center text-white mb-8">
               <Sparkles className="w-5 h-5 inline mr-2 text-primary" />
               Our Dual Income Model
@@ -157,21 +157,21 @@ const EarningEcosystemSection = () => {
                   </div>
                   <div>
                     <h4 className="text-lg font-bold text-white">Passive Income</h4>
-                    <p className="text-xs text-white/50">Revenue Sharing</p>
+                    <p className="text-xs text-white/50">Seniority-Based Profit Sharing</p>
                   </div>
                 </div>
                 <ul className="space-y-2 text-sm text-white/70">
                   <li className="flex items-start gap-2">
                     <span className="text-blue-400">•</span>
-                    Revenue sharing based on seniority
+                    Instant profit share on every company sale
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-blue-400">•</span>
-                    Earn from platform's overall growth
+                    Based on your seniority/hierarchy level
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-blue-400">•</span>
-                    Quarterly profit distribution
+                    Grows as you progress in the system
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-blue-400">•</span>
@@ -183,7 +183,7 @@ const EarningEcosystemSection = () => {
           </div>
         </div>
 
-        {/* Future Ready Section */}
+        {/* Future Ready Section - Updated CTA */}
         <div className="relative rounded-2xl overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/10 to-primary/20" />
           <div className="absolute inset-0 backdrop-blur-xl" />
@@ -194,16 +194,17 @@ const EarningEcosystemSection = () => {
                 <Shield className="w-10 h-10 text-primary" />
                 <div>
                   <h3 className="text-xl lg:text-2xl font-bold font-display text-white">
-                    Future-Ready for the <span className="text-gradient-gold">AI Economy</span>
+                    <span className="text-gradient-teal">"Bridge the Gap</span> Between Skills and Scalable Income"
                   </h3>
                   <p className="text-sm text-white/70 mt-1">
-                    Our curriculum evolves with industry trends—AI, Web3, automation, and beyond.
+                    Our ecosystem evolves with industry trends—AI, Web3, automation, and beyond.
                   </p>
                 </div>
               </div>
               
               <Link to="/register" className="flex-shrink-0">
-                <Button variant="hero" size="lg" className="group shadow-lg">
+                <Button variant="hero" size="lg" className="group shadow-xl shadow-primary/30 text-lg px-8 py-6">
+                  <Sparkles className="w-5 h-5" />
                   Start Your Journey
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
