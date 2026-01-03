@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { CheckCircle2, ArrowRight, Play } from "lucide-react";
+import { CheckCircle2, ArrowRight, Play, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroStudent from "@/assets/hero-student.png";
 import ParticleBackground from "@/components/ui/ParticleBackground";
@@ -8,22 +8,37 @@ const HeroSection = () => {
   const highlights = [
     "10+ Skill-based Video Courses",
     "7+ Income Opportunities",
-    "Earn 10%–30% per Referral",
+    "Earn 10%–30% per Affiliate",
     "Lifetime Community Access",
   ];
 
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Light Premium Background Gradient */}
+      {/* Premium Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[hsl(45,30%,96%)] via-[hsl(200,25%,95%)] to-[hsl(45,35%,94%)] dark:from-[hsl(220,35%,12%)] dark:via-[hsl(220,30%,15%)] dark:to-[hsl(220,35%,14%)]" />
-      <ParticleBackground />
-      <div className="absolute inset-0 bg-mesh-gradient opacity-60" />
       
-      {/* Subtle floating geometric shapes */}
-      <div className="absolute top-1/4 left-10 w-24 h-24 rounded-full bg-primary/15 blur-2xl float-animation animate-pulse" />
-      <div className="absolute top-1/3 right-20 w-36 h-36 rounded-full bg-accent/10 blur-3xl float-animation-delayed" />
-      <div className="absolute bottom-1/4 left-1/4 w-20 h-20 rounded-2xl bg-emerald/10 blur-2xl float-animation-slow rotate-45" />
-      <div className="absolute top-1/2 right-1/4 w-16 h-16 rounded-full bg-primary/15 blur-xl float-animation" />
+      {/* Animated Mesh Gradient Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute w-[800px] h-[800px] -top-1/4 -left-1/4 bg-gradient-to-br from-primary/20 via-accent/10 to-transparent rounded-full blur-3xl animate-pulse-slow opacity-60" />
+        <div className="absolute w-[600px] h-[600px] top-1/2 -right-1/4 bg-gradient-to-bl from-accent/15 via-emerald/10 to-transparent rounded-full blur-3xl animate-float opacity-50" />
+        <div className="absolute w-[400px] h-[400px] bottom-0 left-1/3 bg-gradient-to-t from-primary/10 via-transparent to-transparent rounded-full blur-2xl animate-pulse opacity-40" />
+      </div>
+      
+      {/* Subtle Grid Pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
+      
+      <ParticleBackground />
+      <div className="absolute inset-0 bg-mesh-gradient opacity-40" />
+      
+      {/* Animated Floating Orbs */}
+      <div className="absolute top-1/4 left-10 w-20 h-20 rounded-full bg-gradient-to-br from-primary/30 to-accent/20 blur-xl animate-float" />
+      <div className="absolute top-1/3 right-20 w-32 h-32 rounded-full bg-gradient-to-bl from-accent/25 to-emerald/15 blur-2xl animate-float" style={{ animationDelay: '-2s' }} />
+      <div className="absolute bottom-1/4 left-1/4 w-16 h-16 rounded-full bg-gradient-to-tr from-emerald/20 to-primary/15 blur-xl animate-float" style={{ animationDelay: '-4s' }} />
+      <div className="absolute top-1/2 right-1/4 w-12 h-12 rounded-full bg-gradient-to-br from-primary/25 to-transparent blur-lg animate-pulse" />
+      
+      {/* Decorative Lines */}
+      <div className="absolute top-1/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
+      <div className="absolute bottom-1/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent/10 to-transparent" />
       
       <div className="container relative mx-auto px-4 py-12 lg:py-20 z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -40,11 +55,11 @@ const HeroSection = () => {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight font-display">
               Welcome to{" "}
               <span className="text-gradient-gold">Skill</span>{" "}
-              <span className="text-gradient-teal">Learners</span>
+              <span className="text-gradient-teal">Honors</span>
             </h1>
             
             <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
-              Update your skills through our <strong className="text-foreground">expert-led courses</strong>, and we'll provide the platform and opportunity for you to achieve{" "}
+              Upgrade your skills through our <strong className="text-foreground">expert-led courses</strong>, and we'll provide the platform and opportunity for you to achieve{" "}
               <strong className="text-foreground">financial freedom</strong>.
             </p>
             
@@ -95,22 +110,22 @@ const HeroSection = () => {
           </div>
           
           {/* Right Content - Hero Image */}
-          <div className="relative flex justify-center lg:justify-end animate-fade-in-right" style={{ animationDelay: "0.3s" }}>
+          <div className="relative flex justify-center lg:justify-end animate-fade-in" style={{ animationDelay: "0.3s" }}>
             {/* Glow effect behind image */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-80 h-80 lg:w-96 lg:h-96 rounded-full bg-gradient-to-br from-primary/20 via-accent/15 to-emerald/20 blur-3xl" />
+              <div className="w-80 h-80 lg:w-96 lg:h-96 rounded-full bg-gradient-to-br from-primary/20 via-accent/15 to-emerald/20 blur-3xl animate-pulse-slow" />
             </div>
             
             {/* Main image */}
             <div className="relative">
               <img
                 src={heroStudent}
-                alt="Student achieving success with Skill Learners"
+                alt="Student achieving success with SkillHonors"
                 className="relative z-10 w-full max-w-md lg:max-w-lg xl:max-w-xl h-auto drop-shadow-2xl"
               />
               
               {/* Floating elements */}
-              <div className="absolute top-10 -left-10 glass-card p-4 rounded-2xl shadow-elevated float-animation z-20">
+              <div className="absolute top-10 -left-10 glass-card p-4 rounded-2xl shadow-elevated animate-float z-20">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-xl bg-gradient-gold flex items-center justify-center">
                     <span className="text-2xl">🎓</span>
@@ -122,7 +137,7 @@ const HeroSection = () => {
                 </div>
               </div>
               
-              <div className="absolute bottom-20 -right-5 glass-card p-4 rounded-2xl shadow-elevated float-animation-delayed z-20">
+              <div className="absolute bottom-20 -right-5 glass-card p-4 rounded-2xl shadow-elevated animate-float z-20" style={{ animationDelay: '-1.5s' }}>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-xl bg-gradient-teal flex items-center justify-center">
                     <span className="text-2xl">💰</span>
@@ -133,6 +148,10 @@ const HeroSection = () => {
                   </div>
                 </div>
               </div>
+              
+              {/* Sparkle decorations */}
+              <Sparkles className="absolute -top-4 right-20 w-6 h-6 text-primary animate-pulse" />
+              <Sparkles className="absolute bottom-40 -left-4 w-5 h-5 text-accent animate-pulse" style={{ animationDelay: '0.5s' }} />
             </div>
           </div>
         </div>

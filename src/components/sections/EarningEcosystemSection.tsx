@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Zap, Target, Users, TrendingUp, Crown, Shield, BookOpen, Briefcase, Coins, Gift } from "lucide-react";
+import { ArrowRight, Zap, Target, Users, TrendingUp, Crown, Shield, BookOpen, Briefcase, Coins, Gift, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const EarningEcosystemSection = () => {
@@ -8,19 +8,19 @@ const EarningEcosystemSection = () => {
       icon: BookOpen,
       title: "Skill Development",
       description: "Master in-demand skills like digital marketing, trading, content creation, and e-commerce that enable freelancing success.",
-      color: "from-amber-400 to-yellow-500",
+      color: "from-amber-500 to-orange-500",
     },
     {
       icon: Briefcase,
-      title: "Working Income",
-      description: "Apply your skills immediately to earn active income through freelancing, client projects, and digital services.",
+      title: "Active Income",
+      description: "Apply your skills immediately to earn through freelancing, client projects, and digital services.",
       color: "from-violet-500 to-purple-600",
     },
     {
       icon: Users,
-      title: "Referral Rewards",
+      title: "Affiliate Rewards",
       description: "Earn 10-30% commission when you help others join and succeed. Share knowledge, grow together.",
-      color: "from-emerald-400 to-teal-500",
+      color: "from-emerald-500 to-teal-600",
     },
     {
       icon: Coins,
@@ -37,69 +37,71 @@ const EarningEcosystemSection = () => {
   ];
 
   return (
-    <section className="py-16 lg:py-24 relative overflow-hidden">
-      {/* Royal Gradient Background - Better light mode contrast */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800 dark:from-background dark:via-muted/30 dark:to-background" />
-      <div className="absolute inset-0 bg-mesh-gradient opacity-40" />
+    <section className="py-16 lg:py-28 relative overflow-hidden">
+      {/* Professional Dark Gradient Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" />
       
-      {/* Decorative Elements - Smaller */}
-      <div className="absolute top-1/4 left-[5%] w-64 h-64 rounded-full bg-primary/15 blur-[100px]" />
-      <div className="absolute bottom-1/4 right-[5%] w-56 h-56 rounded-full bg-accent/15 blur-[80px]" />
+      {/* Animated gradient overlay */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent opacity-60" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-accent/15 via-transparent to-transparent opacity-50" />
+      
+      {/* Decorative Elements */}
+      <div className="absolute top-1/4 left-[5%] w-64 h-64 rounded-full bg-primary/15 blur-[100px] animate-pulse" />
+      <div className="absolute bottom-1/4 right-[5%] w-56 h-56 rounded-full bg-accent/15 blur-[80px] animate-pulse" style={{ animationDelay: '1s' }} />
 
       <div className="container relative mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-14">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/15 rounded-full border border-primary/30 mb-6 backdrop-blur-sm">
             <Crown className="w-4 h-4 text-primary" />
             <span className="text-xs font-bold text-primary tracking-wider uppercase">Premium Ecosystem</span>
           </div>
           
-          <h2 className="text-3xl lg:text-5xl font-bold font-display mb-4 text-white dark:text-foreground leading-tight">
+          <h2 className="text-3xl lg:text-5xl font-bold font-display mb-4 text-white leading-tight">
             The <span className="text-gradient-gold">Earning</span> Ecosystem
           </h2>
           
-          <p className="text-base lg:text-lg text-white/70 dark:text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            We sell premium online courses to help you develop high-value skills for freelancing and multiple income streams. 
-            Plus, bonus earning opportunities to maximize your returns.
+          <p className="text-base lg:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
+            We sell premium online courses to help you develop high-value skills for freelancing and multiple income streams.
           </p>
         </div>
 
-        {/* Stats Bar - Compact */}
-        <div className="grid grid-cols-3 gap-3 mb-12 max-w-xl mx-auto">
-          {stats.map((stat, index) => (
+        {/* Stats Bar */}
+        <div className="grid grid-cols-3 gap-4 mb-14 max-w-xl mx-auto">
+          {stats.map((stat) => (
             <div 
               key={stat.label}
-              className="text-center p-4 rounded-xl bg-white/5 dark:bg-card/50 border border-white/10 dark:border-border/30 backdrop-blur-lg"
+              className="text-center p-5 rounded-xl bg-white/5 border border-white/10 backdrop-blur-lg"
             >
-              <div className="text-2xl lg:text-3xl font-bold font-display text-gradient-gold mb-1">
+              <div className="text-2xl lg:text-4xl font-bold font-display text-gradient-gold mb-1">
                 {stat.value}
               </div>
-              <p className="text-xs text-white/60 dark:text-muted-foreground font-medium">
+              <p className="text-xs lg:text-sm text-white/60 font-medium">
                 {stat.label}
               </p>
             </div>
           ))}
         </div>
 
-        {/* Benefits Grid - Compact */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+        {/* Benefits Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 mb-14">
           {benefits.map((benefit) => {
             const Icon = benefit.icon;
             return (
               <div 
                 key={benefit.title}
-                className="p-5 rounded-xl bg-white/5 dark:bg-card/50 border border-white/10 dark:border-border/30 backdrop-blur-lg group hover:-translate-y-1 transition-all duration-300"
+                className="p-6 rounded-xl bg-white/5 border border-white/10 backdrop-blur-lg group hover:-translate-y-2 transition-all duration-300"
               >
                 <div 
-                  className={`w-12 h-12 mb-4 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center shadow-lg`}
+                  className={`w-14 h-14 mb-5 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center shadow-lg`}
                 >
-                  <Icon className="w-6 h-6 text-white" />
+                  <Icon className="w-7 h-7 text-white" />
                 </div>
                 
-                <h3 className="text-lg font-bold font-display text-white dark:text-foreground mb-2">
+                <h3 className="text-lg font-bold font-display text-white mb-2">
                   {benefit.title}
                 </h3>
-                <p className="text-sm text-white/60 dark:text-muted-foreground leading-relaxed">
+                <p className="text-sm text-white/60 leading-relaxed">
                   {benefit.description}
                 </p>
               </div>
@@ -107,49 +109,94 @@ const EarningEcosystemSection = () => {
           })}
         </div>
 
-        {/* Business Model Explanation */}
-        <div className="grid lg:grid-cols-2 gap-6 mb-12">
-          <div className="p-6 rounded-xl bg-white/5 dark:bg-card/50 border border-white/10 dark:border-border/30 backdrop-blur-lg">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center">
-                <Zap className="w-5 h-5 text-white" />
+        {/* Income Types Comparison Box */}
+        <div className="max-w-4xl mx-auto mb-14">
+          <div className="glass-card bg-white/5 border border-white/10 rounded-2xl p-6 lg:p-8">
+            <h3 className="text-xl lg:text-2xl font-bold font-display text-center text-white mb-8">
+              <Sparkles className="w-5 h-5 inline mr-2 text-primary" />
+              Our Dual Income Model
+            </h3>
+            
+            <div className="grid lg:grid-cols-2 gap-6">
+              {/* Working Income */}
+              <div className="p-5 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/5 border border-amber-500/20">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
+                    <Zap className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold text-white">Working Income</h4>
+                    <p className="text-xs text-white/50">Active Earnings</p>
+                  </div>
+                </div>
+                <ul className="space-y-2 text-sm text-white/70">
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-400">•</span>
+                    Apply your learned skills to earn actively
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-400">•</span>
+                    Take freelance projects & client work
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-400">•</span>
+                    Create digital products & services
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-400">•</span>
+                    Effort directly translates to income
+                  </li>
+                </ul>
               </div>
-              <h4 className="text-lg font-bold text-white dark:text-foreground">Working Income</h4>
-            </div>
-            <p className="text-sm text-white/70 dark:text-muted-foreground leading-relaxed">
-              Apply your newly learned skills to earn actively. Take on freelance projects, create digital products, 
-              or offer services. Your effort directly translates to income based on the skills you develop.
-            </p>
-          </div>
 
-          <div className="p-6 rounded-xl bg-white/5 dark:bg-card/50 border border-white/10 dark:border-border/30 backdrop-blur-lg">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-white" />
+              {/* Passive Income */}
+              <div className="p-5 rounded-xl bg-gradient-to-br from-blue-500/10 to-indigo-500/5 border border-blue-500/20">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                    <TrendingUp className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold text-white">Passive Income</h4>
+                    <p className="text-xs text-white/50">Revenue Sharing</p>
+                  </div>
+                </div>
+                <ul className="space-y-2 text-sm text-white/70">
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-400">•</span>
+                    Revenue sharing based on seniority
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-400">•</span>
+                    Earn from platform's overall growth
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-400">•</span>
+                    Quarterly profit distribution
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-400">•</span>
+                    Earn even when not actively working
+                  </li>
+                </ul>
               </div>
-              <h4 className="text-lg font-bold text-white dark:text-foreground">Passive Income</h4>
             </div>
-            <p className="text-sm text-white/70 dark:text-muted-foreground leading-relaxed">
-              Based on your seniority and the company's overall sales performance, you receive revenue sharing. 
-              This is linked to the platform's growth—transparent and based on collective success.
-            </p>
           </div>
         </div>
 
-        {/* Future Ready Section - Compact */}
+        {/* Future Ready Section */}
         <div className="relative rounded-2xl overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/10 to-primary/20" />
           <div className="absolute inset-0 backdrop-blur-xl" />
           
-          <div className="relative p-6 lg:p-8 border border-primary/20 rounded-2xl">
+          <div className="relative p-6 lg:p-10 border border-primary/20 rounded-2xl">
             <div className="flex flex-col lg:flex-row items-center gap-6">
-              <div className="flex items-center gap-3">
-                <Shield className="w-8 h-8 text-primary" />
+              <div className="flex items-center gap-4 flex-1">
+                <Shield className="w-10 h-10 text-primary" />
                 <div>
-                  <h3 className="text-xl lg:text-2xl font-bold font-display text-white dark:text-foreground">
+                  <h3 className="text-xl lg:text-2xl font-bold font-display text-white">
                     Future-Ready for the <span className="text-gradient-gold">AI Economy</span>
                   </h3>
-                  <p className="text-sm text-white/70 dark:text-muted-foreground mt-1">
+                  <p className="text-sm text-white/70 mt-1">
                     Our curriculum evolves with industry trends—AI, Web3, automation, and beyond.
                   </p>
                 </div>

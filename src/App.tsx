@@ -29,6 +29,7 @@ const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const AdminForgotPassword = lazy(() => import("./pages/AdminForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const SubmitCoursePage = lazy(() => import("./pages/affiliate/SubmitCoursePage"));
+const CourseDetailPage = lazy(() => import("./pages/CourseDetailPage"));
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,7 @@ const App = () => (
               <Route path="/register" element={<Register />} />
               <Route path="/registration-success" element={<RegistrationSuccess />} />
               <Route path="/payment" element={<PaymentGateway />} />
+              <Route path="/course/:courseId" element={<CourseDetailPage />} />
               <Route path="/admin-login" element={<AdminLogin />} />
               <Route path="/admin-forgot-password" element={<AdminForgotPassword />} />
               <Route path="/reset-password" element={<ResetPassword />} />
