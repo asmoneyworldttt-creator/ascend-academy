@@ -7,6 +7,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AIChatbot from "@/components/AIChatbot";
+import PageTransition from "@/components/PageTransition";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Lazy load route components for code splitting
 const Index = lazy(() => import("./pages/Index"));
@@ -33,12 +35,30 @@ const CourseDetailPage = lazy(() => import("./pages/CourseDetailPage"));
 
 const queryClient = new QueryClient();
 
-// Loading fallback component
+// Loading fallback component with skeleton
 const PageLoader = () => (
-  <div className="min-h-screen bg-background flex items-center justify-center">
-    <div className="flex flex-col items-center gap-4">
-      <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-      <p className="text-muted-foreground text-sm">Loading...</p>
+  <div className="min-h-screen bg-background">
+    {/* Navbar skeleton */}
+    <div className="h-20 border-b border-border/50 px-4 flex items-center justify-between">
+      <Skeleton className="h-10 w-32" variant="shimmer" />
+      <div className="hidden lg:flex items-center gap-6">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <Skeleton key={i} className="h-4 w-16" variant="shimmer" />
+        ))}
+      </div>
+      <div className="flex items-center gap-3">
+        <Skeleton className="h-9 w-20" variant="shimmer" />
+        <Skeleton className="h-9 w-24" variant="shimmer" />
+      </div>
+    </div>
+    
+    {/* Content skeleton */}
+    <div className="container mx-auto px-4 py-12">
+      <div className="flex flex-col items-center gap-6">
+        <Skeleton className="h-8 w-48" variant="shimmer" />
+        <Skeleton className="h-4 w-96 max-w-full" variant="shimmer" />
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin mt-8" />
+      </div>
     </div>
   </div>
 );
@@ -51,80 +71,82 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Suspense fallback={<PageLoader />}>
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/registration-success" element={<RegistrationSuccess />} />
-              <Route path="/payment" element={<PaymentGateway />} />
-              <Route path="/course/:courseId" element={<CourseDetailPage />} />
-              <Route path="/admin-login" element={<AdminLogin />} />
-              <Route path="/admin-forgot-password" element={<AdminForgotPassword />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              
-              {/* Protected Routes */}
-              <Route path="/user-home" element={
-                <ProtectedRoute>
-                  <UserHome />
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/affiliate" element={
-                <ProtectedRoute>
-                  <AffiliateDashboard />
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/courses" element={
-                <ProtectedRoute>
-                  <UserCourses />
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/learners" element={
-                <ProtectedRoute>
-                  <LearnersPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/income/:type" element={
-                <ProtectedRoute>
-                  <IncomeReportPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/wallet" element={
-                <ProtectedRoute>
-                  <WalletPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/leaderboard" element={
-                <ProtectedRoute>
-                  <LeaderboardPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/tasks" element={
-                <ProtectedRoute>
-                  <TasksPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/profile" element={
-                <ProtectedRoute>
-                  <ProfilePage />
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/submit-course" element={
-                <ProtectedRoute>
-                  <SubmitCoursePage />
-                </ProtectedRoute>
-              } />
-              
-              {/* Admin Routes */}
-              <Route path="/admin" element={
-                <ProtectedRoute>
-                  <AdminPanel />
-                </ProtectedRoute>
-              } />
-              
-              {/* 404 */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <PageTransition>
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/" element={<Index />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/registration-success" element={<RegistrationSuccess />} />
+                <Route path="/payment" element={<PaymentGateway />} />
+                <Route path="/course/:courseId" element={<CourseDetailPage />} />
+                <Route path="/admin-login" element={<AdminLogin />} />
+                <Route path="/admin-forgot-password" element={<AdminForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                
+                {/* Protected Routes */}
+                <Route path="/user-home" element={
+                  <ProtectedRoute>
+                    <UserHome />
+                  </ProtectedRoute>
+                } />
+                <Route path="/dashboard/affiliate" element={
+                  <ProtectedRoute>
+                    <AffiliateDashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/dashboard/courses" element={
+                  <ProtectedRoute>
+                    <UserCourses />
+                  </ProtectedRoute>
+                } />
+                <Route path="/dashboard/learners" element={
+                  <ProtectedRoute>
+                    <LearnersPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/dashboard/income/:type" element={
+                  <ProtectedRoute>
+                    <IncomeReportPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/dashboard/wallet" element={
+                  <ProtectedRoute>
+                    <WalletPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/dashboard/leaderboard" element={
+                  <ProtectedRoute>
+                    <LeaderboardPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/dashboard/tasks" element={
+                  <ProtectedRoute>
+                    <TasksPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/dashboard/profile" element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/dashboard/submit-course" element={
+                  <ProtectedRoute>
+                    <SubmitCoursePage />
+                  </ProtectedRoute>
+                } />
+                
+                {/* Admin Routes */}
+                <Route path="/admin" element={
+                  <ProtectedRoute>
+                    <AdminPanel />
+                  </ProtectedRoute>
+                } />
+                
+                {/* 404 */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </PageTransition>
           </Suspense>
           <AIChatbot />
         </AuthProvider>

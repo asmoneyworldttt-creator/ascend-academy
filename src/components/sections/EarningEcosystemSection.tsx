@@ -38,16 +38,22 @@ const EarningEcosystemSection = () => {
 
   return (
     <section className="py-16 lg:py-28 relative overflow-hidden">
-      {/* Professional Dark Gradient Background - Always dark for visibility */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+      {/* Premium Dark Theme Background */}
+      <div className="absolute inset-0 bg-[#0a0f1a]" />
       
-      {/* Animated gradient overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent opacity-60" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-accent/15 via-transparent to-transparent opacity-50" />
+      {/* Rich gradient overlays for depth */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0d1525] via-[#0a1628] to-[#071018]" />
       
-      {/* Decorative Elements */}
-      <div className="absolute top-1/4 left-[5%] w-64 h-64 rounded-full bg-primary/15 blur-[100px] animate-pulse" />
-      <div className="absolute bottom-1/4 right-[5%] w-56 h-56 rounded-full bg-accent/15 blur-[80px] animate-pulse" style={{ animationDelay: '1s' }} />
+      {/* Subtle mesh gradient for premium feel */}
+      <div className="absolute inset-0 opacity-40">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_80%_50%_at_20%_20%,rgba(120,119,198,0.15),transparent)]" />
+        <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_60%_40%_at_80%_80%,rgba(251,191,36,0.12),transparent)]" />
+      </div>
+      
+      {/* Decorative glow orbs */}
+      <div className="absolute top-1/4 left-[10%] w-80 h-80 rounded-full bg-gradient-to-r from-primary/20 to-amber-500/10 blur-[120px]" />
+      <div className="absolute bottom-1/4 right-[10%] w-72 h-72 rounded-full bg-gradient-to-l from-cyan-500/15 to-blue-600/10 blur-[100px]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-violet-500/5 blur-[150px]" />
 
       <div className="container relative mx-auto px-4">
         {/* Section Header */}

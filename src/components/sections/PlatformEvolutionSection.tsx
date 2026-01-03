@@ -88,17 +88,18 @@ const PlatformEvolutionSection = () => {
 
   return (
     <section className="py-16 lg:py-24 relative overflow-hidden">
-      {/* Dark Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+      {/* Premium Dark Background */}
+      <div className="absolute inset-0 bg-[#080c14]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0a1020] via-[#060810] to-[#0a0e18]" />
       
-      {/* Animated Orbs */}
-      <div className="absolute top-1/4 left-5 w-64 h-64 rounded-full bg-gradient-to-br from-blue-500/15 to-transparent blur-[80px] animate-pulse" />
-      <div className="absolute bottom-1/4 right-5 w-48 h-48 rounded-full bg-gradient-to-bl from-purple-500/15 to-transparent blur-[60px] animate-pulse" style={{ animationDelay: '1s' }} />
+      {/* Subtle gradient orbs */}
+      <div className="absolute top-1/3 left-10 w-72 h-72 rounded-full bg-blue-600/8 blur-[100px]" />
+      <div className="absolute bottom-1/3 right-10 w-64 h-64 rounded-full bg-violet-600/8 blur-[80px]" />
 
       <div className="container relative mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/30 text-sm font-medium text-primary mb-5">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/15 border border-primary/25 text-sm font-medium text-primary mb-5">
             <Rocket className="w-4 h-4" />
             Our Vision of the Future
           </div>
@@ -110,23 +111,26 @@ const PlatformEvolutionSection = () => {
           </p>
         </div>
 
-        {/* 3D Road Path */}
+        {/* Visible Road Path Design */}
         <div className="relative max-w-5xl mx-auto">
-          {/* Central Road Line - Desktop */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-2 -translate-x-1/2 hidden lg:block">
-            <div className="absolute inset-0 bg-gradient-to-b from-blue-500 via-purple-500 via-amber-500 to-indigo-500 rounded-full" />
-            <div className="absolute inset-0 bg-gradient-to-b from-blue-500/50 via-purple-500/50 to-indigo-500/50 rounded-full blur-sm animate-pulse" />
-            {/* Road lane markers */}
-            <div className="absolute inset-x-0 top-0 bottom-0 flex flex-col justify-around items-center">
-              {[...Array(14)].map((_, i) => (
-                <div key={i} className="w-1 h-4 bg-white/40 rounded-full" />
+          {/* Central Road - Desktop - More visible */}
+          <div className="absolute left-1/2 top-0 bottom-0 w-4 -translate-x-1/2 hidden lg:block">
+            {/* Road base */}
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-700 via-slate-600 to-slate-700 rounded-full shadow-lg" />
+            {/* Center line glow */}
+            <div className="absolute inset-x-1 inset-y-0 bg-gradient-to-b from-blue-500 via-purple-500 via-amber-500 to-indigo-500 rounded-full" />
+            {/* Road lane markers - dashed white line */}
+            <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1 flex flex-col gap-3 py-2">
+              {[...Array(20)].map((_, i) => (
+                <div key={i} className="flex-shrink-0 h-6 w-full bg-white/60 rounded-full" />
               ))}
             </div>
           </div>
 
-          {/* Mobile Road Line */}
-          <div className="absolute left-6 top-0 bottom-0 w-1 lg:hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-blue-500 via-purple-500 via-amber-500 to-indigo-500 rounded-full" />
+          {/* Mobile Road Line - More visible */}
+          <div className="absolute left-6 top-0 bottom-0 w-2 lg:hidden">
+            <div className="absolute inset-0 bg-slate-700 rounded-full" />
+            <div className="absolute inset-x-0 inset-y-0 bg-gradient-to-b from-blue-500 via-purple-500 via-amber-500 to-indigo-500 rounded-full opacity-80" />
           </div>
 
           {/* Timeline Items */}
@@ -163,23 +167,23 @@ const PlatformEvolutionSection = () => {
                     </div>
                   </button>
 
-                  {/* Content Card */}
+                  {/* Content Card - More visible with better contrast */}
                   <div 
                     className={`lg:w-[calc(50%-3rem)] ml-14 lg:ml-0 ${isLeft ? 'lg:pr-6' : 'lg:pl-6'}`}
                   >
                     <button 
                       onClick={() => setSelectedPhase(phase)}
-                      className="w-full text-left p-4 rounded-xl border bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 group"
+                      className="w-full text-left p-4 rounded-xl border bg-slate-900/90 border-slate-700/50 hover:bg-slate-800/90 hover:border-slate-600/60 transition-all duration-300 group shadow-lg"
                     >
                       {/* Phase Badge Row */}
                       <div className="flex items-center justify-between mb-2">
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold bg-gradient-to-r ${phase.color} text-white`}>
+                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold bg-gradient-to-r ${phase.color} text-white shadow-sm`}>
                           Phase {phase.phase}
                         </span>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
                           phase.status === 'Active' 
-                            ? 'bg-emerald-500/20 text-emerald-400' 
-                            : 'bg-amber-500/20 text-amber-400'
+                            ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/30' 
+                            : 'bg-amber-500/25 text-amber-300 border border-amber-500/30'
                         }`}>
                           {phase.status}
                         </span>
@@ -191,10 +195,10 @@ const PlatformEvolutionSection = () => {
                       </div>
 
                       <h3 className="text-base font-bold text-white mb-0.5">{phase.title}</h3>
-                      <p className="text-primary text-xs font-medium mb-2">{phase.subtitle}</p>
-                      <p className="text-white/50 text-xs leading-relaxed line-clamp-2">{phase.description}</p>
+                      <p className="text-primary text-xs font-semibold mb-2">{phase.subtitle}</p>
+                      <p className="text-slate-300 text-xs leading-relaxed line-clamp-2">{phase.description}</p>
                       
-                      <span className="inline-flex items-center text-[10px] text-primary font-semibold mt-2 group-hover:gap-1.5 transition-all">
+                      <span className="inline-flex items-center text-[10px] text-primary font-semibold mt-3 group-hover:gap-1.5 transition-all">
                         Learn More
                         <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
                       </span>
@@ -215,42 +219,43 @@ const PlatformEvolutionSection = () => {
         </div>
       </div>
 
-      {/* Phase Detail Modal */}
+      {/* Phase Detail Modal - Mobile optimized */}
       <Dialog open={!!selectedPhase} onOpenChange={() => setSelectedPhase(null)}>
-        <DialogContent className="max-w-lg p-0 border-0 overflow-hidden mx-4">
+        <DialogContent className="max-w-md p-0 border-0 overflow-hidden mx-4 max-h-[85vh] overflow-y-auto">
           {selectedPhase && (
             <>
               {/* Header with gradient */}
-              <div className={`relative p-6 bg-gradient-to-br ${selectedPhase.color}`}>
+              <div className={`relative p-5 bg-gradient-to-br ${selectedPhase.color}`}>
                 <button 
                   onClick={() => setSelectedPhase(null)}
-                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/30 transition-colors"
+                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/30 transition-colors"
                 >
                   <X className="w-4 h-4 text-white" />
                 </button>
                 
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                    <selectedPhase.icon className="w-8 h-8 text-white" />
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <selectedPhase.icon className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <span className="text-xs font-bold text-white/70 uppercase tracking-wider">
+                    <span className="text-[10px] font-bold text-white/80 uppercase tracking-wider">
                       Phase {selectedPhase.phase} • {selectedPhase.status}
                     </span>
-                    <h3 className="text-xl font-bold text-white">{selectedPhase.title}</h3>
+                    <h3 className="text-lg font-bold text-white">{selectedPhase.title}</h3>
                   </div>
                 </div>
               </div>
               
               {/* Content */}
-              <div className="p-6 bg-card">
-                <p className="text-sm font-semibold text-primary mb-3">{selectedPhase.subtitle}</p>
+              <div className="p-5 bg-card">
+                <p className="text-sm font-semibold text-primary mb-2">{selectedPhase.subtitle}</p>
                 <p className="text-sm text-muted-foreground leading-relaxed">{selectedPhase.fullDescription}</p>
                 
                 <Button 
                   onClick={() => setSelectedPhase(null)} 
                   variant="hero" 
-                  className="w-full mt-6"
+                  className="w-full mt-5"
+                  size="default"
                 >
                   Got it!
                 </Button>
