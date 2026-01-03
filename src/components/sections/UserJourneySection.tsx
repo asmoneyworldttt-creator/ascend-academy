@@ -219,40 +219,40 @@ const UserJourneySection = () => {
         </div>
       </div>
 
-      {/* Step Detail Modal */}
+      {/* Step Detail Modal - Mobile optimized */}
       <Dialog open={!!selectedStep} onOpenChange={() => setSelectedStep(null)}>
-        <DialogContent className="max-w-md p-0 border-0 overflow-hidden mx-4">
+        <DialogContent className="max-w-sm p-0 border-0 overflow-hidden mx-4 max-h-[85vh] overflow-y-auto">
           {selectedStep && (
             <>
               {/* Header */}
-              <div className={`relative p-6 bg-gradient-to-br ${selectedStep.gradient}`}>
+              <div className={`relative p-5 bg-gradient-to-br ${selectedStep.gradient}`}>
                 <button 
                   onClick={() => setSelectedStep(null)}
-                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/30 transition-colors"
+                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/30 transition-colors"
                 >
                   <X className="w-4 h-4 text-white" />
                 </button>
                 
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                    <selectedStep.icon className="w-7 h-7 text-white" />
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <selectedStep.icon className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <span className="text-xs font-bold text-white/70 uppercase tracking-wider">
+                    <span className="text-[10px] font-bold text-white/80 uppercase tracking-wider">
                       Step {selectedStep.step}
                     </span>
-                    <h3 className="text-lg font-bold text-white">{selectedStep.title}</h3>
+                    <h3 className="text-base font-bold text-white">{selectedStep.title}</h3>
                   </div>
                 </div>
               </div>
               
               {/* Content */}
-              <div className="p-6 bg-card">
-                <p className="text-sm font-semibold text-primary mb-3">{selectedStep.subtitle}</p>
+              <div className="p-5 bg-card">
+                <p className="text-sm font-semibold text-primary mb-2">{selectedStep.subtitle}</p>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-4">{selectedStep.fullDescription}</p>
                 
                 <h4 className="text-xs font-bold text-foreground mb-2 uppercase tracking-wider">What You Get:</h4>
-                <ul className="space-y-2 mb-6">
+                <ul className="space-y-2 mb-5">
                   {selectedStep.highlights.map((highlight, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm">
                       <div className={`w-5 h-5 rounded-full bg-gradient-to-r ${selectedStep.gradient} flex items-center justify-center flex-shrink-0`}>
@@ -267,6 +267,7 @@ const UserJourneySection = () => {
                   onClick={() => setSelectedStep(null)} 
                   variant="hero" 
                   className="w-full"
+                  size="default"
                 >
                   Got it!
                 </Button>

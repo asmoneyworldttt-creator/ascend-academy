@@ -90,23 +90,16 @@ const Navbar = () => {
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
-            {/* Logo with glassmorphism container for light mode visibility */}
+            {/* Logo - Clean minimal design */}
             <Link to="/" className="flex items-center gap-2 group relative">
-              {/* Glassmorphism container */}
-              <div className={`absolute -inset-3 rounded-2xl transition-all duration-500 ${
-                isDark 
-                  ? 'opacity-0 group-hover:opacity-100 bg-gradient-to-r from-primary/15 via-accent/10 to-primary/15 blur-xl' 
-                  : 'opacity-100 bg-gradient-to-br from-white/60 via-amber-50/40 to-white/60 backdrop-blur-sm border border-amber-200/30 shadow-[0_4px_20px_rgba(251,191,36,0.15),_inset_0_1px_0_rgba(255,255,255,0.6)]'
-              }`} />
-              {/* Subtle outer glow for light mode */}
-              <div className={`absolute -inset-4 rounded-3xl transition-all duration-500 ${
-                isDark ? 'opacity-0' : 'opacity-60 bg-gradient-to-r from-amber-400/20 via-yellow-300/15 to-amber-400/20 blur-2xl'
-              }`} />
+              {/* Subtle shadow for visibility in light mode */}
               <img
                 src={logo}
                 alt="Skill Learners"
-                className={`relative h-14 md:h-16 w-auto transition-all duration-300 group-hover:scale-105 ${
-                  isDark ? 'drop-shadow-[0_2px_12px_rgba(251,191,36,0.5)]' : 'drop-shadow-[0_2px_8px_rgba(180,83,9,0.25)]'
+                className={`relative h-12 md:h-14 w-auto transition-all duration-300 group-hover:scale-105 ${
+                  isDark 
+                    ? 'drop-shadow-[0_2px_12px_rgba(251,191,36,0.5)]' 
+                    : 'drop-shadow-[0_4px_12px_rgba(0,0,0,0.15)] filter brightness-105'
                 }`}
               />
             </Link>
@@ -196,36 +189,26 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay - Full Screen */}
+      {/* Mobile Menu - Top-down dropdown */}
       <div
-        className={`lg:hidden fixed inset-0 z-[55] transition-all duration-500 ease-out ${
-          isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        className={`lg:hidden fixed left-0 right-0 top-20 z-[55] transition-all duration-400 ease-out origin-top ${
+          isOpen 
+            ? "opacity-100 visible scale-y-100 translate-y-0" 
+            : "opacity-0 invisible scale-y-95 -translate-y-2"
         }`}
       >
-        {/* Backdrop */}
-        <div 
-          className={`absolute inset-0 bg-background/95 backdrop-blur-xl transition-opacity duration-500 ${
-            isOpen ? "opacity-100" : "opacity-0"
-          }`}
-          onClick={() => setIsOpen(false)}
-        />
-        
-        {/* Menu Content */}
-        <div 
-          className={`relative h-full flex flex-col pt-24 px-6 pb-8 transition-all duration-500 ease-out ${
-            isOpen ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
-          }`}
-        >
+        {/* Menu Content - Compact dropdown */}
+        <div className="mx-4 rounded-xl bg-card/98 backdrop-blur-xl border border-border/50 shadow-2xl overflow-hidden">
           {/* Navigation Links */}
-          <nav className="flex-1 flex flex-col gap-2">
+          <nav className="p-3 space-y-1">
             {navLinks.map((link, index) => (
               <button
                 key={link.name}
                 onClick={() => handleNavClick(link.href)}
-                className="text-left text-2xl font-semibold text-foreground/90 hover:text-primary py-4 border-b border-border/30 transition-all duration-300 hover:pl-2"
+                className="w-full text-left text-sm font-medium text-foreground/80 hover:text-primary hover:bg-primary/5 px-3 py-2.5 rounded-lg transition-all duration-200"
                 style={{ 
-                  animationDelay: `${index * 50}ms`,
-                  animation: isOpen ? 'slideInRight 0.4s ease-out forwards' : 'none'
+                  animationDelay: `${index * 30}ms`,
+                  animation: isOpen ? 'fadeSlideDown 0.3s ease-out forwards' : 'none'
                 }}
               >
                 {link.name}
@@ -233,23 +216,26 @@ const Navbar = () => {
             ))}
           </nav>
           
-          {/* Action Buttons - Register/Login for public, Dashboard for logged in */}
-          <div className="space-y-4 pt-6">
+          {/* Divider */}
+          <div className="h-px bg-border/50 mx-3" />
+          
+          {/* Action Buttons - Compact */}
+          <div className="p-3 flex gap-2">
             {user ? (
-              <Link to="/user-home" onClick={() => setIsOpen(false)} className="block">
-                <Button variant="hero" className="w-full h-14 text-lg">
+              <Link to="/user-home" onClick={() => setIsOpen(false)} className="flex-1">
+                <Button variant="hero" size="sm" className="w-full">
                   Dashboard
                 </Button>
               </Link>
             ) : (
               <>
-                <Link to="/login" onClick={() => setIsOpen(false)} className="block">
-                  <Button variant="outline" className="w-full h-14 text-lg border-primary/30">
+                <Link to="/login" onClick={() => setIsOpen(false)} className="flex-1">
+                  <Button variant="outline" size="sm" className="w-full border-primary/30">
                     Login
                   </Button>
                 </Link>
-                <Link to="/register" onClick={() => setIsOpen(false)} className="block">
-                  <Button variant="hero" className="w-full h-14 text-lg">
+                <Link to="/register" onClick={() => setIsOpen(false)} className="flex-1">
+                  <Button variant="hero" size="sm" className="w-full">
                     Register
                   </Button>
                 </Link>
@@ -257,6 +243,12 @@ const Navbar = () => {
             )}
           </div>
         </div>
+        
+        {/* Backdrop */}
+        <div 
+          className="fixed inset-0 -z-10 bg-black/20 backdrop-blur-sm"
+          onClick={() => setIsOpen(false)}
+        />
       </div>
     </>
   );

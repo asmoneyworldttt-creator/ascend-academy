@@ -4,6 +4,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile menu animation */
+@keyframes fadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @layer base {
   :root {
     /* Light Mode - Premium & Royal */
