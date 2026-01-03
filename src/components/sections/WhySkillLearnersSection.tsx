@@ -82,10 +82,10 @@ const WhySkillLearnersSection = () => {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium text-primary mb-6">
             <Sparkles className="w-4 h-4" />
-            The SkillHonors Difference
+            The Skill Learners Difference
           </div>
           <h2 className="text-3xl lg:text-5xl font-bold font-display mb-4">
-            Why Choose <span className="text-gradient-gold">SkillHonors</span>?
+            Why Choose <span className="text-gradient-gold">Skill Learners</span>?
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             We're not just another e-learning platform. We're your partner in building a successful career 
@@ -93,25 +93,42 @@ const WhySkillLearnersSection = () => {
           </p>
         </div>
 
-        {/* Comparison Section */}
+        {/* Futuristic Comparison Section */}
         <div className="max-w-4xl mx-auto mb-16">
-          <div className="glass-card rounded-2xl p-6 lg:p-8">
-            <h3 className="text-xl font-bold font-display text-center mb-6">
-              Others vs <span className="text-gradient-gold">SkillHonors</span>
-            </h3>
-            <div className="space-y-3">
-              {comparisonPoints.map((point, index) => (
-                <div key={index} className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-destructive/5 border border-destructive/20">
-                    <span className="text-destructive text-lg">✗</span>
-                    <span className="text-sm text-muted-foreground">{point.others}</span>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-emerald/10 border border-emerald/20">
-                    <span className="text-emerald text-lg">✓</span>
-                    <span className="text-sm text-foreground font-medium">{point.us}</span>
-                  </div>
+          <div className="relative rounded-2xl overflow-hidden">
+            {/* Gradient border effect */}
+            <div className="absolute -inset-[1px] bg-gradient-to-r from-primary/50 via-accent/30 to-primary/50 rounded-2xl" />
+            
+            <div className="relative bg-card rounded-2xl p-6 lg:p-8">
+              <h3 className="text-xl font-bold font-display text-center mb-8">
+                Others vs <span className="text-gradient-gold">Skill Learners</span>
+              </h3>
+              
+              {/* Column Headers */}
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="text-center p-3 rounded-xl bg-destructive/10 border border-destructive/20">
+                  <span className="text-sm font-bold text-destructive">❌ Others</span>
                 </div>
-              ))}
+                <div className="text-center p-3 rounded-xl bg-emerald/10 border border-emerald/20">
+                  <span className="text-sm font-bold text-emerald">✓ Skill Learners</span>
+                </div>
+              </div>
+              
+              {/* Comparison Rows */}
+              <div className="space-y-3">
+                {comparisonPoints.map((point, index) => (
+                  <div key={index} className="grid grid-cols-2 gap-4">
+                    <div className="flex items-center gap-3 p-4 rounded-xl bg-muted/30 border border-border/50">
+                      <X className="w-4 h-4 text-destructive flex-shrink-0" />
+                      <span className="text-sm text-muted-foreground">{point.others}</span>
+                    </div>
+                    <div className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-emerald/10 to-teal/5 border border-emerald/20">
+                      <Check className="w-4 h-4 text-emerald flex-shrink-0" />
+                      <span className="text-sm text-foreground font-medium">{point.us}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

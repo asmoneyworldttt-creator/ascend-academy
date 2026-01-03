@@ -1,6 +1,8 @@
-import { ArrowRight, CheckCircle2, Sparkles, Target, GraduationCap, Wallet, Rocket, Users, Crown, Zap, TrendingUp } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, CheckCircle2, Sparkles, Target, GraduationCap, Wallet, Rocket, Users, Crown, Zap, TrendingUp, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const journeySteps = [
   {
@@ -8,193 +10,271 @@ const journeySteps = [
     icon: Target,
     title: "Choose Your Path",
     subtitle: "Select a Combo Package",
-    description: "Browse our carefully curated combo packages designed to give you maximum value. Each package combines complementary courses that work together to build complete skill sets.",
+    description: "Browse our carefully curated combo packages designed to give you maximum value.",
+    fullDescription: "Browse our carefully curated combo packages designed to give you maximum value. Each package combines complementary courses that work together to build complete skill sets. Whether you're starting fresh or upgrading your abilities, there's a perfect package waiting for you.",
     highlights: [
       "Multiple courses bundled together",
       "Significant savings vs individual courses",
       "Access to exclusive community",
     ],
     gradient: "from-blue-600 via-cyan-500 to-teal-400",
-    bgGradient: "from-blue-500/20 to-cyan-500/10",
+    bgGradient: "from-blue-500/15 to-cyan-500/5",
   },
   {
     step: 2,
     icon: GraduationCap,
-    title: "Master High-Demand Skills",
-    subtitle: "Learn from Industry Experts",
-    description: "Dive into comprehensive courses taught by professionals who are actively working in their fields. Our curriculum is constantly updated to match industry demands.",
+    title: "Master Skills",
+    subtitle: "Learn from Experts",
+    description: "Dive into comprehensive courses taught by professionals actively working in their fields.",
+    fullDescription: "Dive into comprehensive courses taught by professionals who are actively working in their fields. Our curriculum is constantly updated to match industry demands. Learn through practical, project-based modules that prepare you for real-world challenges.",
     highlights: [
       "Practical, project-based learning",
       "Live mentoring sessions",
       "Industry-recognized certificates",
     ],
     gradient: "from-emerald-500 via-green-400 to-teal-400",
-    bgGradient: "from-emerald-500/20 to-teal-500/10",
+    bgGradient: "from-emerald-500/15 to-teal-500/5",
   },
   {
     step: 3,
     icon: Wallet,
     title: "Start Earning",
     subtitle: "Multiple Income Streams",
-    description: "Apply your new skills immediately. Take on freelance projects, build your portfolio, and leverage our affiliate program for additional income while you learn.",
+    description: "Apply your new skills immediately through freelancing and our affiliate program.",
+    fullDescription: "Apply your new skills immediately. Take on freelance projects, build your portfolio, and leverage our affiliate program for additional income while you learn. Multiple income streams await you from day one.",
     highlights: [
       "Freelance opportunities",
       "Affiliate income potential",
       "Direct client connections",
     ],
     gradient: "from-amber-500 via-orange-400 to-yellow-400",
-    bgGradient: "from-amber-500/20 to-orange-500/10",
+    bgGradient: "from-amber-500/15 to-orange-500/5",
   },
   {
     step: 4,
     icon: Rocket,
-    title: "Achieve Financial Freedom",
+    title: "Financial Freedom",
     subtitle: "Build Your Future",
-    description: "With mastered skills and multiple income streams, you're positioned for lasting success. Our community continues to support you as you scale your ventures.",
+    description: "With mastered skills and multiple income streams, position yourself for lasting success.",
+    fullDescription: "With mastered skills and multiple income streams, you're positioned for lasting success. Our community continues to support you as you scale your ventures and achieve the financial freedom you deserve.",
     highlights: [
       "Passive income opportunities",
       "Business building guidance",
       "Lifetime community access",
     ],
     gradient: "from-violet-600 via-purple-500 to-pink-400",
-    bgGradient: "from-violet-500/20 to-purple-500/10",
+    bgGradient: "from-violet-500/15 to-purple-500/5",
   },
 ];
 
 const UserJourneySection = () => {
+  const [selectedStep, setSelectedStep] = useState<typeof journeySteps[0] | null>(null);
+
   return (
-    <section className="py-20 lg:py-32 relative overflow-hidden transition-colors duration-500">
-      {/* Premium Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/30 to-background transition-colors duration-500" />
+    <section className="py-16 lg:py-24 relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/20 to-background" />
       
-      {/* Decorative Geometric Elements */}
+      {/* Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-primary/10 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-bl from-accent/10 to-transparent rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent opacity-50" />
+        <div className="absolute top-20 left-5 w-48 h-48 bg-gradient-to-br from-primary/10 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-5 w-64 h-64 bg-gradient-to-bl from-accent/10 to-transparent rounded-full blur-3xl" />
       </div>
 
       <div className="container relative mx-auto px-4">
-        {/* Premium Header */}
-        <div className="text-center mb-16 lg:mb-20">
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-primary/20 to-accent/20 border border-primary/30 text-sm font-bold text-primary mb-6 shadow-lg shadow-primary/10">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/15 to-accent/15 border border-primary/25 text-sm font-bold text-primary mb-5 shadow-sm">
             <Crown className="w-4 h-4" />
             Your Success Blueprint
           </div>
-          <h2 className="text-3xl lg:text-6xl font-bold font-display mb-6">
+          <h2 className="text-2xl lg:text-4xl font-bold font-display mb-4">
             Your <span className="text-gradient-gold">Journey</span> to Success
           </h2>
-          <p className="text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Follow our proven 4-step path from beginner to financially independent professional. 
-            Each step builds on the previous, creating a solid foundation for lasting success.
+          <p className="text-sm lg:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Follow our proven 4-step path from beginner to financially independent professional.
           </p>
         </div>
 
-        {/* Premium Journey Cards */}
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8">
+        {/* 3D Road Path */}
+        <div className="max-w-5xl mx-auto relative">
+          {/* Horizontal Road - Desktop */}
+          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-2 -translate-y-1/2 z-0">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-emerald-500 via-amber-500 to-violet-500 rounded-full" />
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/50 via-amber-500/50 to-violet-500/50 rounded-full blur-sm" />
+            {/* Lane markers */}
+            <div className="absolute inset-y-0 inset-x-4 flex justify-around items-center">
+              {[...Array(12)].map((_, i) => (
+                <div key={i} className="w-6 h-1 bg-white/40 rounded-full" />
+              ))}
+            </div>
+          </div>
+
+          {/* Vertical Road - Mobile */}
+          <div className="lg:hidden absolute left-6 top-0 bottom-0 w-1 z-0">
+            <div className="absolute inset-0 bg-gradient-to-b from-blue-500 via-emerald-500 via-amber-500 to-violet-500 rounded-full" />
+          </div>
+
+          {/* Journey Cards */}
+          <div className="grid lg:grid-cols-4 gap-4 lg:gap-6 relative z-10">
             {journeySteps.map((step, index) => {
               const Icon = step.icon;
               
               return (
-                <div 
+                <button 
                   key={step.step}
-                  className="group relative"
-                  style={{ animationDelay: `${index * 0.1}s` }}
+                  onClick={() => setSelectedStep(step)}
+                  className="group relative text-left"
                 >
-                  {/* Card Glow Effect */}
-                  <div className={`absolute -inset-1 bg-gradient-to-r ${step.gradient} rounded-3xl opacity-0 group-hover:opacity-30 blur-xl transition-all duration-500`} />
-                  
-                  {/* Main Card */}
-                  <div className={`relative p-8 rounded-2xl bg-gradient-to-br ${step.bgGradient} border border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-2xl`}>
-                    {/* Step Number Badge */}
-                    <div className="absolute -top-4 -right-4 w-16 h-16 rounded-2xl bg-gradient-to-br from-card to-muted flex items-center justify-center shadow-xl border border-border/50">
-                      <span className={`text-2xl font-bold bg-gradient-to-r ${step.gradient} bg-clip-text text-transparent`}>
+                  {/* Mobile Road Node */}
+                  <div className="lg:hidden absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[calc(50%-1.5rem)] w-6 h-6 rounded-full bg-gradient-to-br from-white to-muted flex items-center justify-center border-2 border-primary shadow-md z-20">
+                    <span className="text-[10px] font-bold text-primary">{step.step}</span>
+                  </div>
+
+                  {/* Card */}
+                  <div className={`ml-10 lg:ml-0 p-5 rounded-xl bg-gradient-to-br ${step.bgGradient} border border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-400 group-hover:-translate-y-2 group-hover:shadow-xl`}>
+                    {/* Step Number - Desktop */}
+                    <div className="hidden lg:flex absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-br from-card to-muted items-center justify-center shadow-lg border-2 border-primary z-20">
+                      <span className={`text-sm font-bold bg-gradient-to-r ${step.gradient} bg-clip-text text-transparent`}>
                         {step.step}
                       </span>
                     </div>
 
                     {/* Icon */}
-                    <div className={`w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br ${step.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500`}>
-                      <Icon className="w-8 h-8 text-white" />
+                    <div className={`w-12 h-12 mb-4 rounded-xl bg-gradient-to-br ${step.gradient} flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-400`}>
+                      <Icon className="w-6 h-6 text-white" />
                     </div>
 
                     {/* Content */}
-                    <h3 className="text-2xl font-bold font-display mb-2 group-hover:text-primary transition-colors">
+                    <h3 className="text-base font-bold font-display mb-1 group-hover:text-primary transition-colors">
                       {step.title}
                     </h3>
-                    <p className={`text-sm font-semibold mb-4 bg-gradient-to-r ${step.gradient} bg-clip-text text-transparent`}>
+                    <p className={`text-xs font-semibold mb-2 bg-gradient-to-r ${step.gradient} bg-clip-text text-transparent`}>
                       {step.subtitle}
                     </p>
-                    <p className="text-muted-foreground mb-6 leading-relaxed">
+                    <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
                       {step.description}
                     </p>
 
-                    {/* Highlights */}
-                    <ul className="space-y-3">
-                      {step.highlights.map((highlight, i) => (
-                        <li key={i} className="flex items-center gap-3 text-sm">
-                          <div className={`w-6 h-6 rounded-full bg-gradient-to-r ${step.gradient} flex items-center justify-center flex-shrink-0`}>
-                            <CheckCircle2 className="w-4 h-4 text-white" />
-                          </div>
-                          <span className="text-foreground/80">{highlight}</span>
-                        </li>
+                    {/* Highlights Preview */}
+                    <div className="mt-3 space-y-1">
+                      {step.highlights.slice(0, 2).map((highlight, i) => (
+                        <div key={i} className="flex items-center gap-1.5 text-[10px]">
+                          <CheckCircle2 className={`w-3 h-3 flex-shrink-0 bg-gradient-to-r ${step.gradient} rounded-full text-white`} />
+                          <span className="text-foreground/70 line-clamp-1">{highlight}</span>
+                        </div>
                       ))}
-                    </ul>
-
-                    {/* Decorative Corner */}
-                    <div className="absolute bottom-0 right-0 w-24 h-24 opacity-5 group-hover:opacity-10 transition-opacity">
-                      <Icon className="w-full h-full" />
                     </div>
+
+                    <span className="inline-flex items-center text-[10px] text-primary font-semibold mt-3 group-hover:gap-1.5 transition-all">
+                      Learn More
+                      <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
+                    </span>
                   </div>
-                </div>
+                </button>
               );
             })}
           </div>
 
           {/* Connection Arrows - Desktop Only */}
-          <div className="hidden lg:flex justify-center items-center gap-4 my-8">
+          <div className="hidden lg:flex justify-center items-center gap-2 mt-6">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-primary" />
-                <ArrowRight className="w-6 h-6 text-muted-foreground" />
+              <div key={i} className="flex items-center gap-1.5 text-muted-foreground/40">
+                <Zap className="w-4 h-4 text-primary/50" />
+                <span className="text-xs">→</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Premium CTA Section */}
-        <div className="mt-20 text-center">
+        {/* CTA Section */}
+        <div className="mt-16 text-center">
           <div className="relative inline-block">
-            {/* Glow Effect */}
-            <div className="absolute -inset-4 bg-gradient-to-r from-primary/30 via-accent/30 to-primary/30 rounded-3xl blur-2xl opacity-50" />
+            <div className="absolute -inset-3 bg-gradient-to-r from-primary/25 via-accent/25 to-primary/25 rounded-2xl blur-xl opacity-60" />
             
-            <div className="relative glass-card p-10 rounded-3xl border border-primary/20 max-w-4xl mx-auto bg-gradient-to-br from-card/80 to-muted/50">
-              <div className="flex items-center justify-center gap-2 mb-6">
-                <TrendingUp className="w-6 h-6 text-emerald" />
-                <span className="text-sm font-bold text-emerald">Join 10,000+ learners who started their journey</span>
+            <div className="relative glass-card p-8 rounded-2xl border border-primary/20 max-w-3xl mx-auto bg-gradient-to-br from-card/90 to-muted/60">
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <TrendingUp className="w-5 h-5 text-emerald" />
+                <span className="text-xs font-bold text-emerald">Join 10,000+ learners who started their journey</span>
               </div>
               
-              <h3 className="text-3xl lg:text-4xl font-bold font-display mb-4">
+              <h3 className="text-2xl lg:text-3xl font-bold font-display mb-3">
                 Ready to <span className="text-gradient-teal">Transform</span> Your Future?
               </h3>
               
-              <p className="text-muted-foreground mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
-                By mastering these skills, you can take on freelance projects, build passive income streams, 
-                and position yourself for career growth. We provide extra earning opportunities and future business prospects.
+              <p className="text-sm text-muted-foreground mb-6 max-w-xl mx-auto leading-relaxed">
+                Master in-demand skills, take freelance projects, and build multiple income streams. 
+                We're here to guide you every step of the way.
               </p>
               
               <Link to="/register">
-                <Button variant="hero" size="xl" className="group shadow-xl shadow-primary/20">
-                  <Sparkles className="w-5 h-5" />
+                <Button variant="hero" size="lg" className="group shadow-lg shadow-primary/20">
+                  <Sparkles className="w-4 h-4" />
                   Start Your Journey Today
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Step Detail Modal */}
+      <Dialog open={!!selectedStep} onOpenChange={() => setSelectedStep(null)}>
+        <DialogContent className="max-w-md p-0 border-0 overflow-hidden mx-4">
+          {selectedStep && (
+            <>
+              {/* Header */}
+              <div className={`relative p-6 bg-gradient-to-br ${selectedStep.gradient}`}>
+                <button 
+                  onClick={() => setSelectedStep(null)}
+                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/30 transition-colors"
+                >
+                  <X className="w-4 h-4 text-white" />
+                </button>
+                
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <selectedStep.icon className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-white/70 uppercase tracking-wider">
+                      Step {selectedStep.step}
+                    </span>
+                    <h3 className="text-lg font-bold text-white">{selectedStep.title}</h3>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Content */}
+              <div className="p-6 bg-card">
+                <p className="text-sm font-semibold text-primary mb-3">{selectedStep.subtitle}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4">{selectedStep.fullDescription}</p>
+                
+                <h4 className="text-xs font-bold text-foreground mb-2 uppercase tracking-wider">What You Get:</h4>
+                <ul className="space-y-2 mb-6">
+                  {selectedStep.highlights.map((highlight, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm">
+                      <div className={`w-5 h-5 rounded-full bg-gradient-to-r ${selectedStep.gradient} flex items-center justify-center flex-shrink-0`}>
+                        <CheckCircle2 className="w-3 h-3 text-white" />
+                      </div>
+                      <span className="text-foreground/80">{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
+                
+                <Button 
+                  onClick={() => setSelectedStep(null)} 
+                  variant="hero" 
+                  className="w-full"
+                >
+                  Got it!
+                </Button>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
