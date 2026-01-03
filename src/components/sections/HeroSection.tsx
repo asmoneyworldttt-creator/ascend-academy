@@ -55,7 +55,7 @@ const HeroSection = () => {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight font-display">
               Welcome to{" "}
               <span className="text-gradient-gold">Skill</span>{" "}
-              <span className="text-gradient-teal">Honors</span>
+              <span className="text-gradient-teal">Learners</span>
             </h1>
             
             <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
@@ -120,7 +120,7 @@ const HeroSection = () => {
             <div className="relative">
               <img
                 src={heroStudent}
-                alt="Student achieving success with SkillHonors"
+                alt="Student achieving success with Skill Learners"
                 className="relative z-10 w-full max-w-md lg:max-w-lg xl:max-w-xl h-auto drop-shadow-2xl"
               />
               

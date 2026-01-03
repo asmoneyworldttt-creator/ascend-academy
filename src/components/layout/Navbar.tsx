@@ -22,6 +22,9 @@ const Navbar = () => {
   const { user } = useAuth();
   const { isAdmin } = useAdminCheck();
 
+  // Check if on index page (public)
+  const isIndexPage = location.pathname === "/";
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -97,7 +100,7 @@ const Navbar = () => {
               }`} />
               <img
                 src={logo}
-                alt="SkillHonors"
+                alt="Skill Learners"
                 className="relative h-14 md:h-16 w-auto transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_10px_rgba(251,191,36,0.4)]"
               />
             </Link>
@@ -116,7 +119,7 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* Actions */}
+            {/* Actions - Different for index vs logged in pages */}
             <div className="hidden lg:flex items-center gap-4">
               <button
                 onClick={toggleTheme}
@@ -129,7 +132,9 @@ const Navbar = () => {
                   <Moon className="w-5 h-5 text-secondary-foreground" />
                 )}
               </button>
-              {isAdmin && (
+              
+              {/* Only show Admin button if user is admin AND not on index page */}
+              {isAdmin && !isIndexPage && (
                 <Link to="/admin">
                   <Button variant="outline" size="default" className="gap-2 border-red-500/30 text-red-500 hover:bg-red-500/10">
                     <Shield className="w-4 h-4" />
@@ -137,6 +142,7 @@ const Navbar = () => {
                   </Button>
                 </Link>
               )}
+              
               {user ? (
                 <Link to="/user-home">
                   <Button variant="hero" size="default">
@@ -146,13 +152,13 @@ const Navbar = () => {
               ) : (
                 <>
                   <Link to="/login">
-                    <Button variant="ghost" size="default">
+                    <Button variant="outline" size="default" className="border-primary/30 hover:bg-primary/10">
                       Login
                     </Button>
                   </Link>
                   <Link to="/register">
                     <Button variant="hero" size="default">
-                      Get Started
+                      Register
                     </Button>
                   </Link>
                 </>
@@ -221,16 +227,8 @@ const Navbar = () => {
             ))}
           </nav>
           
-          {/* Action Buttons */}
+          {/* Action Buttons - Register/Login for public, Dashboard for logged in */}
           <div className="space-y-4 pt-6">
-            {isAdmin && (
-              <Link to="/admin" onClick={() => setIsOpen(false)} className="block">
-                <Button variant="outline" className="w-full h-14 text-lg gap-2 border-red-500/30 text-red-500">
-                  <Shield className="w-5 h-5" />
-                  Admin Panel
-                </Button>
-              </Link>
-            )}
             {user ? (
               <Link to="/user-home" onClick={() => setIsOpen(false)} className="block">
                 <Button variant="hero" className="w-full h-14 text-lg">
@@ -240,13 +238,13 @@ const Navbar = () => {
             ) : (
               <>
                 <Link to="/login" onClick={() => setIsOpen(false)} className="block">
-                  <Button variant="outline" className="w-full h-14 text-lg">
+                  <Button variant="outline" className="w-full h-14 text-lg border-primary/30">
                     Login
                   </Button>
                 </Link>
                 <Link to="/register" onClick={() => setIsOpen(false)} className="block">
                   <Button variant="hero" className="w-full h-14 text-lg">
-                    Get Started
+                    Register
                   </Button>
                 </Link>
               </>

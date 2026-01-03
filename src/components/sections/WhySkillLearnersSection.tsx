@@ -1,41 +1,41 @@
-import { Clock, Users, Lightbulb, TrendingUp, Shield, Headphones, GraduationCap, Briefcase, Target, Sparkles } from "lucide-react";
+import { Clock, Users, Lightbulb, TrendingUp, Shield, Headphones, GraduationCap, Briefcase, Target, Sparkles, Check, X, Crown, HeartHandshake, Rocket } from "lucide-react";
 
 const features = [
   {
     icon: GraduationCap,
-    title: "Advanced Skill Training",
-    description: "Unlike basic courses, we provide in-depth, expert-level training that prepares you for real-world challenges. Master skills that are in high demand across industries.",
-    color: "from-primary to-gold-dark",
-  },
-  {
-    icon: Clock,
-    title: "Lifetime Access",
-    description: "Learn at your own pace with forever-access to course materials. No expiration dates, no rush—your education, your timeline. Get free updates as content evolves.",
-    color: "from-accent to-teal-dark",
-  },
-  {
-    icon: Headphones,
-    title: "24/7 Mentorship Support",
-    description: "Get round-the-clock guidance from industry experts to clear your doubts. Our mentors provide personalized advice and real-time problem-solving assistance.",
-    color: "from-emerald to-emerald-light",
-  },
-  {
-    icon: Lightbulb,
-    title: "Practical Learning",
-    description: "Not just theory—hands-on projects that build real-world skills. Apply what you learn immediately through assignments, case studies, and live projects.",
-    color: "from-violet-500 to-purple-600",
-  },
-  {
-    icon: TrendingUp,
-    title: "Path to Financial Freedom",
-    description: "We don't just teach skills—we provide a complete roadmap to financial independence. Learn to monetize your skills through freelancing, business, and passive income.",
-    color: "from-blue-500 to-indigo-600",
+    title: "Expert-Led Training",
+    description: "Learn from industry professionals with real-world experience, not just theory. Our instructors are active practitioners who share proven strategies.",
+    color: "from-blue-500 to-cyan-500",
   },
   {
     icon: Briefcase,
-    title: "Future Job Opportunities",
-    description: "We're building partnerships to provide direct job placements for skilled graduates. Your training today opens doors to employment opportunities tomorrow.",
-    color: "from-rose-500 to-pink-600",
+    title: "Career-Ready Skills",
+    description: "Every course is designed with freelancing and job market demands in mind. Graduate with skills employers and clients are actively seeking.",
+    color: "from-emerald-500 to-teal-500",
+  },
+  {
+    icon: TrendingUp,
+    title: "Multiple Income Paths",
+    description: "Unlike others who just teach, we provide 7 different income opportunities including affiliate earnings, task income, and profit sharing.",
+    color: "from-amber-500 to-orange-500",
+  },
+  {
+    icon: HeartHandshake,
+    title: "Lifetime Community",
+    description: "Join a supportive network of learners and mentors. Get help, share wins, and grow together with 24/7 community access.",
+    color: "from-violet-500 to-purple-500",
+  },
+  {
+    icon: Lightbulb,
+    title: "Future-Ready Curriculum",
+    description: "Our courses cover AI, Web3, digital marketing, and emerging technologies. Stay ahead of the curve with constantly updated content.",
+    color: "from-rose-500 to-pink-500",
+  },
+  {
+    icon: Rocket,
+    title: "Direct Job Opportunities",
+    description: "We're building a freelance marketplace and job portal to connect skilled learners directly with clients and employers. (Coming Soon)",
+    color: "from-indigo-500 to-blue-600",
   },
   {
     icon: Users,
