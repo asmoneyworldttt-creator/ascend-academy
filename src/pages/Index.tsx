@@ -11,7 +11,7 @@ import CoursesSection from "@/components/sections/CoursesSection";
 import ReviewsSection from "@/components/sections/ReviewsSection";
 import UserJourneySection from "@/components/sections/UserJourneySection";
 import PlatformEvolutionSection from "@/components/sections/PlatformEvolutionSection";
-import EcommerceRoadmapSection from "@/components/sections/EcommerceRoadmapSection";
+
 import FAQSection from "@/components/sections/FAQSection";
 import ContactSection from "@/components/sections/ContactSection";
 import { ScrollAnimate } from "@/components/ui/ScrollAnimate";
@@ -30,6 +30,13 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden">
+      {/* Dark mode ambient animations */}
+      <div className="dark-ambient-bg">
+        <div className="ambient-orb ambient-orb-1" />
+        <div className="ambient-orb ambient-orb-2" />
+        <div className="ambient-orb ambient-orb-3" />
+      </div>
+      
       {/* Parallax Background Elements */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         {/* Large gradient orbs */}
@@ -167,9 +174,6 @@ const Index = () => {
           <PlatformEvolutionSection />
         </ScrollAnimate>
         
-        <ScrollAnimate>
-          <EcommerceRoadmapSection />
-        </ScrollAnimate>
         
         <ScrollAnimate>
           <FAQSection />

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, Target, Crosshair, Sparkles, Award, Globe, Users, ArrowRight, Lightbulb, Rocket } from "lucide-react";
+import { Eye, Target, Crosshair, Sparkles, Award, Globe, Users, ArrowRight, Lightbulb, Rocket, Star, Zap } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const aboutCards = [
@@ -58,104 +58,152 @@ By staying ahead of industry trends and continuously updating our curriculum, we
   },
 ];
 
+const stats = [
+  { icon: Users, value: "10,000+", label: "Active Learners" },
+  { icon: Star, value: "50+", label: "Expert Courses" },
+  { icon: Zap, value: "7", label: "Income Streams" },
+];
+
 const AboutSection = () => {
   const [selectedCard, setSelectedCard] = useState<typeof aboutCards[0] | null>(null);
 
   return (
-    <section id="about" className="py-16 lg:py-24 relative overflow-hidden">
-      {/* Clean Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/20 to-background" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-radial from-primary/5 via-transparent to-transparent opacity-60" />
+    <section id="about" className="py-20 lg:py-32 relative overflow-hidden">
+      {/* Premium Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/30 to-background" />
+      <div className="absolute inset-0 bg-mesh-gradient opacity-60" />
+      
+      {/* Decorative Elements */}
+      <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-primary/10 to-transparent rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-10 w-64 h-64 bg-gradient-to-bl from-accent/10 to-transparent rounded-full blur-3xl" />
 
       <div className="container relative mx-auto px-4">
-        {/* Compact Header */}
-        <div className="text-center mb-12 lg:mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium text-primary mb-5">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-primary/15 to-accent/15 border border-primary/25 text-sm font-bold text-primary mb-6 shadow-sm">
             <Sparkles className="w-4 h-4" />
             About Skill Learners
           </div>
-          <h2 className="text-2xl lg:text-4xl font-bold font-display mb-4">
+          <h2 className="text-3xl lg:text-5xl font-bold font-display mb-5">
             Empowering Your <span className="text-gradient-gold">Digital Future</span>
           </h2>
-          <p className="text-sm lg:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base lg:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Empowering the next generation of digital entrepreneurs through learning, earning, and future-tech innovation.
           </p>
         </div>
 
-        {/* Compact Storytelling Section */}
-        <div className="max-w-4xl mx-auto mb-12">
-          <div className="glass-card p-6 lg:p-8 rounded-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-primary/10 to-transparent rounded-full blur-2xl" />
-            
-            <div className="relative grid lg:grid-cols-5 gap-6 items-center">
-              <div className="lg:col-span-3">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                    <Lightbulb className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold font-display">Our Story</h3>
+        {/* Stats Row */}
+        <div className="flex flex-wrap justify-center gap-4 lg:gap-8 mb-16">
+          {stats.map((stat, index) => {
+            const Icon = stat.icon;
+            return (
+              <div 
+                key={index}
+                className="flex items-center gap-3 px-6 py-4 rounded-2xl bg-card/80 border border-border/50 backdrop-blur-sm shadow-sm"
+              >
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                  <Icon className="w-6 h-6 text-primary" />
                 </div>
-                
-                <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-                  In a world where technology evolves faster than traditional education can keep up, we created 
-                  <strong className="text-foreground"> Skill Learners</strong> — a complete ecosystem designed to transform 
-                  lives through practical education and real earning opportunities.
-                </p>
-
-                <div className="flex flex-wrap items-center gap-2">
-                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald/10 border border-emerald/20">
-                    <Rocket className="w-3.5 h-3.5 text-emerald" />
-                    <span className="text-xs font-medium text-emerald">Future-Focused</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
-                    <Users className="w-3.5 h-3.5 text-primary" />
-                    <span className="text-xs font-medium text-primary">Community-Driven</span>
-                  </div>
+                <div>
+                  <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+                  <p className="text-sm text-muted-foreground">{stat.label}</p>
                 </div>
               </div>
-              
-              <div className="lg:col-span-2 relative hidden lg:block">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl blur-lg" />
-                <img 
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=280&fit=crop" 
-                  alt="Team collaboration"
-                  className="relative rounded-xl shadow-xl w-full h-40 object-cover"
-                />
+            );
+          })}
+        </div>
+
+        {/* Story Section - Premium Design */}
+        <div className="max-w-5xl mx-auto mb-16">
+          <div className="relative rounded-3xl overflow-hidden">
+            {/* Gradient border effect */}
+            <div className="absolute -inset-[1px] bg-gradient-to-r from-primary/50 via-accent/30 to-primary/50 rounded-3xl" />
+            
+            <div className="relative bg-card/95 backdrop-blur-xl rounded-3xl p-8 lg:p-12">
+              <div className="grid lg:grid-cols-2 gap-8 items-center">
+                {/* Content */}
+                <div>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg">
+                      <Lightbulb className="w-7 h-7 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold font-display">Our Story</h3>
+                      <p className="text-sm text-muted-foreground">The journey that defines us</p>
+                    </div>
+                  </div>
+                  
+                  <p className="text-muted-foreground leading-relaxed mb-6">
+                    In a world where technology evolves faster than traditional education can keep up, we created 
+                    <strong className="text-foreground"> Skill Learners</strong> — a complete ecosystem designed to transform 
+                    lives through practical education and real earning opportunities.
+                  </p>
+                  
+                  <p className="text-muted-foreground leading-relaxed mb-6">
+                    We're not just another e-learning platform. We're building a community where learning leads to earning, 
+                    and where every member has access to the skills and opportunities needed to thrive in the digital economy.
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald/15 border border-emerald/25">
+                      <Rocket className="w-4 h-4 text-emerald" />
+                      <span className="text-sm font-semibold text-emerald">Future-Focused</span>
+                    </div>
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/15 border border-primary/25">
+                      <Users className="w-4 h-4 text-primary" />
+                      <span className="text-sm font-semibold text-primary">Community-Driven</span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Image */}
+                <div className="relative">
+                  <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-2xl" />
+                  <img 
+                    src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=400&fit=crop" 
+                    alt="Team collaboration"
+                    className="relative rounded-2xl shadow-2xl w-full h-64 lg:h-80 object-cover"
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Compact Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+        {/* Cards Grid - Modern Design */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {aboutCards.map((card, index) => {
             const Icon = card.icon;
             return (
-              <div
+              <button
                 key={card.title}
                 onClick={() => setSelectedCard(card)}
-                className="glass-card p-5 lg:p-6 rounded-2xl cursor-pointer group hover:-translate-y-2 transition-all duration-400 relative overflow-hidden"
+                className="group relative text-left"
               >
-                {/* Icon */}
-                <div className="relative z-10">
-                  <div className={`w-12 h-12 mb-4 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300`}>
-                    <Icon className="w-6 h-6 text-primary-foreground" />
+                {/* Card */}
+                <div className="relative h-full p-6 lg:p-8 rounded-2xl bg-card/80 border border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-400 group-hover:-translate-y-2 group-hover:shadow-xl overflow-hidden">
+                  {/* Background glow on hover */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${card.color} opacity-0 group-hover:opacity-5 transition-opacity duration-400`} />
+                  
+                  {/* Icon */}
+                  <div className={`relative z-10 w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br ${card.color} flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300`}>
+                    <Icon className="w-8 h-8 text-primary-foreground" />
                   </div>
                   
-                  <h3 className="text-lg font-bold font-display mb-2 group-hover:text-primary transition-colors">
+                  <h3 className="relative z-10 text-xl font-bold font-display mb-3 group-hover:text-primary transition-colors">
                     {card.title}
                   </h3>
                   
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                  <p className="relative z-10 text-muted-foreground leading-relaxed mb-6">
                     {card.shortDesc}
                   </p>
                   
-                  <span className="inline-flex items-center text-primary font-medium text-sm group-hover:gap-2 transition-all">
+                  <span className="relative z-10 inline-flex items-center text-primary font-semibold group-hover:gap-2 transition-all">
                     Learn More
-                    <ArrowRight className="ml-1 w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>
@@ -163,31 +211,33 @@ const AboutSection = () => {
 
       {/* Premium Modal */}
       <Dialog open={!!selectedCard} onOpenChange={() => setSelectedCard(null)}>
-        <DialogContent className="max-w-2xl p-0 glass-card border-border/50 overflow-hidden mx-4">
+        <DialogContent className="max-w-2xl p-0 border-0 overflow-hidden mx-4 max-h-[85vh] overflow-y-auto">
           {selectedCard && (
-            <div className="relative h-40 md:h-56 overflow-hidden">
-              <img 
-                src={selectedCard.bannerImage} 
-                alt={selectedCard.title}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-card via-card/60 to-transparent" />
-              <div className={`absolute bottom-4 left-4 md:left-6 w-14 h-14 md:w-18 md:h-18 rounded-2xl bg-gradient-to-br ${selectedCard.color} flex items-center justify-center shadow-lg`}>
-                <selectedCard.icon className="w-7 h-7 md:w-9 md:h-9 text-primary-foreground" />
+            <>
+              <div className="relative h-48 md:h-64 overflow-hidden">
+                <img 
+                  src={selectedCard.bannerImage} 
+                  alt={selectedCard.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/70 to-transparent" />
+                <div className={`absolute bottom-6 left-6 w-16 h-16 rounded-2xl bg-gradient-to-br ${selectedCard.color} flex items-center justify-center shadow-xl`}>
+                  <selectedCard.icon className="w-8 h-8 text-primary-foreground" />
+                </div>
               </div>
-            </div>
+              
+              <div className="p-6 md:p-8 pt-4 bg-card">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl md:text-3xl font-bold font-display">
+                    {selectedCard?.title}
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="text-muted-foreground leading-relaxed whitespace-pre-line mt-4 text-base">
+                  {selectedCard?.fullDesc}
+                </div>
+              </div>
+            </>
           )}
-          
-          <div className="p-6 md:p-8 pt-4 md:pt-6">
-            <DialogHeader>
-              <DialogTitle className="text-2xl md:text-3xl font-bold font-display">
-                {selectedCard?.title}
-              </DialogTitle>
-            </DialogHeader>
-            <div className="text-muted-foreground leading-relaxed whitespace-pre-line mt-4 text-base max-h-[50vh] overflow-y-auto">
-              {selectedCard?.fullDesc}
-            </div>
-          </div>
         </DialogContent>
       </Dialog>
     </section>

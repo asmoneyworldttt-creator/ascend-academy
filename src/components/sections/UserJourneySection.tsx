@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, CheckCircle2, Sparkles, Target, GraduationCap, Wallet, Rocket, Users, Crown, Zap, TrendingUp, X } from "lucide-react";
+import { ArrowRight, CheckCircle2, Sparkles, Target, GraduationCap, Wallet, Rocket, Crown, TrendingUp, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -18,7 +18,7 @@ const journeySteps = [
       "Access to exclusive community",
     ],
     gradient: "from-blue-600 via-cyan-500 to-teal-400",
-    bgGradient: "from-blue-500/15 to-cyan-500/5",
+    bgColor: "bg-blue-500/10",
   },
   {
     step: 2,
@@ -33,7 +33,7 @@ const journeySteps = [
       "Industry-recognized certificates",
     ],
     gradient: "from-emerald-500 via-green-400 to-teal-400",
-    bgGradient: "from-emerald-500/15 to-teal-500/5",
+    bgColor: "bg-emerald-500/10",
   },
   {
     step: 3,
@@ -48,7 +48,7 @@ const journeySteps = [
       "Direct client connections",
     ],
     gradient: "from-amber-500 via-orange-400 to-yellow-400",
-    bgGradient: "from-amber-500/15 to-orange-500/5",
+    bgColor: "bg-amber-500/10",
   },
   {
     step: 4,
@@ -63,7 +63,7 @@ const journeySteps = [
       "Lifetime community access",
     ],
     gradient: "from-violet-600 via-purple-500 to-pink-400",
-    bgGradient: "from-violet-500/15 to-purple-500/5",
+    bgColor: "bg-violet-500/10",
   },
 ];
 
@@ -71,7 +71,7 @@ const UserJourneySection = () => {
   const [selectedStep, setSelectedStep] = useState<typeof journeySteps[0] | null>(null);
 
   return (
-    <section className="py-16 lg:py-24 relative overflow-hidden">
+    <section className="py-20 lg:py-28 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/20 to-background" />
       
@@ -88,35 +88,34 @@ const UserJourneySection = () => {
             <Crown className="w-4 h-4" />
             Your Success Blueprint
           </div>
-          <h2 className="text-2xl lg:text-4xl font-bold font-display mb-4">
+          <h2 className="text-3xl lg:text-5xl font-bold font-display mb-4">
             Your <span className="text-gradient-gold">Journey</span> to Success
           </h2>
-          <p className="text-sm lg:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Follow our proven 4-step path from beginner to financially independent professional.
           </p>
         </div>
 
-        {/* 3D Road Path */}
+        {/* Journey Path */}
         <div className="max-w-5xl mx-auto relative">
           {/* Horizontal Road - Desktop */}
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-2 -translate-y-1/2 z-0">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-emerald-500 via-amber-500 to-violet-500 rounded-full" />
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/50 via-amber-500/50 to-violet-500/50 rounded-full blur-sm" />
+          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-3 -translate-y-1/2 z-0">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-emerald-500 via-amber-500 to-violet-500 rounded-full shadow-lg" />
             {/* Lane markers */}
-            <div className="absolute inset-y-0 inset-x-4 flex justify-around items-center">
-              {[...Array(12)].map((_, i) => (
-                <div key={i} className="w-6 h-1 bg-white/40 rounded-full" />
+            <div className="absolute inset-y-0 inset-x-8 flex justify-around items-center">
+              {[...Array(10)].map((_, i) => (
+                <div key={i} className="w-5 h-1 bg-white/50 rounded-full" />
               ))}
             </div>
           </div>
 
           {/* Vertical Road - Mobile */}
-          <div className="lg:hidden absolute left-6 top-0 bottom-0 w-1 z-0">
-            <div className="absolute inset-0 bg-gradient-to-b from-blue-500 via-emerald-500 via-amber-500 to-violet-500 rounded-full" />
+          <div className="lg:hidden absolute left-6 top-0 bottom-0 w-1.5 z-0">
+            <div className="absolute inset-0 bg-gradient-to-b from-blue-500 via-emerald-500 via-amber-500 to-violet-500 rounded-full shadow-md" />
           </div>
 
           {/* Journey Cards */}
-          <div className="grid lg:grid-cols-4 gap-4 lg:gap-6 relative z-10">
+          <div className="grid lg:grid-cols-4 gap-4 lg:gap-5 relative z-10">
             {journeySteps.map((step, index) => {
               const Icon = step.icon;
               
@@ -127,22 +126,22 @@ const UserJourneySection = () => {
                   className="group relative text-left"
                 >
                   {/* Mobile Road Node */}
-                  <div className="lg:hidden absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[calc(50%-1.5rem)] w-6 h-6 rounded-full bg-gradient-to-br from-white to-muted flex items-center justify-center border-2 border-primary shadow-md z-20">
+                  <div className="lg:hidden absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[calc(50%-1.5rem)] w-6 h-6 rounded-full bg-card flex items-center justify-center border-2 border-primary shadow-md z-20">
                     <span className="text-[10px] font-bold text-primary">{step.step}</span>
                   </div>
 
-                  {/* Card */}
-                  <div className={`ml-10 lg:ml-0 p-5 rounded-xl bg-gradient-to-br ${step.bgGradient} border border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-400 group-hover:-translate-y-2 group-hover:shadow-xl`}>
+                  {/* Card - Solid background for readability */}
+                  <div className={`ml-10 lg:ml-0 p-5 rounded-xl bg-card border border-border/50 hover:border-primary/30 transition-all duration-400 group-hover:-translate-y-2 group-hover:shadow-xl`}>
                     {/* Step Number - Desktop */}
-                    <div className="hidden lg:flex absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-br from-card to-muted items-center justify-center shadow-lg border-2 border-primary z-20">
-                      <span className={`text-sm font-bold bg-gradient-to-r ${step.gradient} bg-clip-text text-transparent`}>
+                    <div className="hidden lg:flex absolute -top-3 left-1/2 -translate-x-1/2 w-7 h-7 rounded-full bg-card items-center justify-center shadow-lg border-2 border-primary z-20">
+                      <span className={`text-xs font-bold bg-gradient-to-r ${step.gradient} bg-clip-text text-transparent`}>
                         {step.step}
                       </span>
                     </div>
 
                     {/* Icon */}
-                    <div className={`w-12 h-12 mb-4 rounded-xl bg-gradient-to-br ${step.gradient} flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-400`}>
-                      <Icon className="w-6 h-6 text-white" />
+                    <div className={`w-11 h-11 mb-3 rounded-xl bg-gradient-to-br ${step.gradient} flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-400`}>
+                      <Icon className="w-5 h-5 text-white" />
                     </div>
 
                     {/* Content */}
@@ -160,7 +159,7 @@ const UserJourneySection = () => {
                     <div className="mt-3 space-y-1">
                       {step.highlights.slice(0, 2).map((highlight, i) => (
                         <div key={i} className="flex items-center gap-1.5 text-[10px]">
-                          <CheckCircle2 className={`w-3 h-3 flex-shrink-0 bg-gradient-to-r ${step.gradient} rounded-full text-white`} />
+                          <CheckCircle2 className="w-3 h-3 flex-shrink-0 text-emerald" />
                           <span className="text-foreground/70 line-clamp-1">{highlight}</span>
                         </div>
                       ))}
@@ -175,16 +174,6 @@ const UserJourneySection = () => {
               );
             })}
           </div>
-
-          {/* Connection Arrows - Desktop Only */}
-          <div className="hidden lg:flex justify-center items-center gap-2 mt-6">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="flex items-center gap-1.5 text-muted-foreground/40">
-                <Zap className="w-4 h-4 text-primary/50" />
-                <span className="text-xs">→</span>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* CTA Section */}
@@ -192,7 +181,7 @@ const UserJourneySection = () => {
           <div className="relative inline-block">
             <div className="absolute -inset-3 bg-gradient-to-r from-primary/25 via-accent/25 to-primary/25 rounded-2xl blur-xl opacity-60" />
             
-            <div className="relative glass-card p-8 rounded-2xl border border-primary/20 max-w-3xl mx-auto bg-gradient-to-br from-card/90 to-muted/60">
+            <div className="relative p-8 rounded-2xl bg-card border border-primary/20 max-w-3xl mx-auto">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <TrendingUp className="w-5 h-5 text-emerald" />
                 <span className="text-xs font-bold text-emerald">Join 10,000+ learners who started their journey</span>
@@ -219,7 +208,7 @@ const UserJourneySection = () => {
         </div>
       </div>
 
-      {/* Step Detail Modal - Mobile optimized */}
+      {/* Step Detail Modal */}
       <Dialog open={!!selectedStep} onOpenChange={() => setSelectedStep(null)}>
         <DialogContent className="max-w-sm p-0 border-0 overflow-hidden mx-4 max-h-[85vh] overflow-y-auto">
           {selectedStep && (
