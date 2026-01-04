@@ -9,6 +9,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import AIChatbot from "@/components/AIChatbot";
 import PageTransition from "@/components/PageTransition";
 import { Skeleton } from "@/components/ui/skeleton";
+import ReferralNotificationProvider from "@/components/ReferralNotificationProvider";
 
 // Lazy load route components for code splitting
 const Index = lazy(() => import("./pages/Index"));
@@ -70,85 +71,87 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <Suspense fallback={<PageLoader />}>
-            <PageTransition>
-              <Routes>
-                {/* Public Routes */}
-                <Route path="/" element={<Index />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/registration-success" element={<RegistrationSuccess />} />
-                <Route path="/payment" element={<PaymentGateway />} />
-                <Route path="/course/:courseId" element={<CourseDetailPage />} />
-                <Route path="/admin-login" element={<AdminLogin />} />
-                <Route path="/admin-forgot-password" element={<AdminForgotPassword />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                
-                {/* Protected Routes */}
-                <Route path="/user-home" element={
-                  <ProtectedRoute>
-                    <UserHome />
-                  </ProtectedRoute>
-                } />
-                <Route path="/dashboard/affiliate" element={
-                  <ProtectedRoute>
-                    <AffiliateDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/dashboard/courses" element={
-                  <ProtectedRoute>
-                    <UserCourses />
-                  </ProtectedRoute>
-                } />
-                <Route path="/dashboard/learners" element={
-                  <ProtectedRoute>
-                    <LearnersPage />
-                  </ProtectedRoute>
-                } />
-                <Route path="/dashboard/income/:type" element={
-                  <ProtectedRoute>
-                    <IncomeReportPage />
-                  </ProtectedRoute>
-                } />
-                <Route path="/dashboard/wallet" element={
-                  <ProtectedRoute>
-                    <WalletPage />
-                  </ProtectedRoute>
-                } />
-                <Route path="/dashboard/leaderboard" element={
-                  <ProtectedRoute>
-                    <LeaderboardPage />
-                  </ProtectedRoute>
-                } />
-                <Route path="/dashboard/tasks" element={
-                  <ProtectedRoute>
-                    <TasksPage />
-                  </ProtectedRoute>
-                } />
-                <Route path="/dashboard/profile" element={
-                  <ProtectedRoute>
-                    <ProfilePage />
-                  </ProtectedRoute>
-                } />
-                <Route path="/dashboard/submit-course" element={
-                  <ProtectedRoute>
-                    <SubmitCoursePage />
-                  </ProtectedRoute>
-                } />
-                
-                {/* Admin Routes */}
-                <Route path="/admin" element={
-                  <ProtectedRoute>
-                    <AdminPanel />
-                  </ProtectedRoute>
-                } />
-                
-                {/* 404 */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </PageTransition>
-          </Suspense>
-          <AIChatbot />
+          <ReferralNotificationProvider>
+            <Suspense fallback={<PageLoader />}>
+              <PageTransition>
+                <Routes>
+                  {/* Public Routes */}
+                  <Route path="/" element={<Index />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/registration-success" element={<RegistrationSuccess />} />
+                  <Route path="/payment" element={<PaymentGateway />} />
+                  <Route path="/course/:courseId" element={<CourseDetailPage />} />
+                  <Route path="/admin-login" element={<AdminLogin />} />
+                  <Route path="/admin-forgot-password" element={<AdminForgotPassword />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
+                  
+                  {/* Protected Routes */}
+                  <Route path="/user-home" element={
+                    <ProtectedRoute>
+                      <UserHome />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/dashboard/affiliate" element={
+                    <ProtectedRoute>
+                      <AffiliateDashboard />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/dashboard/courses" element={
+                    <ProtectedRoute>
+                      <UserCourses />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/dashboard/learners" element={
+                    <ProtectedRoute>
+                      <LearnersPage />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/dashboard/income/:type" element={
+                    <ProtectedRoute>
+                      <IncomeReportPage />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/dashboard/wallet" element={
+                    <ProtectedRoute>
+                      <WalletPage />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/dashboard/leaderboard" element={
+                    <ProtectedRoute>
+                      <LeaderboardPage />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/dashboard/tasks" element={
+                    <ProtectedRoute>
+                      <TasksPage />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/dashboard/profile" element={
+                    <ProtectedRoute>
+                      <ProfilePage />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/dashboard/submit-course" element={
+                    <ProtectedRoute>
+                      <SubmitCoursePage />
+                    </ProtectedRoute>
+                  } />
+                  
+                  {/* Admin Routes */}
+                  <Route path="/admin" element={
+                    <ProtectedRoute>
+                      <AdminPanel />
+                    </ProtectedRoute>
+                  } />
+                  
+                  {/* 404 */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </PageTransition>
+            </Suspense>
+            <AIChatbot />
+          </ReferralNotificationProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>

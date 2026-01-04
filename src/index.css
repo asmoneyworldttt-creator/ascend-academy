@@ -16,6 +16,18 @@
   }
 }
 
+/* Milestone pulse animation for roadmap */
+@keyframes pulse-milestone {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 hsla(var(--primary) / 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px 4px hsla(var(--primary) / 0.2);
+  }
+}
+
 @layer base {
   :root {
     /* Light Mode - Premium & Royal */

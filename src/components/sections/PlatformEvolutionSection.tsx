@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { GraduationCap, Users, Briefcase, ShoppingBag, Bitcoin, Wallet, Globe, Rocket, Sparkles, X, ArrowRight } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
@@ -85,9 +86,10 @@ const platformPhases = [
 
 const PlatformEvolutionSection = () => {
   const [selectedPhase, setSelectedPhase] = useState<typeof platformPhases[0] | null>(null);
+  const { ref: sectionRef, isVisible: sectionVisible } = useScrollAnimation({ threshold: 0.1 });
 
   return (
-    <section className="py-20 lg:py-28 relative overflow-hidden">
+    <section ref={sectionRef} className="py-20 lg:py-28 relative overflow-hidden">
       {/* Clean Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/40 to-background" />
       
@@ -219,10 +221,22 @@ const PlatformEvolutionSection = () => {
                     className="lg:hidden absolute left-5 top-6 z-20"
                   >
                     <div 
-                      className={`w-10 h-10 rounded-full bg-gradient-to-br ${phase.color} flex items-center justify-center border-4 border-background shadow-xl`}
+                      className={`w-10 h-10 rounded-full bg-gradient-to-br ${phase.color} flex items-center justify-center border-4 border-background shadow-xl ${
+                        sectionVisible ? 'animate-[pulse-milestone_2s_ease-in-out_infinite]' : ''
+                      }`}
+                      style={{ animationDelay: `${index * 0.2}s` }}
                     >
                       <Icon className="w-5 h-5 text-white" />
                     </div>
+                    {sectionVisible && (
+                      <div 
+                        className={`absolute inset-0 rounded-full bg-gradient-to-br ${phase.color} opacity-30`}
+                        style={{
+                          animation: 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
+                          animationDelay: `${index * 0.15}s`
+                        }}
+                      />
+                    )}
                   </button>
 
                   {/* Content Card - Mobile */}
@@ -296,12 +310,27 @@ const PlatformEvolutionSection = () => {
                         className="group relative z-20"
                       >
                         <div 
-                          className={`w-16 h-16 rounded-full bg-gradient-to-br ${phase.color} flex items-center justify-center border-4 border-background shadow-2xl transition-all duration-300 group-hover:scale-110`}
+                          className={`w-16 h-16 rounded-full bg-gradient-to-br ${phase.color} flex items-center justify-center border-4 border-background shadow-2xl transition-all duration-500 group-hover:scale-110 ${
+                            sectionVisible 
+                              ? 'animate-[pulse-milestone_2s_ease-in-out_infinite]' 
+                              : ''
+                          }`}
+                          style={{ 
+                            animationDelay: `${index * 0.2}s`,
+                          }}
                         >
                           <Icon className="w-8 h-8 text-white" />
                         </div>
-                        {/* Pulse ring */}
-                        <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${phase.color} animate-ping opacity-20`} />
+                        {/* Pulse ring - only animate when visible */}
+                        {sectionVisible && (
+                          <div 
+                            className={`absolute inset-0 rounded-full bg-gradient-to-br ${phase.color} opacity-30`}
+                            style={{
+                              animation: 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
+                              animationDelay: `${index * 0.15}s`
+                            }}
+                          />
+                        )}
                       </button>
                     </div>
 
