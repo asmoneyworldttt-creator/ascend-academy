@@ -1,3 +1,4 @@
+import { useRef, useEffect, useState } from "react";
 import { Check, X, Crown, Compass, Flame, Eye, TrendingUp } from "lucide-react";
 
 const tiers = [
@@ -33,90 +34,149 @@ const tiers = [
   },
 ];
 
+// Reduced to key features only
 const features = [
-  { name: "Foundational Courses", tiers: [true, true, true, true, true] },
-  { name: "Community Forum Access", tiers: [true, true, true, true, true] },
-  { name: "Email Support", tiers: ["48h", "24h", "Priority", "Priority", "Priority"] },
-  { name: "Downloadable Materials", tiers: [true, true, true, true, true] },
-  { name: "Progress Tracking", tiers: [true, true, true, true, true] },
-  { name: "Completion Certificate", tiers: [true, true, true, true, true] },
-  { name: "Advanced Course Library", tiers: [false, true, true, true, true] },
-  { name: "Live Q&A Sessions", tiers: [false, true, true, true, true] },
-  { name: "Exclusive Webinars", tiers: [false, true, true, true, true] },
-  { name: "Networking Community", tiers: [false, true, true, true, true] },
-  { name: "Complete Course Catalog", tiers: [false, false, true, true, true] },
-  { name: "1-on-1 Mentor Sessions", tiers: [false, false, "Monthly", "Unlimited", "Unlimited"] },
-  { name: "VIP Membership", tiers: [false, false, true, true, true] },
-  { name: "Job Placement Assistance", tiers: [false, false, true, true, true] },
+  { name: "Course Access", tiers: ["Basic", "Advanced", "Full", "Full", "Full"] },
+  { name: "Community Access", tiers: [true, true, true, "VIP", "VIP"] },
+  { name: "Support Response", tiers: ["48h", "24h", "Priority", "Priority", "Instant"] },
+  { name: "Mentor Sessions", tiers: [false, false, "Monthly", "Unlimited", "Unlimited"] },
+  { name: "Live Q&A & Webinars", tiers: [false, true, true, true, true] },
+  { name: "Job Placement Help", tiers: [false, false, true, true, true] },
   { name: "Business Coaching", tiers: [false, false, false, true, true] },
-  { name: "Mastermind Group", tiers: [false, false, false, true, true] },
   { name: "Revenue Sharing", tiers: [false, false, false, true, true] },
-  { name: "Direct Founder Access", tiers: [false, false, false, true, true] },
   { name: "Personal Success Manager", tiers: [false, false, false, false, true] },
-  { name: "Profit-Sharing Program", tiers: [false, false, false, false, true] },
-  { name: "VIP Event Invitations", tiers: [false, false, false, false, true] },
-  { name: "Brand Ambassador Program", tiers: [false, false, false, false, true] },
+  { name: "VIP Events & Profit Share", tiers: [false, false, false, false, true] },
 ];
 
 const PackageComparisonTable = () => {
+  const tableRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLTableSectionElement>(null);
+  const [isSticky, setIsSticky] = useState(false);
+  const [visibleRows, setVisibleRows] = useState<boolean[]>(new Array(features.length).fill(false));
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!tableRef.current || !headerRef.current) return;
+      
+      const tableRect = tableRef.current.getBoundingClientRect();
+      const headerHeight = 80;
+      
+      // Make header sticky when table is in view but header would scroll out
+      setIsSticky(tableRect.top < headerHeight && tableRect.bottom > 200);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Intersection observer for row animations
+  useEffect(() => {
+    const rows = document.querySelectorAll('.comparison-row');
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const index = Number(entry.target.getAttribute('data-index'));
+          if (entry.isIntersecting && !isNaN(index)) {
+            setVisibleRows(prev => {
+              const newState = [...prev];
+              newState[index] = true;
+              return newState;
+            });
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
+
+    rows.forEach(row => observer.observe(row));
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="mt-16 overflow-hidden">
-      <div className="text-center mb-10">
-        <h3 className="text-2xl lg:text-3xl font-bold font-display mb-3">
-          Compare All <span className="text-gradient-gold">Features</span>
+    <div className="mt-16">
+      <div className="text-center mb-8">
+        <h3 className="text-xl lg:text-2xl font-bold font-display mb-2">
+          Compare <span className="text-gradient-gold">Packages</span>
         </h3>
-        <p className="text-muted-foreground max-w-xl mx-auto">
-          See exactly what's included in each tier
+        <p className="text-sm text-muted-foreground max-w-md mx-auto">
+          Quick overview of what's included in each tier
         </p>
       </div>
 
-      {/* Desktop Table */}
-      <div className="hidden lg:block overflow-x-auto rounded-2xl border border-border/60 bg-card/50 backdrop-blur-sm">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-border/60">
-              <th className="text-left p-4 font-semibold text-foreground min-w-[200px]">
-                Features
-              </th>
-              {tiers.map((tier) => {
-                const Icon = tier.icon;
-                return (
-                  <th key={tier.name} className="p-4 text-center min-w-[140px]">
-                    <div className="flex flex-col items-center gap-2">
-                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${tier.gradient} flex items-center justify-center shadow-md`}>
-                        <Icon className="w-5 h-5 text-white" />
+      {/* Desktop Table - Compact & Premium */}
+      <div 
+        ref={tableRef}
+        className="hidden lg:block max-w-4xl mx-auto rounded-xl border border-border/40 bg-card/80 backdrop-blur-sm shadow-lg overflow-hidden"
+      >
+        {/* Sticky Header */}
+        <div 
+          className={`transition-all duration-300 ${
+            isSticky 
+              ? 'fixed top-20 left-1/2 -translate-x-1/2 z-50 max-w-4xl w-full rounded-t-xl shadow-xl border-x border-t border-border/40' 
+              : ''
+          }`}
+          style={{ width: isSticky ? tableRef.current?.offsetWidth : undefined }}
+        >
+          <table className="w-full">
+            <thead ref={headerRef} className="bg-card/95 backdrop-blur-md">
+              <tr className="border-b border-border/40">
+                <th className="text-left py-3 px-4 font-medium text-xs uppercase tracking-wider text-muted-foreground w-[160px]">
+                  Feature
+                </th>
+                {tiers.map((tier) => {
+                  const Icon = tier.icon;
+                  return (
+                    <th key={tier.name} className="py-3 px-2 text-center">
+                      <div className="flex flex-col items-center gap-1">
+                        <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${tier.gradient} flex items-center justify-center shadow-sm`}>
+                          <Icon className="w-4 h-4 text-white" />
+                        </div>
+                        <span className="text-xs font-bold text-foreground">{tier.name}</span>
+                        <span className="text-[10px] text-muted-foreground">{tier.price}</span>
                       </div>
-                      <span className="font-bold text-foreground">{tier.name}</span>
-                      <span className="text-xs text-muted-foreground">{tier.price}</span>
-                    </div>
-                  </th>
-                );
-              })}
-            </tr>
-          </thead>
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+          </table>
+        </div>
+
+        {/* Spacer when header is sticky */}
+        {isSticky && <div className="h-[88px]" />}
+
+        {/* Table Body */}
+        <table className="w-full">
           <tbody>
             {features.map((feature, idx) => (
               <tr 
-                key={feature.name} 
-                className={`border-b border-border/30 transition-colors hover:bg-muted/30 ${
-                  idx % 2 === 0 ? 'bg-transparent' : 'bg-muted/10'
+                key={feature.name}
+                data-index={idx}
+                className={`comparison-row border-b border-border/20 transition-all duration-500 ${
+                  idx % 2 === 0 ? 'bg-transparent' : 'bg-muted/5'
+                } hover:bg-primary/5 ${
+                  visibleRows[idx] 
+                    ? 'opacity-100 translate-y-0' 
+                    : 'opacity-0 translate-y-4'
                 }`}
+                style={{ transitionDelay: `${idx * 50}ms` }}
               >
-                <td className="p-4 text-sm font-medium text-foreground">
+                <td className="py-2.5 px-4 text-sm font-medium text-foreground w-[160px]">
                   {feature.name}
                 </td>
                 {feature.tiers.map((value, tierIdx) => (
-                  <td key={tierIdx} className="p-4 text-center">
+                  <td key={tierIdx} className="py-2.5 px-2 text-center">
                     {value === true ? (
-                      <div className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald/15">
-                        <Check className="w-4 h-4 text-emerald" />
+                      <div className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald/15">
+                        <Check className="w-3 h-3 text-emerald" />
                       </div>
                     ) : value === false ? (
-                      <div className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-destructive/10">
-                        <X className="w-4 h-4 text-destructive/60" />
+                      <div className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-muted/30">
+                        <X className="w-3 h-3 text-muted-foreground/40" />
                       </div>
                     ) : (
-                      <span className="text-xs font-semibold text-primary px-2 py-1 rounded-full bg-primary/10">
+                      <span className="text-[10px] font-semibold text-primary px-1.5 py-0.5 rounded bg-primary/10 whitespace-nowrap">
                         {value}
                       </span>
                     )}
@@ -128,48 +188,51 @@ const PackageComparisonTable = () => {
         </table>
       </div>
 
-      {/* Mobile Accordion View */}
-      <div className="lg:hidden space-y-3">
+      {/* Mobile Cards - Compact */}
+      <div className="lg:hidden space-y-2 px-2">
         {tiers.map((tier, tierIdx) => {
           const Icon = tier.icon;
-          const tierFeatures = features.filter(f => f.tiers[tierIdx] !== false);
+          const includedCount = features.filter(f => f.tiers[tierIdx] !== false).length;
           
           return (
-            <details key={tier.name} className="group rounded-2xl border border-border/60 bg-card/80 overflow-hidden">
-              <summary className="flex items-center gap-4 p-4 cursor-pointer list-none">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tier.gradient} flex items-center justify-center shadow-md flex-shrink-0`}>
-                  <Icon className="w-6 h-6 text-white" />
+            <details key={tier.name} className="group rounded-xl border border-border/40 bg-card/80 overflow-hidden">
+              <summary className="flex items-center gap-3 p-3 cursor-pointer list-none">
+                <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${tier.gradient} flex items-center justify-center shadow-sm flex-shrink-0`}>
+                  <Icon className="w-5 h-5 text-white" />
                 </div>
-                <div className="flex-1">
-                  <h4 className="font-bold text-foreground">{tier.name}</h4>
-                  <p className="text-sm text-muted-foreground">{tier.price} • {tierFeatures.length} features</p>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h4 className="font-bold text-sm text-foreground">{tier.name}</h4>
+                    <span className="text-[10px] text-muted-foreground">{tier.price}</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{includedCount}/{features.length} features</p>
                 </div>
-                <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center transition-transform group-open:rotate-180">
-                  <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="w-5 h-5 rounded-full bg-muted/50 flex items-center justify-center transition-transform group-open:rotate-180">
+                  <svg className="w-3 h-3 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
               </summary>
-              <div className="px-4 pb-4 pt-2 border-t border-border/30">
-                <ul className="space-y-2">
+              <div className="px-3 pb-3 pt-2 border-t border-border/20">
+                <ul className="space-y-1.5">
                   {features.map((feature, idx) => {
                     const value = feature.tiers[tierIdx];
                     return (
-                      <li key={idx} className="flex items-center gap-3 text-sm">
+                      <li key={idx} className="flex items-center gap-2 text-xs">
                         {value === true ? (
-                          <div className="w-5 h-5 rounded-full bg-emerald/15 flex items-center justify-center flex-shrink-0">
-                            <Check className="w-3 h-3 text-emerald" />
+                          <div className="w-4 h-4 rounded-full bg-emerald/15 flex items-center justify-center flex-shrink-0">
+                            <Check className="w-2.5 h-2.5 text-emerald" />
                           </div>
                         ) : value === false ? (
-                          <div className="w-5 h-5 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
-                            <X className="w-3 h-3 text-destructive/60" />
+                          <div className="w-4 h-4 rounded-full bg-muted/30 flex items-center justify-center flex-shrink-0">
+                            <X className="w-2.5 h-2.5 text-muted-foreground/40" />
                           </div>
                         ) : (
-                          <span className="text-[10px] font-semibold text-primary px-1.5 py-0.5 rounded bg-primary/10 flex-shrink-0">
+                          <span className="text-[9px] font-semibold text-primary px-1 py-0.5 rounded bg-primary/10 flex-shrink-0 min-w-[40px] text-center">
                             {value}
                           </span>
                         )}
-                        <span className={value === false ? 'text-muted-foreground/50 line-through' : 'text-muted-foreground'}>
+                        <span className={`${value === false ? 'text-muted-foreground/40 line-through' : 'text-muted-foreground'}`}>
                           {feature.name}
                         </span>
                       </li>
