@@ -199,21 +199,19 @@ const PlatformEvolutionSection = () => {
           </div>
 
           {/* Timeline Items */}
-          <div className="relative space-y-6 lg:space-y-0 lg:pt-4">
+          <div className="relative space-y-6 lg:space-y-0" style={{ minHeight: 'calc(7 * 160px + 60px)' }}>
             {platformPhases.map((phase, index) => {
               const Icon = phase.icon;
               const isLeft = index % 2 === 0;
               
-              // Calculate vertical position for desktop
-              const topPosition = index * 180 + 40;
+              // Fixed consistent spacing for desktop
+              const topPosition = index * 160 + 20;
               
               return (
                 <div 
                   key={phase.phase}
-                  className="relative lg:absolute lg:w-full"
-                  style={{ 
-                    top: typeof window !== 'undefined' && window.innerWidth >= 1024 ? `${topPosition}px` : undefined 
-                  }}
+                  className="relative lg:absolute lg:w-full lg:left-0"
+                  style={{ top: `${topPosition}px` }}
                 >
                   {/* Milestone Marker - Mobile */}
                   <button
@@ -269,59 +267,50 @@ const PlatformEvolutionSection = () => {
                     </button>
                   </div>
 
-                  {/* Desktop Layout */}
-                  <div className="hidden lg:flex items-center justify-center">
+                  {/* Desktop Layout - Fixed Grid Alignment */}
+                  <div className="hidden lg:grid lg:grid-cols-[1fr_auto_1fr] items-center gap-0">
                     {/* Left Side Content */}
-                    {isLeft && (
-                      <div className="w-[42%] pr-16 text-right">
+                    <div className={`pr-8 ${isLeft ? 'text-right' : ''}`}>
+                      {isLeft && (
                         <button 
                           onClick={() => setSelectedPhase(phase)}
-                          className="inline-block text-right p-5 rounded-2xl bg-card/90 border border-border/60 hover:bg-card hover:border-primary/30 hover:-translate-x-2 transition-all duration-300 group shadow-lg backdrop-blur-sm max-w-sm ml-auto"
+                          className="inline-block text-right p-4 rounded-xl bg-card/90 border border-border/50 hover:bg-card hover:border-primary/30 hover:-translate-x-1 transition-all duration-300 group shadow-md backdrop-blur-sm w-[280px] ml-auto"
                         >
-                          <div className="flex items-center justify-end gap-3 mb-3">
-                            <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${
+                          <div className="flex items-center justify-end gap-2 mb-2">
+                            <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
                               phase.status === 'Active' 
                                 ? 'bg-emerald/15 text-emerald border border-emerald/30' 
                                 : 'bg-amber/15 text-amber-600 dark:text-amber-400 border border-amber/30'
                             }`}>
                               {phase.status}
                             </span>
-                            <span className={`px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r ${phase.color} text-white shadow-md`}>
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold bg-gradient-to-r ${phase.color} text-white`}>
                               Phase {phase.phase}
                             </span>
                           </div>
-
-                          <h3 className="text-xl font-bold text-foreground mb-1 group-hover:text-primary transition-colors">{phase.title}</h3>
-                          <p className="text-primary text-sm font-semibold mb-2">{phase.subtitle}</p>
-                          <p className="text-muted-foreground text-sm leading-relaxed">{phase.description}</p>
-                          
-                          <span className="inline-flex items-center text-xs text-primary font-semibold mt-4 group-hover:gap-1.5 transition-all">
-                            Learn More
-                            <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
-                          </span>
+                          <h3 className="text-base font-bold text-foreground mb-0.5 group-hover:text-primary transition-colors">{phase.title}</h3>
+                          <p className="text-primary text-xs font-semibold mb-1">{phase.subtitle}</p>
+                          <p className="text-muted-foreground text-xs leading-relaxed line-clamp-2">{phase.description}</p>
                         </button>
-                      </div>
-                    )}
+                      )}
+                    </div>
 
                     {/* Center Milestone Marker */}
-                    <div className="relative w-[16%] flex justify-center">
+                    <div className="relative flex justify-center w-20">
                       <button
                         onClick={() => setSelectedPhase(phase)}
                         className="group relative z-20"
                       >
                         <div 
-                          className={`w-16 h-16 rounded-full bg-gradient-to-br ${phase.color} flex items-center justify-center border-4 border-background shadow-2xl transition-all duration-500 group-hover:scale-110 ${
+                          className={`w-14 h-14 rounded-full bg-gradient-to-br ${phase.color} flex items-center justify-center border-4 border-background shadow-xl transition-all duration-500 group-hover:scale-110 ${
                             sectionVisible 
                               ? 'animate-[pulse-milestone_2s_ease-in-out_infinite]' 
                               : ''
                           }`}
-                          style={{ 
-                            animationDelay: `${index * 0.2}s`,
-                          }}
+                          style={{ animationDelay: `${index * 0.2}s` }}
                         >
-                          <Icon className="w-8 h-8 text-white" />
+                          <Icon className="w-6 h-6 text-white" />
                         </div>
-                        {/* Pulse ring - only animate when visible */}
                         {sectionVisible && (
                           <div 
                             className={`absolute inset-0 rounded-full bg-gradient-to-br ${phase.color} opacity-30`}
@@ -335,17 +324,17 @@ const PlatformEvolutionSection = () => {
                     </div>
 
                     {/* Right Side Content */}
-                    {!isLeft && (
-                      <div className="w-[42%] pl-16 text-left">
+                    <div className={`pl-8 ${!isLeft ? 'text-left' : ''}`}>
+                      {!isLeft && (
                         <button 
                           onClick={() => setSelectedPhase(phase)}
-                          className="inline-block text-left p-5 rounded-2xl bg-card/90 border border-border/60 hover:bg-card hover:border-primary/30 hover:translate-x-2 transition-all duration-300 group shadow-lg backdrop-blur-sm max-w-sm"
+                          className="inline-block text-left p-4 rounded-xl bg-card/90 border border-border/50 hover:bg-card hover:border-primary/30 hover:translate-x-1 transition-all duration-300 group shadow-md backdrop-blur-sm w-[280px]"
                         >
-                          <div className="flex items-center gap-3 mb-3">
-                            <span className={`px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r ${phase.color} text-white shadow-md`}>
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold bg-gradient-to-r ${phase.color} text-white`}>
                               Phase {phase.phase}
                             </span>
-                            <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${
+                            <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
                               phase.status === 'Active' 
                                 ? 'bg-emerald/15 text-emerald border border-emerald/30' 
                                 : 'bg-amber/15 text-amber-600 dark:text-amber-400 border border-amber/30'
@@ -353,30 +342,17 @@ const PlatformEvolutionSection = () => {
                               {phase.status}
                             </span>
                           </div>
-
-                          <h3 className="text-xl font-bold text-foreground mb-1 group-hover:text-primary transition-colors">{phase.title}</h3>
-                          <p className="text-primary text-sm font-semibold mb-2">{phase.subtitle}</p>
-                          <p className="text-muted-foreground text-sm leading-relaxed">{phase.description}</p>
-                          
-                          <span className="inline-flex items-center text-xs text-primary font-semibold mt-4 group-hover:gap-1.5 transition-all">
-                            Learn More
-                            <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
-                          </span>
+                          <h3 className="text-base font-bold text-foreground mb-0.5 group-hover:text-primary transition-colors">{phase.title}</h3>
+                          <p className="text-primary text-xs font-semibold mb-1">{phase.subtitle}</p>
+                          <p className="text-muted-foreground text-xs leading-relaxed line-clamp-2">{phase.description}</p>
                         </button>
-                      </div>
-                    )}
-
-                    {/* Empty space for alternating layout */}
-                    {isLeft && <div className="w-[42%]" />}
-                    {!isLeft && <div className="w-[42%]" />}
+                      )}
+                    </div>
                   </div>
                 </div>
               );
             })}
           </div>
-
-          {/* Spacer for desktop absolute positioning */}
-          <div className="hidden lg:block" style={{ height: `${platformPhases.length * 180 + 100}px` }} />
         </div>
 
         {/* Bottom CTA */}
