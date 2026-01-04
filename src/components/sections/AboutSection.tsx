@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, Target, Crosshair, Sparkles, Award, Globe, Users, ArrowRight, Lightbulb, Rocket, Star, Zap } from "lucide-react";
+import { Eye, Target, Crosshair, Sparkles, Award, Globe, Users, ArrowRight, Lightbulb, Rocket, Star, Zap, ChevronDown } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const aboutCards = [
@@ -66,6 +66,7 @@ const stats = [
 
 const AboutSection = () => {
   const [selectedCard, setSelectedCard] = useState<typeof aboutCards[0] | null>(null);
+  const [isStoryExpanded, setIsStoryExpanded] = useState(false);
 
   return (
     <section id="about" className="py-20 lg:py-32 relative overflow-hidden">
@@ -73,9 +74,19 @@ const AboutSection = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/30 to-background" />
       <div className="absolute inset-0 bg-mesh-gradient opacity-60" />
       
-      {/* Decorative Elements */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-primary/10 to-transparent rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-10 w-64 h-64 bg-gradient-to-bl from-accent/10 to-transparent rounded-full blur-3xl" />
+      {/* Animated Floating Shapes */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Floating geometric shapes */}
+        <div className="absolute top-20 left-[10%] w-20 h-20 border border-primary/20 rounded-full animate-float opacity-40" />
+        <div className="absolute top-40 right-[15%] w-16 h-16 border border-accent/20 rotate-45 animate-float-delayed opacity-30" />
+        <div className="absolute bottom-32 left-[20%] w-12 h-12 bg-gradient-to-br from-primary/10 to-transparent rounded-lg animate-float-slow opacity-50" />
+        <div className="absolute top-1/3 right-[8%] w-24 h-24 border border-emerald/15 rounded-2xl rotate-12 animate-float opacity-25" />
+        <div className="absolute bottom-1/4 right-[25%] w-8 h-8 bg-accent/10 rounded-full animate-float-delayed opacity-40" />
+      </div>
+      
+      {/* Gradient pulse background */}
+      <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-primary/10 to-transparent rounded-full blur-3xl animate-pulse-slow" />
+      <div className="absolute bottom-20 right-10 w-64 h-64 bg-gradient-to-bl from-accent/10 to-transparent rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '2s' }} />
 
       <div className="container relative mx-auto px-4">
         {/* Header */}
@@ -113,51 +124,73 @@ const AboutSection = () => {
           })}
         </div>
 
-        {/* Story Section - Premium Design */}
+        {/* Story Section - Premium Design with Read More */}
         <div className="max-w-5xl mx-auto mb-16">
           <div className="relative rounded-3xl overflow-hidden">
             {/* Gradient border effect */}
             <div className="absolute -inset-[1px] bg-gradient-to-r from-primary/50 via-accent/30 to-primary/50 rounded-3xl" />
             
-            <div className="relative bg-card/95 backdrop-blur-xl rounded-3xl p-8 lg:p-12">
-              <div className="grid lg:grid-cols-2 gap-8 items-center">
+            <div className="relative bg-card/95 backdrop-blur-xl rounded-3xl p-6 lg:p-12">
+              <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-center">
                 {/* Content */}
                 <div>
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg">
-                      <Lightbulb className="w-7 h-7 text-white" />
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-12 lg:w-14 h-12 lg:h-14 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg">
+                      <Lightbulb className="w-6 lg:w-7 h-6 lg:h-7 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold font-display">Our Story</h3>
-                      <p className="text-sm text-muted-foreground">The journey that defines us</p>
+                      <h3 className="text-xl lg:text-2xl font-bold font-display">Our Story</h3>
+                      <p className="text-xs lg:text-sm text-muted-foreground">The journey that defines us</p>
                     </div>
                   </div>
                   
-                  <p className="text-muted-foreground leading-relaxed mb-6">
-                    In a world where technology evolves faster than traditional education can keep up, we created 
-                    <strong className="text-foreground"> Skill Learners</strong> — a complete ecosystem designed to transform 
-                    lives through practical education and real earning opportunities.
+                  {/* Teaser text - always visible */}
+                  <p className="text-muted-foreground leading-relaxed text-sm lg:text-base">
+                    <span className="text-foreground font-medium italic">"From a spark of an idea to a community of learners."</span> We didn't just build an app; we built a bridge to your future...
                   </p>
                   
-                  <p className="text-muted-foreground leading-relaxed mb-6">
-                    We're not just another e-learning platform. We're building a community where learning leads to earning, 
-                    and where every member has access to the skills and opportunities needed to thrive in the digital economy.
-                  </p>
+                  {/* Expandable content */}
+                  <div className={`overflow-hidden transition-all duration-500 ${isStoryExpanded ? 'max-h-[500px] opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
+                    <p className="text-muted-foreground leading-relaxed text-sm lg:text-base mb-4">
+                      In a world where technology evolves faster than traditional education can keep up, we created 
+                      <strong className="text-foreground"> Skill Learners</strong> — a complete ecosystem designed to transform 
+                      lives through practical education and real earning opportunities.
+                    </p>
+                    
+                    <p className="text-muted-foreground leading-relaxed text-sm lg:text-base mb-4">
+                      We're not just another e-learning platform. We're building a community where learning leads to earning, 
+                      and where every member has access to the skills and opportunities needed to thrive in the digital economy.
+                    </p>
 
-                  <div className="flex flex-wrap items-center gap-3">
-                    <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald/15 border border-emerald/25">
-                      <Rocket className="w-4 h-4 text-emerald" />
-                      <span className="text-sm font-semibold text-emerald">Future-Focused</span>
+                    <p className="text-muted-foreground leading-relaxed text-sm lg:text-base">
+                      Our mission goes beyond teaching—we're here to create <strong className="text-foreground">financial freedom</strong> through 
+                      skill development, mentorship, and a supportive network that celebrates every milestone of your journey.
+                    </p>
+                  </div>
+
+                  {/* Read More Toggle */}
+                  <button 
+                    onClick={() => setIsStoryExpanded(!isStoryExpanded)}
+                    className="inline-flex items-center gap-2 mt-4 text-primary font-semibold text-sm hover:text-primary/80 transition-colors group"
+                  >
+                    {isStoryExpanded ? 'Read Less' : 'Read More'}
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isStoryExpanded ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  <div className="flex flex-wrap items-center gap-2 lg:gap-3 mt-5">
+                    <div className="flex items-center gap-2 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full bg-emerald/15 border border-emerald/25">
+                      <Rocket className="w-3.5 lg:w-4 h-3.5 lg:h-4 text-emerald" />
+                      <span className="text-xs lg:text-sm font-semibold text-emerald">Future-Focused</span>
                     </div>
-                    <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/15 border border-primary/25">
-                      <Users className="w-4 h-4 text-primary" />
-                      <span className="text-sm font-semibold text-primary">Community-Driven</span>
+                    <div className="flex items-center gap-2 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full bg-primary/15 border border-primary/25">
+                      <Users className="w-3.5 lg:w-4 h-3.5 lg:h-4 text-primary" />
+                      <span className="text-xs lg:text-sm font-semibold text-primary">Community-Driven</span>
                     </div>
                   </div>
                 </div>
                 
                 {/* Image */}
-                <div className="relative">
+                <div className="relative hidden lg:block">
                   <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-2xl" />
                   <img 
                     src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=400&fit=crop" 
