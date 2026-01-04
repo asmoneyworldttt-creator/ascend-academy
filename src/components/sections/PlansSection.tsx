@@ -4,6 +4,7 @@ import { Check, Gift, ChevronLeft, ChevronRight, Shield, Award, TrendingUp, Crow
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { packages, incomeTypes } from "@/data/packages";
+import PackageComparisonTable from "./PackageComparisonTable";
 
 // New tier naming with brand-aligned icons and gradients
 const tierConfig: Record<string, { 
@@ -243,6 +244,9 @@ const PlansSection = () => {
 
         {/* Income Opportunities Section */}
         <IncomeSection />
+
+        {/* Package Comparison Table */}
+        <PackageComparisonTable />
       </div>
     </section>
   );
