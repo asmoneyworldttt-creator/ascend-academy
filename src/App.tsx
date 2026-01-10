@@ -25,6 +25,7 @@ const LearnersPage = lazy(() => import("./pages/affiliate/LearnersPage"));
 const IncomeReportPage = lazy(() => import("./pages/affiliate/IncomeReportPage"));
 const WalletPage = lazy(() => import("./pages/affiliate/WalletPage"));
 const LeaderboardPage = lazy(() => import("./pages/affiliate/LeaderboardPage"));
+const AnalyticsPage = lazy(() => import("./pages/affiliate/AnalyticsPage"));
 const TasksPage = lazy(() => import("./pages/affiliate/TasksPage"));
 const ProfilePage = lazy(() => import("./pages/affiliate/ProfilePage"));
 const AdminPanel = lazy(() => import("./pages/admin/AdminPanel"));
@@ -120,6 +121,11 @@ const App = () => (
                   <Route path="/dashboard/leaderboard" element={
                     <ProtectedRoute>
                       <LeaderboardPage />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/dashboard/analytics" element={
+                    <ProtectedRoute>
+                      <AnalyticsPage />
                     </ProtectedRoute>
                   } />
                   <Route path="/dashboard/tasks" element={

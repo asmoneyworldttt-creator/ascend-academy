@@ -61,6 +61,12 @@ const sidebarLinks = [
     description: "Top earners"
   },
   { 
+    icon: PieChart, 
+    label: "Analytics", 
+    href: "/dashboard/analytics",
+    description: "Performance insights"
+  },
+  {
     icon: ClipboardList, 
     label: "Tasks", 
     href: "/dashboard/tasks",

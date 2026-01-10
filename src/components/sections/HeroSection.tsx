@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { CheckCircle2, ArrowRight, Play, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import heroStudent from "@/assets/hero-student.png";
 import ParticleBackground from "@/components/ui/ParticleBackground";
+import Hero3DScene from "@/components/Hero3DScene";
 
 const HeroSection = () => {
   const highlights = [
@@ -100,50 +100,9 @@ const HeroSection = () => {
             </div>
           </div>
           
-          {/* Right Content - Hero Image */}
+          {/* Right Content - 3D Hero Scene */}
           <div className="relative flex justify-center lg:justify-end animate-fade-in" style={{ animationDelay: "0.3s" }}>
-            {/* Glow effect behind image */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-80 h-80 lg:w-96 lg:h-96 rounded-full bg-gradient-to-br from-primary/20 via-accent/15 to-emerald/20 blur-3xl animate-pulse-slow" />
-            </div>
-            
-            {/* Main image */}
-            <div className="relative">
-              <img
-                src={heroStudent}
-                alt="Student achieving success with Skill Learners"
-                className="relative z-10 w-full max-w-md lg:max-w-lg xl:max-w-xl h-auto drop-shadow-2xl"
-              />
-              
-              {/* Floating elements */}
-              <div className="absolute top-10 -left-10 glass-card p-4 rounded-2xl shadow-elevated animate-float z-20">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-gold flex items-center justify-center">
-                    <span className="text-2xl">🎓</span>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Course Completed</p>
-                    <p className="font-bold text-foreground">Digital Marketing</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="absolute bottom-20 -right-5 glass-card p-4 rounded-2xl shadow-elevated animate-float z-20" style={{ animationDelay: '-1.5s' }}>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-teal flex items-center justify-center">
-                    <span className="text-2xl">💰</span>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Earnings This Month</p>
-                    <p className="font-bold text-emerald">₹25,000+</p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Sparkle decorations */}
-              <Sparkles className="absolute -top-4 right-20 w-6 h-6 text-primary animate-pulse" />
-              <Sparkles className="absolute bottom-40 -left-4 w-5 h-5 text-accent animate-pulse" style={{ animationDelay: '0.5s' }} />
-            </div>
+            <Hero3DScene />
           </div>
         </div>
       </div>
