@@ -34,6 +34,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { exportToCSV, csvColumns } from "@/lib/csvExport";
 
 interface WalletManagementProps {
   mode: "add" | "withdraw" | "history" | "withdrawal-history" | "adjust";
@@ -448,9 +449,13 @@ const WalletManagement = ({ mode, onRefresh }: WalletManagementProps) => {
               <DropdownMenuItem onClick={() => setStatusFilter("rejected")}>Rejected</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button variant="outline" size="sm" className="gap-2" onClick={() => {
+            const cols = mode === "withdraw" || mode === "withdrawal-history" ? csvColumns.withdrawals : mode === "add" ? csvColumns.deposits : csvColumns.walletHistory;
+            exportToCSV(filteredData, mode, cols);
+            toast({ title: "Exported successfully" });
+          }}>
             <Download className="w-4 h-4" />
-            Export
+            Export CSV
           </Button>
         </div>
       </div>

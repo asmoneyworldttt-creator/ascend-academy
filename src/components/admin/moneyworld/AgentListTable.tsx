@@ -29,6 +29,8 @@ import {
 } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { exportToCSV, csvColumns } from "@/lib/csvExport";
+import { useToast } from "@/hooks/use-toast";
 
 interface Agent {
   id: string;
@@ -57,6 +59,12 @@ const AgentListTable = ({ filter }: AgentListTableProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [planFilter, setPlanFilter] = useState("all");
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
+  const { toast } = useToast();
+
+  const handleExport = () => {
+    exportToCSV(filteredAgents, "users", csvColumns.agents);
+    toast({ title: "Exported successfully" });
+  };
 
   useEffect(() => {
     fetchAgents();
@@ -173,9 +181,9 @@ const AgentListTable = ({ filter }: AgentListTableProps) => {
               <DropdownMenuItem onClick={() => setPlanFilter("free")}>Free</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button variant="outline" size="sm" className="gap-2" onClick={handleExport}>
             <Download className="w-4 h-4" />
-            Export
+            Export CSV
           </Button>
         </div>
       </div>

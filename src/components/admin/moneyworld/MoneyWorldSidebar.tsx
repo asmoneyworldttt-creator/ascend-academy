@@ -48,6 +48,7 @@ interface MoneyWorldSidebarProps {
     withdrawals: number;
     tasks: number;
     messages: number;
+    packages: number;
   };
 }
 
@@ -83,12 +84,13 @@ const MoneyWorldSidebar = ({
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     {
       id: "agents-section",
-      label: "Agents",
+      label: "Users",
       icon: Users,
       children: [
-        { id: "agents", label: "All Agents", icon: Users },
-        { id: "active-agents", label: "Active Agents", icon: UserCheck },
-        { id: "inactive-agents", label: "Inactive Agents", icon: UserX },
+        { id: "agents", label: "All Users", icon: Users },
+        { id: "active-agents", label: "Active Users", icon: UserCheck },
+        { id: "inactive-agents", label: "Inactive Users", icon: UserX },
+        { id: "package-approvals", label: "Package Approvals", icon: Shield, badge: pendingCounts.packages },
       ],
     },
     {
@@ -215,11 +217,11 @@ const MoneyWorldSidebar = ({
       >
         {/* Logo */}
         <div className="flex items-center justify-between p-4 border-b border-border">
-          {!collapsed && (
+        {!collapsed && (
             <div className="flex items-center gap-3">
-              <img src={logo} alt="MoneyWorld" className="h-10 w-auto" />
+              <img src={logo} alt="Skill Learners" className="h-10 w-auto" />
               <div>
-                <h2 className="font-bold text-sm">MoneyWorld</h2>
+                <h2 className="font-bold text-sm">Skill Learners</h2>
                 <p className="text-xs text-muted-foreground">Admin Panel</p>
               </div>
             </div>
@@ -273,9 +275,9 @@ const MoneyWorldSidebar = ({
         {/* Logo */}
         <div className="flex items-center justify-between p-4 border-b border-border">
           <div className="flex items-center gap-3">
-            <img src={logo} alt="MoneyWorld" className="h-10 w-auto" />
+            <img src={logo} alt="Skill Learners" className="h-10 w-auto" />
             <div>
-              <h2 className="font-bold text-sm">MoneyWorld</h2>
+              <h2 className="font-bold text-sm">Skill Learners</h2>
               <p className="text-xs text-muted-foreground">Admin Panel</p>
             </div>
           </div>
