@@ -21,6 +21,7 @@ import BankDetailsView from "@/components/admin/moneyworld/BankDetailsView";
 import MessagesManagement from "@/components/admin/moneyworld/MessagesManagement";
 import AdminProfile from "@/components/admin/moneyworld/AdminProfile";
 import AgentActions from "@/components/admin/moneyworld/AgentActions";
+import PackagePurchaseApproval from "@/components/admin/moneyworld/PackagePurchaseApproval";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,6 +36,7 @@ export type TabType =
   | "agents" 
   | "active-agents" 
   | "inactive-agents"
+  | "package-approvals"
   | "level-income"
   | "global-income"
   | "referral-income"
@@ -85,6 +87,7 @@ const MoneyWorldAdmin = () => {
     pendingWithdrawals: 0,
     pendingTasks: 0,
     unreadMessages: 0,
+    pendingPackages: 0,
   });
 
   const { toast } = useToast();
@@ -207,6 +210,11 @@ const MoneyWorldAdmin = () => {
         .select("*", { count: "exact", head: true })
         .eq("is_read", false);
 
+      const { count: pendingPackages } = await supabase
+        .from("package_purchase_requests")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "pending");
+
       setStats({
         totalAgents: totalAgents || 0,
         activeAgents,
@@ -221,6 +229,7 @@ const MoneyWorldAdmin = () => {
         pendingWithdrawals: pendingWithdrawals || 0,
         pendingTasks: (pendingWhatsAppTasks || 0) + (pendingAppTasks || 0),
         unreadMessages: unreadMessages || 0,
+        pendingPackages: pendingPackages || 0,
       });
     } catch (error) {
       console.error("Error fetching stats:", error);
@@ -297,6 +306,8 @@ const MoneyWorldAdmin = () => {
         return <AgentListTable filter="active" />;
       case "inactive-agents":
         return <AgentListTable filter="inactive" />;
+      case "package-approvals":
+        return <PackagePurchaseApproval onRefresh={fetchStats} />;
       case "level-income":
         return <IncomeManagement type="level" />;
       case "global-income":
@@ -343,9 +354,10 @@ const MoneyWorldAdmin = () => {
   const getPageTitle = () => {
     const titles: Record<TabType, string> = {
       dashboard: "Dashboard",
-      agents: "All Agents",
-      "active-agents": "Active Agents",
-      "inactive-agents": "Inactive Agents",
+      agents: "All Users",
+      "active-agents": "Active Users",
+      "inactive-agents": "Inactive Users",
+      "package-approvals": "Package Approvals",
       "level-income": "Level Income",
       "global-income": "Global Income",
       "referral-income": "Referral Income",
@@ -396,6 +408,7 @@ const MoneyWorldAdmin = () => {
           withdrawals: stats.pendingWithdrawals,
           tasks: stats.pendingTasks,
           messages: stats.unreadMessages,
+          packages: stats.pendingPackages,
         }}
       />
 
@@ -418,7 +431,7 @@ const MoneyWorldAdmin = () => {
               </Button>
               <div>
                 <h1 className="text-xl font-bold">{getPageTitle()}</h1>
-                <p className="text-sm text-muted-foreground">MoneyWorld Admin Panel</p>
+                <p className="text-sm text-muted-foreground">Skill Learners Admin Panel</p>
               </div>
             </div>
 

@@ -160,10 +160,10 @@ const MoneyWorldDashboard = ({ stats, onNavigate }: MoneyWorldDashboardProps) =>
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-3xl" />
         <div className="relative">
           <h1 className="text-2xl md:text-3xl font-bold mb-2">
-            Welcome to MoneyWorld Admin 🎛️
+            Welcome to Skill Learners Admin 🎛️
           </h1>
           <p className="text-muted-foreground max-w-2xl">
-            Manage your agents, income, wallets, tasks, and more from this centralized control panel.
+            Manage your users, income, wallets, tasks, and more from this centralized control panel. All user activities require manual admin approval.
           </p>
         </div>
       </div>

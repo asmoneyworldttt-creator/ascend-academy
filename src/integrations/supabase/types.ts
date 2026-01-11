@@ -417,6 +417,50 @@ export type Database = {
         }
         Relationships: []
       }
+      package_purchase_requests: {
+        Row: {
+          admin_notes: string | null
+          amount: number
+          created_at: string
+          id: string
+          package_name: string
+          payment_proof_id: string | null
+          processed_at: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          amount: number
+          created_at?: string
+          id?: string
+          package_name: string
+          payment_proof_id?: string | null
+          processed_at?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          amount?: number
+          created_at?: string
+          id?: string
+          package_name?: string
+          payment_proof_id?: string | null
+          processed_at?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "package_purchase_requests_payment_proof_id_fkey"
+            columns: ["payment_proof_id"]
+            isOneToOne: false
+            referencedRelation: "payment_proofs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payment_proofs: {
         Row: {
           admin_notes: string | null

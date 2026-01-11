@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { exportToCSV, csvColumns } from "@/lib/csvExport";
+import { useToast } from "@/hooks/use-toast";
 
 interface Transaction {
   id: string;
@@ -40,6 +42,12 @@ const IncomeManagement = ({ type }: IncomeManagementProps) => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const { toast } = useToast();
+
+  const handleExport = () => {
+    exportToCSV(filteredTransactions, `${type}_income`, csvColumns.walletHistory);
+    toast({ title: "Exported successfully" });
+  };
 
   const typeLabels = {
     level: "Level Income",
@@ -167,9 +175,9 @@ const IncomeManagement = ({ type }: IncomeManagementProps) => {
               <DropdownMenuItem onClick={() => setStatusFilter("debit")}>Debit</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button variant="outline" size="sm" className="gap-2" onClick={handleExport}>
             <Download className="w-4 h-4" />
-            Export
+            Export CSV
           </Button>
         </div>
       </div>
