@@ -14,6 +14,250 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_broadcast: boolean
+          message: string
+          target_users: string[] | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_broadcast?: boolean
+          message: string
+          target_users?: string[] | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_broadcast?: boolean
+          message?: string
+          target_users?: string[] | null
+        }
+        Relationships: []
+      }
+      ads_management: {
+        Row: {
+          ads_title: string
+          ads_vendor: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          media_url: string | null
+        }
+        Insert: {
+          ads_title: string
+          ads_vendor?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          media_url?: string | null
+        }
+        Update: {
+          ads_title?: string
+          ads_vendor?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          media_url?: string | null
+        }
+        Relationships: []
+      }
+      agent_income: {
+        Row: {
+          created_at: string
+          id: string
+          total_income: number
+          updated_at: string
+          user_id: string
+          wallet: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          total_income?: number
+          updated_at?: string
+          user_id: string
+          wallet?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          total_income?: number
+          updated_at?: string
+          user_id?: string
+          wallet?: number
+        }
+        Relationships: []
+      }
+      app_tasks: {
+        Row: {
+          created_at: string
+          file_url: string | null
+          id: string
+          is_active: boolean
+          optional_url_1: string | null
+          optional_url_2: string | null
+          proof_type: string
+          requirements: string | null
+          task_amount: number
+          task_description: string | null
+          task_title: string
+        }
+        Insert: {
+          created_at?: string
+          file_url?: string | null
+          id?: string
+          is_active?: boolean
+          optional_url_1?: string | null
+          optional_url_2?: string | null
+          proof_type?: string
+          requirements?: string | null
+          task_amount?: number
+          task_description?: string | null
+          task_title: string
+        }
+        Update: {
+          created_at?: string
+          file_url?: string | null
+          id?: string
+          is_active?: boolean
+          optional_url_1?: string | null
+          optional_url_2?: string | null
+          proof_type?: string
+          requirements?: string | null
+          task_amount?: number
+          task_description?: string | null
+          task_title?: string
+        }
+        Relationships: []
+      }
+      bank_accounts: {
+        Row: {
+          account_holder: string | null
+          account_number: string | null
+          bank_name: string | null
+          created_at: string
+          id: string
+          ifsc_code: string | null
+          updated_at: string
+          upi_id: string | null
+          usdt_address: string | null
+          user_id: string
+        }
+        Insert: {
+          account_holder?: string | null
+          account_number?: string | null
+          bank_name?: string | null
+          created_at?: string
+          id?: string
+          ifsc_code?: string | null
+          updated_at?: string
+          upi_id?: string | null
+          usdt_address?: string | null
+          user_id: string
+        }
+        Update: {
+          account_holder?: string | null
+          account_number?: string | null
+          bank_name?: string | null
+          created_at?: string
+          id?: string
+          ifsc_code?: string | null
+          updated_at?: string
+          upi_id?: string | null
+          usdt_address?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      completed_app_tasks: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          file_paths: string[] | null
+          id: string
+          payment_status: string
+          processed_at: string | null
+          task_id: string
+          user_id: string
+          user_id_proof: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          file_paths?: string[] | null
+          id?: string
+          payment_status?: string
+          processed_at?: string | null
+          task_id: string
+          user_id: string
+          user_id_proof?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          file_paths?: string[] | null
+          id?: string
+          payment_status?: string
+          processed_at?: string | null
+          task_id?: string
+          user_id?: string
+          user_id_proof?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "completed_app_tasks_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "app_tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      completed_whatsapp_tasks: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          file_paths: string[] | null
+          id: string
+          payment_status: string
+          processed_at: string | null
+          task_id: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          file_paths?: string[] | null
+          id?: string
+          payment_status?: string
+          processed_at?: string | null
+          task_id: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          file_paths?: string[] | null
+          id?: string
+          payment_status?: string
+          processed_at?: string | null
+          task_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "completed_whatsapp_tasks_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "whatsapp_tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       course_progress: {
         Row: {
           completed: boolean
@@ -95,6 +339,123 @@ export type Database = {
         }
         Relationships: []
       }
+      courses: {
+        Row: {
+          category: string | null
+          course_file: string | null
+          course_name: string
+          created_at: string
+          description: string | null
+          duration: string | null
+          id: string
+          is_active: boolean
+          level: string | null
+          package: string | null
+          price: number
+          thumbnail: string | null
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          course_file?: string | null
+          course_name: string
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          id?: string
+          is_active?: boolean
+          level?: string | null
+          package?: string | null
+          price?: number
+          thumbnail?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          course_file?: string | null
+          course_name?: string
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          id?: string
+          is_active?: boolean
+          level?: string | null
+          package?: string | null
+          price?: number
+          thumbnail?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          is_read: boolean
+          message: string
+          name: string
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_read?: boolean
+          message: string
+          name: string
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_read?: boolean
+          message?: string
+          name?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      payment_proofs: {
+        Row: {
+          admin_notes: string | null
+          amount: number
+          created_at: string
+          id: string
+          payment_type: string
+          processed_at: string | null
+          proof_image: string | null
+          status: string
+          transaction_id: string | null
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          amount: number
+          created_at?: string
+          id?: string
+          payment_type?: string
+          processed_at?: string | null
+          proof_image?: string | null
+          status?: string
+          transaction_id?: string | null
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          amount?: number
+          created_at?: string
+          id?: string
+          payment_type?: string
+          processed_at?: string | null
+          proof_image?: string | null
+          status?: string
+          transaction_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           admin_notes: string | null
@@ -134,6 +495,48 @@ export type Database = {
         }
         Relationships: []
       }
+      products: {
+        Row: {
+          created_at: string
+          description: string | null
+          discount: number | null
+          id: string
+          image_1: string | null
+          image_2: string | null
+          image_3: string | null
+          is_active: boolean
+          price: number
+          product_name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          discount?: number | null
+          id?: string
+          image_1?: string | null
+          image_2?: string | null
+          image_3?: string | null
+          is_active?: boolean
+          price: number
+          product_name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          discount?: number | null
+          id?: string
+          image_1?: string | null
+          image_2?: string | null
+          image_3?: string | null
+          is_active?: boolean
+          price?: number
+          product_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           address: string | null
@@ -141,16 +544,21 @@ export type Database = {
           country: string | null
           created_at: string
           dob: string | null
+          downline_count: number | null
           email: string | null
           full_name: string | null
           has_purchased: boolean | null
           id: string
+          package: string | null
+          password_visible: string | null
           phone: string | null
           pincode: string | null
           purchased_plan: string | null
           referral_code: string | null
           referred_by: string | null
+          sponsor_id: string | null
           state: string | null
+          status: string | null
           updated_at: string
           user_id: string
         }
@@ -160,16 +568,21 @@ export type Database = {
           country?: string | null
           created_at?: string
           dob?: string | null
+          downline_count?: number | null
           email?: string | null
           full_name?: string | null
           has_purchased?: boolean | null
           id?: string
+          package?: string | null
+          password_visible?: string | null
           phone?: string | null
           pincode?: string | null
           purchased_plan?: string | null
           referral_code?: string | null
           referred_by?: string | null
+          sponsor_id?: string | null
           state?: string | null
+          status?: string | null
           updated_at?: string
           user_id: string
         }
@@ -179,16 +592,21 @@ export type Database = {
           country?: string | null
           created_at?: string
           dob?: string | null
+          downline_count?: number | null
           email?: string | null
           full_name?: string | null
           has_purchased?: boolean | null
           id?: string
+          package?: string | null
+          password_visible?: string | null
           phone?: string | null
           pincode?: string | null
           purchased_plan?: string | null
           referral_code?: string | null
           referred_by?: string | null
+          sponsor_id?: string | null
           state?: string | null
+          status?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -200,7 +618,41 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "profiles_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
+      }
+      task_income: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          task_id: string
+          task_type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          task_id: string
+          task_type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          task_id?: string
+          task_type?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {
@@ -220,6 +672,72 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      wallet_history: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string
+          id: string
+          reference_id: string | null
+          reference_type: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          description: string
+          id?: string
+          reference_id?: string | null
+          reference_type?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string
+          id?: string
+          reference_id?: string | null
+          reference_type?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      whatsapp_tasks: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          media_url: string | null
+          requirements: string | null
+          task_amount: number
+          task_description: string | null
+          task_title: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          media_url?: string | null
+          requirements?: string | null
+          task_amount?: number
+          task_description?: string | null
+          task_title: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          media_url?: string | null
+          requirements?: string | null
+          task_amount?: number
+          task_description?: string | null
+          task_title?: string
         }
         Relationships: []
       }
