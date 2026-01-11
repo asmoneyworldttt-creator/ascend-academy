@@ -7,9 +7,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
-import AdminSidebar from "@/components/admin/moneyworld/MoneyWorldSidebar";
-import AdminDashboard from "@/components/admin/moneyworld/MoneyWorldDashboard";
-import AgentListTable from "@/components/admin/moneyworld/AgentListTable";
+import AdminSidebar from "@/components/admin/skilllearners/AdminSidebar";
+import AdminDashboard from "@/components/admin/skilllearners/AdminDashboard";
+import UserListTable from "@/components/admin/skilllearners/UserListTable";
+import UserActions from "@/components/admin/skilllearners/UserActions";
+import PaymentSettings from "@/components/admin/skilllearners/PaymentSettings";
+import CourseRequestsApproval from "@/components/admin/skilllearners/CourseRequestsApproval";
 import IncomeManagement from "@/components/admin/moneyworld/IncomeManagement";
 import WalletManagement from "@/components/admin/moneyworld/WalletManagement";
 import TaskManagement from "@/components/admin/moneyworld/TaskManagement";
@@ -20,7 +23,6 @@ import AdsManagement from "@/components/admin/moneyworld/AdsManagement";
 import BankDetailsView from "@/components/admin/moneyworld/BankDetailsView";
 import MessagesManagement from "@/components/admin/moneyworld/MessagesManagement";
 import AdminProfile from "@/components/admin/moneyworld/AdminProfile";
-import AgentActions from "@/components/admin/moneyworld/AgentActions";
 import PackagePurchaseApproval from "@/components/admin/moneyworld/PackagePurchaseApproval";
 import {
   DropdownMenu,
@@ -33,29 +35,31 @@ import { Badge } from "@/components/ui/badge";
 
 export type TabType = 
   | "dashboard" 
-  | "agents" 
-  | "active-agents" 
-  | "inactive-agents"
-  | "package-approvals"
+  | "all-students" 
+  | "active-students" 
+  | "inactive-students"
+  | "course-only-students"
+  | "package-requests"
+  | "course-requests"
   | "level-income"
   | "global-income"
   | "referral-income"
   | "other-income"
-  | "add-money"
-  | "withdraw-money"
+  | "deposit-requests"
+  | "withdrawal-requests"
   | "wallet-history"
-  | "withdrawal-history"
-  | "increase-decrease"
-  | "add-task"
-  | "task-completion"
+  | "adjust-balance"
+  | "create-task"
+  | "task-verification"
   | "courses"
   | "products"
   | "ads"
   | "bank-details"
   | "messages"
+  | "payment-settings"
   | "profile"
-  | "block-agent"
-  | "delete-agent";
+  | "block-student"
+  | "delete-student";
 
 interface Notification {
   id: string;
