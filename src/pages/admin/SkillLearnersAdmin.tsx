@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { RefreshCw, Loader2, Bell, Menu, X, User, Settings, LogOut } from "lucide-react";
+import { RefreshCw, Loader2, Bell, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
@@ -27,8 +27,6 @@ import PackagePurchaseApproval from "@/components/admin/moneyworld/PackagePurcha
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
@@ -70,7 +68,7 @@ interface Notification {
   read: boolean;
 }
 
-const MoneyWorldAdmin = () => {
+const SkillLearnersAdmin = () => {
   const [activeTab, setActiveTab] = useState<TabType>("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -78,9 +76,9 @@ const MoneyWorldAdmin = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [stats, setStats] = useState({
-    totalAgents: 0,
-    activeAgents: 0,
-    inactiveAgents: 0,
+    totalStudents: 0,
+    activeStudents: 0,
+    inactiveStudents: 0,
     totalWallet: 0,
     totalIncome: 0,
     referralIncome: 0,
@@ -92,6 +90,7 @@ const MoneyWorldAdmin = () => {
     pendingTasks: 0,
     unreadMessages: 0,
     pendingPackages: 0,
+    pendingCourseRequests: 0,
   });
 
   const { toast } = useToast();
@@ -152,12 +151,12 @@ const MoneyWorldAdmin = () => {
     setLoading(true);
     try {
       // Fetch all profiles
-      const { data: profiles, count: totalAgents } = await supabase
+      const { data: profiles, count: totalStudents } = await supabase
         .from("profiles")
         .select("*", { count: "exact" });
 
-      const activeAgents = profiles?.filter(p => p.status !== 'inactive' && p.status !== 'blocked').length || 0;
-      const inactiveAgents = profiles?.filter(p => p.status === 'inactive' || p.status === 'blocked').length || 0;
+      const activeStudents = profiles?.filter(p => p.has_purchased === true).length || 0;
+      const inactiveStudents = profiles?.filter(p => !p.has_purchased).length || 0;
 
       // Fetch wallet totals
       const { data: walletData } = await supabase
@@ -219,10 +218,15 @@ const MoneyWorldAdmin = () => {
         .select("*", { count: "exact", head: true })
         .eq("status", "pending");
 
+      const { count: pendingCourseRequests } = await supabase
+        .from("course_submissions")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "pending");
+
       setStats({
-        totalAgents: totalAgents || 0,
-        activeAgents,
-        inactiveAgents,
+        totalStudents: totalStudents || 0,
+        activeStudents,
+        inactiveStudents,
         totalWallet,
         totalIncome,
         referralIncome,
@@ -234,6 +238,7 @@ const MoneyWorldAdmin = () => {
         pendingTasks: (pendingWhatsAppTasks || 0) + (pendingAppTasks || 0),
         unreadMessages: unreadMessages || 0,
         pendingPackages: pendingPackages || 0,
+        pendingCourseRequests: pendingCourseRequests || 0,
       });
     } catch (error) {
       console.error("Error fetching stats:", error);
@@ -287,6 +292,10 @@ const MoneyWorldAdmin = () => {
     navigate("/");
   };
 
+  const handleNavigate = (tab: string) => {
+    setActiveTab(tab as TabType);
+  };
+
   const unreadCount = notifications.filter(n => !n.read).length;
 
   if (!isAdmin) {
@@ -303,15 +312,19 @@ const MoneyWorldAdmin = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "dashboard":
-        return <AdminDashboard stats={stats} onNavigate={setActiveTab} />;
-      case "agents":
-        return <AgentListTable filter="all" />;
-      case "active-agents":
-        return <AgentListTable filter="active" />;
-      case "inactive-agents":
-        return <AgentListTable filter="inactive" />;
-      case "package-approvals":
+        return <AdminDashboard stats={stats} onNavigate={handleNavigate} />;
+      case "all-students":
+        return <UserListTable filter="all" />;
+      case "active-students":
+        return <UserListTable filter="active" />;
+      case "inactive-students":
+        return <UserListTable filter="inactive" />;
+      case "course-only-students":
+        return <UserListTable filter="course-only" />;
+      case "package-requests":
         return <PackagePurchaseApproval onRefresh={fetchStats} />;
+      case "course-requests":
+        return <CourseRequestsApproval onRefresh={fetchStats} />;
       case "level-income":
         return <IncomeManagement type="level" />;
       case "global-income":
@@ -320,19 +333,17 @@ const MoneyWorldAdmin = () => {
         return <IncomeManagement type="referral" />;
       case "other-income":
         return <IncomeManagement type="other" />;
-      case "add-money":
+      case "deposit-requests":
         return <WalletManagement mode="add" onRefresh={fetchStats} />;
-      case "withdraw-money":
+      case "withdrawal-requests":
         return <WalletManagement mode="withdraw" onRefresh={fetchStats} />;
       case "wallet-history":
         return <WalletManagement mode="history" onRefresh={fetchStats} />;
-      case "withdrawal-history":
-        return <WalletManagement mode="withdrawal-history" onRefresh={fetchStats} />;
-      case "increase-decrease":
+      case "adjust-balance":
         return <WalletManagement mode="adjust" onRefresh={fetchStats} />;
-      case "add-task":
+      case "create-task":
         return <TaskManagement />;
-      case "task-completion":
+      case "task-verification":
         return <TaskCompletion onRefresh={fetchStats} />;
       case "courses":
         return <CoursesManagement />;
@@ -344,43 +355,47 @@ const MoneyWorldAdmin = () => {
         return <BankDetailsView />;
       case "messages":
         return <MessagesManagement onRefresh={fetchStats} />;
+      case "payment-settings":
+        return <PaymentSettings />;
       case "profile":
         return <AdminProfile />;
-      case "block-agent":
-        return <AgentActions mode="block" onRefresh={fetchStats} />;
-      case "delete-agent":
-        return <AgentActions mode="delete" onRefresh={fetchStats} />;
+      case "block-student":
+        return <UserActions mode="block" onRefresh={fetchStats} />;
+      case "delete-student":
+        return <UserActions mode="delete" onRefresh={fetchStats} />;
       default:
-        return <AdminDashboard stats={stats} onNavigate={setActiveTab} />;
+        return <AdminDashboard stats={stats} onNavigate={handleNavigate} />;
     }
   };
 
   const getPageTitle = () => {
     const titles: Record<TabType, string> = {
       dashboard: "Dashboard",
-      agents: "All Users",
-      "active-agents": "Active Users",
-      "inactive-agents": "Inactive Users",
-      "package-approvals": "Package Approvals",
+      "all-students": "All Students",
+      "active-students": "Active Students",
+      "inactive-students": "Inactive Students",
+      "course-only-students": "Course-Only Users",
+      "package-requests": "Package Requests",
+      "course-requests": "Course Requests",
       "level-income": "Level Income",
       "global-income": "Global Income",
       "referral-income": "Referral Income",
       "other-income": "Other Income",
-      "add-money": "Add Money",
-      "withdraw-money": "Withdraw Money",
+      "deposit-requests": "Deposit Requests",
+      "withdrawal-requests": "Withdrawal Requests",
       "wallet-history": "Wallet History",
-      "withdrawal-history": "Withdrawal History",
-      "increase-decrease": "Adjust Balance",
-      "add-task": "Task Management",
-      "task-completion": "Task Completion",
+      "adjust-balance": "Adjust Balance",
+      "create-task": "Create Task",
+      "task-verification": "Task Verification",
       courses: "Courses Management",
       products: "Products",
       ads: "Ads Management",
       "bank-details": "Bank Details",
       messages: "Messages",
+      "payment-settings": "Payment Settings",
       profile: "Admin Profile",
-      "block-agent": "Block Agent",
-      "delete-agent": "Delete Agent",
+      "block-student": "Block Student",
+      "delete-student": "Delete Student",
     };
     return titles[activeTab] || "Dashboard";
   };
@@ -413,6 +428,7 @@ const MoneyWorldAdmin = () => {
           tasks: stats.pendingTasks,
           messages: stats.unreadMessages,
           packages: stats.pendingPackages,
+          courseRequests: stats.pendingCourseRequests,
         }}
       />
 
@@ -499,38 +515,12 @@ const MoneyWorldAdmin = () => {
                   </div>
                 </DropdownMenuContent>
               </DropdownMenu>
-
-              {/* Profile dropdown */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                      <User className="w-4 h-4 text-white" />
-                    </div>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setActiveTab("profile")}>
-                    <User className="w-4 h-4 mr-2" />
-                    My Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Settings className="w-4 h-4 mr-2" />
-                    Settings
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Sign Out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
             </div>
           </div>
         </header>
 
-        {/* Page content */}
-        <div className="p-4 md:p-6">
+        {/* Page Content */}
+        <div className="p-4 lg:p-6">
           {loading && activeTab === "dashboard" ? (
             <div className="flex items-center justify-center py-20">
               <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -544,4 +534,4 @@ const MoneyWorldAdmin = () => {
   );
 };
 
-export default MoneyWorldAdmin;
+export default SkillLearnersAdmin;

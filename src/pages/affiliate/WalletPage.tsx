@@ -1,50 +1,107 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   Wallet, 
   ArrowUpRight, 
   ArrowDownLeft, 
   Clock, 
-  CheckCircle2, 
-  XCircle,
+  CheckCircle2,
   IndianRupee,
   Bitcoin,
   Building,
-  CreditCard
+  CreditCard,
+  Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import AffiliateSidebar from "@/components/layout/AffiliateSidebar";
 
-const walletHistory = [
-  { id: "W001", date: "2024-12-28", type: "credit", description: "Referral Commission", amount: 750, balance: 12500 },
-  { id: "W002", date: "2024-12-27", type: "credit", description: "Level Income", amount: 200, balance: 11750 },
-  { id: "W003", date: "2024-12-26", type: "debit", description: "Withdrawal to Bank", amount: -2000, balance: 11550 },
-  { id: "W004", date: "2024-12-25", type: "credit", description: "Task Reward", amount: 50, balance: 13550 },
-  { id: "W005", date: "2024-12-24", type: "credit", description: "Spillover Bonus", amount: 150, balance: 13500 },
-];
+interface WalletHistory {
+  id: string;
+  created_at: string;
+  amount: number;
+  description: string;
+  status: string;
+}
 
-const withdrawalHistory = [
-  { id: "WD001", date: "2024-12-26", amount: 2000, method: "Bank Transfer", status: "approved", processedDate: "2024-12-27" },
-  { id: "WD002", date: "2024-12-20", amount: 5000, method: "UPI", status: "approved", processedDate: "2024-12-21" },
-  { id: "WD003", date: "2024-12-15", amount: 1500, method: "USDT", status: "pending", processedDate: null },
-];
+interface WithdrawalRequest {
+  id: string;
+  created_at: string;
+  amount: number;
+  status: string | null;
+  processed_at: string | null;
+}
 
 const WalletPage = () => {
   const [activeTab, setActiveTab] = useState<"withdraw" | "history" | "withdrawals">("withdraw");
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [withdrawMethod, setWithdrawMethod] = useState("bank");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [walletBalance, setWalletBalance] = useState(0);
+  const [walletHistory, setWalletHistory] = useState<WalletHistory[]>([]);
+  const [withdrawalHistory, setWithdrawalHistory] = useState<WithdrawalRequest[]>([]);
   const { toast } = useToast();
+  const { user } = useAuth();
 
-  const walletBalance = 12500;
   const minWithdraw = 500;
+
+  useEffect(() => {
+    if (user) {
+      fetchWalletData();
+    }
+  }, [user]);
+
+  const fetchWalletData = async () => {
+    if (!user) return;
+    
+    setLoading(true);
+    try {
+      // Fetch wallet balance
+      const { data: incomeData } = await supabase
+        .from("agent_income")
+        .select("wallet")
+        .eq("user_id", user.id)
+        .single();
+
+      setWalletBalance(Number(incomeData?.wallet || 0));
+
+      // Fetch wallet history
+      const { data: historyData } = await supabase
+        .from("wallet_history")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      setWalletHistory(historyData || []);
+
+      // Fetch withdrawal history
+      const { data: withdrawData } = await supabase
+        .from("withdrawal_requests")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      setWithdrawalHistory(withdrawData || []);
+    } catch (error) {
+      console.error("Error fetching wallet data:", error);
+    }
+    setLoading(false);
+  };
 
   const handleWithdraw = async (e: React.FormEvent) => {
     e.preventDefault();
     const amount = parseFloat(withdrawAmount);
+    
+    if (!user) {
+      toast({ title: "Error", description: "Please login to request withdrawal", variant: "destructive" });
+      return;
+    }
     
     if (amount < minWithdraw) {
       toast({ title: "Error", description: `Minimum withdrawal is ₹${minWithdraw}`, variant: "destructive" });
@@ -56,15 +113,57 @@ const WalletPage = () => {
     }
 
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
     
-    toast({ 
-      title: "Withdrawal Requested!", 
-      description: `₹${amount} will be processed within 24-48 hours.` 
-    });
-    setWithdrawAmount("");
+    try {
+      // Get user's bank details
+      const { data: bankDetails } = await supabase
+        .from("bank_accounts")
+        .select("*")
+        .eq("user_id", user.id)
+        .single();
+
+      // Create withdrawal request
+      const { error } = await supabase
+        .from("withdrawal_requests")
+        .insert({
+          user_id: user.id,
+          amount: amount,
+          status: "pending",
+          bank_details: bankDetails ? {
+            bank_name: bankDetails.bank_name,
+            account_number: bankDetails.account_number,
+            ifsc_code: bankDetails.ifsc_code,
+            account_holder: bankDetails.account_holder,
+            upi_id: bankDetails.upi_id,
+            method: withdrawMethod,
+          } : { method: withdrawMethod },
+        });
+
+      if (error) throw error;
+
+      toast({ 
+        title: "Withdrawal Requested!", 
+        description: `₹${amount} will be processed within 24-48 hours.` 
+      });
+      setWithdrawAmount("");
+      fetchWalletData();
+    } catch (error) {
+      console.error("Error submitting withdrawal:", error);
+      toast({ title: "Error", description: "Failed to submit withdrawal request", variant: "destructive" });
+    }
+
+    setIsSubmitting(false);
   };
+
+  if (loading) {
+    return (
+      <AffiliateSidebar>
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </AffiliateSidebar>
+    );
+  }
 
   return (
     <AffiliateSidebar>
@@ -86,7 +185,7 @@ const WalletPage = () => {
         {/* Tabs */}
         <div className="flex gap-2 mb-6 p-1 bg-muted/50 rounded-xl w-fit">
           <Button 
-            variant={activeTab === "withdraw" ? "hero" : "ghost"} 
+            variant={activeTab === "withdraw" ? "default" : "ghost"} 
             size="sm"
             onClick={() => setActiveTab("withdraw")}
           >
@@ -94,7 +193,7 @@ const WalletPage = () => {
             Withdraw
           </Button>
           <Button 
-            variant={activeTab === "history" ? "hero" : "ghost"} 
+            variant={activeTab === "history" ? "default" : "ghost"} 
             size="sm"
             onClick={() => setActiveTab("history")}
           >
@@ -102,7 +201,7 @@ const WalletPage = () => {
             Wallet History
           </Button>
           <Button 
-            variant={activeTab === "withdrawals" ? "hero" : "ghost"} 
+            variant={activeTab === "withdrawals" ? "default" : "ghost"} 
             size="sm"
             onClick={() => setActiveTab("withdrawals")}
           >
@@ -174,8 +273,8 @@ const WalletPage = () => {
                   <label className={`glass-card p-4 rounded-xl cursor-pointer transition-all ${withdrawMethod === "usdt" ? "ring-2 ring-primary" : ""}`}>
                     <RadioGroupItem value="usdt" className="sr-only" />
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-emerald/10 flex items-center justify-center">
-                        <Bitcoin className="w-5 h-5 text-emerald" />
+                      <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                        <Bitcoin className="w-5 h-5 text-emerald-500" />
                       </div>
                       <div>
                         <p className="font-medium text-sm">USDT (TRC20)</p>
@@ -186,10 +285,10 @@ const WalletPage = () => {
                 </RadioGroup>
               </div>
 
-              <Button type="submit" variant="hero" className="w-full h-12" disabled={isSubmitting}>
+              <Button type="submit" className="w-full h-12" disabled={isSubmitting || walletBalance < minWithdraw}>
                 {isSubmitting ? (
                   <>
-                    <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin mr-2" />
+                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
                     Processing...
                   </>
                 ) : (
@@ -214,31 +313,38 @@ const WalletPage = () => {
               <h2 className="font-bold font-display">Wallet Transaction History</h2>
             </div>
             <div className="divide-y divide-border/50">
-              {walletHistory.map((txn) => (
-                <div key={txn.id} className="flex items-center justify-between p-4 hover:bg-muted/30 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      txn.type === 'credit' ? 'bg-emerald/10' : 'bg-destructive/10'
-                    }`}>
-                      {txn.type === 'credit' ? (
-                        <ArrowDownLeft className="w-5 h-5 text-emerald" />
-                      ) : (
-                        <ArrowUpRight className="w-5 h-5 text-destructive" />
-                      )}
-                    </div>
-                    <div>
-                      <p className="font-medium text-sm">{txn.description}</p>
-                      <p className="text-xs text-muted-foreground">{txn.date}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className={`font-bold ${txn.type === 'credit' ? 'text-emerald' : 'text-destructive'}`}>
-                      {txn.type === 'credit' ? '+' : ''}₹{Math.abs(txn.amount).toLocaleString()}
-                    </p>
-                    <p className="text-xs text-muted-foreground">Bal: ₹{txn.balance.toLocaleString()}</p>
-                  </div>
+              {walletHistory.length === 0 ? (
+                <div className="p-8 text-center text-muted-foreground">
+                  No transaction history yet
                 </div>
-              ))}
+              ) : (
+                walletHistory.map((txn) => (
+                  <div key={txn.id} className="flex items-center justify-between p-4 hover:bg-muted/30 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        txn.status === 'credit' ? 'bg-emerald-500/10' : 'bg-destructive/10'
+                      }`}>
+                        {txn.status === 'credit' ? (
+                          <ArrowDownLeft className="w-5 h-5 text-emerald-500" />
+                        ) : (
+                          <ArrowUpRight className="w-5 h-5 text-destructive" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">{txn.description}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(txn.created_at).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className={`font-bold ${txn.status === 'credit' ? 'text-emerald-500' : 'text-destructive'}`}>
+                        {txn.status === 'credit' ? '+' : '-'}₹{Math.abs(txn.amount).toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         )}
@@ -250,37 +356,50 @@ const WalletPage = () => {
               <h2 className="font-bold font-display">Withdrawal Requests</h2>
             </div>
             <div className="divide-y divide-border/50">
-              {withdrawalHistory.map((wd) => (
-                <div key={wd.id} className="flex items-center justify-between p-4 hover:bg-muted/30 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      wd.status === 'approved' ? 'bg-emerald/10' : 'bg-primary/10'
-                    }`}>
-                      {wd.status === 'approved' ? (
-                        <CheckCircle2 className="w-5 h-5 text-emerald" />
-                      ) : (
-                        <Clock className="w-5 h-5 text-primary" />
+              {withdrawalHistory.length === 0 ? (
+                <div className="p-8 text-center text-muted-foreground">
+                  No withdrawal requests yet
+                </div>
+              ) : (
+                withdrawalHistory.map((wd) => (
+                  <div key={wd.id} className="flex items-center justify-between p-4 hover:bg-muted/30 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        wd.status === 'approved' ? 'bg-emerald-500/10' : 
+                        wd.status === 'rejected' ? 'bg-destructive/10' : 'bg-primary/10'
+                      }`}>
+                        {wd.status === 'approved' ? (
+                          <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                        ) : (
+                          <Clock className="w-5 h-5 text-primary" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">₹{wd.amount.toLocaleString()}</p>
+                        <p className="text-xs text-muted-foreground">
+                          Requested: {new Date(wd.created_at).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
+                        wd.status === 'approved' 
+                          ? 'bg-emerald-500/10 text-emerald-500' 
+                          : wd.status === 'rejected'
+                          ? 'bg-destructive/10 text-destructive'
+                          : 'bg-primary/10 text-primary'
+                      }`}>
+                        {wd.status || 'pending'}
+                      </span>
+                      {wd.processed_at && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Processed: {new Date(wd.processed_at).toLocaleDateString()}
+                        </p>
                       )}
                     </div>
-                    <div>
-                      <p className="font-medium text-sm">₹{wd.amount.toLocaleString()} via {wd.method}</p>
-                      <p className="text-xs text-muted-foreground">Requested: {wd.date}</p>
-                    </div>
                   </div>
-                  <div className="text-right">
-                    <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
-                      wd.status === 'approved' 
-                        ? 'bg-emerald/10 text-emerald' 
-                        : 'bg-primary/10 text-primary'
-                    }`}>
-                      {wd.status}
-                    </span>
-                    {wd.processedDate && (
-                      <p className="text-xs text-muted-foreground mt-1">Processed: {wd.processedDate}</p>
-                    )}
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         )}
