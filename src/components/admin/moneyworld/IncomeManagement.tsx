@@ -34,7 +34,7 @@ interface Transaction {
 }
 
 interface IncomeManagementProps {
-  type: "level" | "global" | "referral" | "other";
+  type: "level" | "global" | "referral" | "spillover" | "revenue_share" | "task" | "other";
 }
 
 const IncomeManagement = ({ type }: IncomeManagementProps) => {
@@ -49,10 +49,13 @@ const IncomeManagement = ({ type }: IncomeManagementProps) => {
     toast({ title: "Exported successfully" });
   };
 
-  const typeLabels = {
+  const typeLabels: Record<string, string> = {
     level: "Level Income",
     global: "Global Income",
     referral: "Referral Income",
+    spillover: "Spillover Income",
+    revenue_share: "Revenue Share Income",
+    task: "Task Income",
     other: "Other Income",
   };
 
@@ -68,18 +71,28 @@ const IncomeManagement = ({ type }: IncomeManagementProps) => {
         .select("*")
         .order("created_at", { ascending: false });
 
-      // Filter by type
+      // Filter by type using income_type column first, then fall back to description
       if (type === "level") {
-        query = query.ilike("description", "%level%");
+        query = query.or("income_type.eq.level,description.ilike.%level%");
       } else if (type === "global") {
-        query = query.ilike("description", "%global%");
+        query = query.or("income_type.eq.global,description.ilike.%global%");
       } else if (type === "referral") {
-        query = query.ilike("description", "%referral%");
+        query = query.or("income_type.eq.referral,description.ilike.%referral%");
+      } else if (type === "spillover") {
+        query = query.or("income_type.eq.spillover,description.ilike.%spillover%");
+      } else if (type === "revenue_share") {
+        query = query.or("income_type.eq.revenue_share,description.ilike.%revenue share%");
+      } else if (type === "task") {
+        query = query.or("income_type.eq.task,description.ilike.%task%");
       } else if (type === "other") {
         query = query
+          .is("income_type", null)
           .not("description", "ilike", "%level%")
           .not("description", "ilike", "%global%")
           .not("description", "ilike", "%referral%")
+          .not("description", "ilike", "%spillover%")
+          .not("description", "ilike", "%revenue share%")
+          .not("description", "ilike", "%task%")
           .not("description", "ilike", "%wallet%")
           .not("description", "ilike", "%withdrawal%");
       }
@@ -188,7 +201,7 @@ const IncomeManagement = ({ type }: IncomeManagementProps) => {
           <table className="w-full">
             <thead className="bg-muted/50 border-b border-border">
               <tr>
-                <th className="text-left p-4 font-medium text-sm text-muted-foreground">Agent</th>
+                <th className="text-left p-4 font-medium text-sm text-muted-foreground">Student</th>
                 <th className="text-left p-4 font-medium text-sm text-muted-foreground">Amount</th>
                 <th className="text-left p-4 font-medium text-sm text-muted-foreground">Status</th>
                 <th className="text-left p-4 font-medium text-sm text-muted-foreground">Description</th>

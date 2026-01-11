@@ -387,6 +387,102 @@ export type Database = {
         }
         Relationships: []
       }
+      income_settings: {
+        Row: {
+          created_at: string
+          id: string
+          level_1_income: number | null
+          level_10_income: number | null
+          level_11_income: number | null
+          level_12_income: number | null
+          level_2_income: number | null
+          level_3_income: number | null
+          level_4_income: number | null
+          level_5_income: number | null
+          level_6_income: number | null
+          level_7_income: number | null
+          level_8_income: number | null
+          level_9_income: number | null
+          package_name: string
+          referral_commission: number | null
+          revenue_share_level_1: number | null
+          revenue_share_level_2: number | null
+          revenue_share_level_3: number | null
+          revenue_share_level_4: number | null
+          revenue_share_level_5: number | null
+          revenue_share_level_6: number | null
+          revenue_share_level_7: number | null
+          revenue_share_level_8: number | null
+          spillover_level_1: number | null
+          spillover_level_2: number | null
+          spillover_level_3: number | null
+          spillover_level_4: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          level_1_income?: number | null
+          level_10_income?: number | null
+          level_11_income?: number | null
+          level_12_income?: number | null
+          level_2_income?: number | null
+          level_3_income?: number | null
+          level_4_income?: number | null
+          level_5_income?: number | null
+          level_6_income?: number | null
+          level_7_income?: number | null
+          level_8_income?: number | null
+          level_9_income?: number | null
+          package_name: string
+          referral_commission?: number | null
+          revenue_share_level_1?: number | null
+          revenue_share_level_2?: number | null
+          revenue_share_level_3?: number | null
+          revenue_share_level_4?: number | null
+          revenue_share_level_5?: number | null
+          revenue_share_level_6?: number | null
+          revenue_share_level_7?: number | null
+          revenue_share_level_8?: number | null
+          spillover_level_1?: number | null
+          spillover_level_2?: number | null
+          spillover_level_3?: number | null
+          spillover_level_4?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          level_1_income?: number | null
+          level_10_income?: number | null
+          level_11_income?: number | null
+          level_12_income?: number | null
+          level_2_income?: number | null
+          level_3_income?: number | null
+          level_4_income?: number | null
+          level_5_income?: number | null
+          level_6_income?: number | null
+          level_7_income?: number | null
+          level_8_income?: number | null
+          level_9_income?: number | null
+          package_name?: string
+          referral_commission?: number | null
+          revenue_share_level_1?: number | null
+          revenue_share_level_2?: number | null
+          revenue_share_level_3?: number | null
+          revenue_share_level_4?: number | null
+          revenue_share_level_5?: number | null
+          revenue_share_level_6?: number | null
+          revenue_share_level_7?: number | null
+          revenue_share_level_8?: number | null
+          spillover_level_1?: number | null
+          spillover_level_2?: number | null
+          spillover_level_3?: number | null
+          spillover_level_4?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           created_at: string
@@ -600,6 +696,7 @@ export type Database = {
           purchased_plan: string | null
           referral_code: string | null
           referred_by: string | null
+          spillover_count: number | null
           sponsor_id: string | null
           state: string | null
           status: string | null
@@ -624,6 +721,7 @@ export type Database = {
           purchased_plan?: string | null
           referral_code?: string | null
           referred_by?: string | null
+          spillover_count?: number | null
           sponsor_id?: string | null
           state?: string | null
           status?: string | null
@@ -648,6 +746,7 @@ export type Database = {
           purchased_plan?: string | null
           referral_code?: string | null
           referred_by?: string | null
+          spillover_count?: number | null
           sponsor_id?: string | null
           state?: string | null
           status?: string | null
@@ -670,6 +769,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      revenue_share_tree: {
+        Row: {
+          created_at: string
+          downline_count: number | null
+          id: string
+          is_upgraded: boolean | null
+          left_pos: string | null
+          level: number | null
+          mid_pos: string | null
+          package_type: string | null
+          placement_id: string | null
+          right_pos: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          downline_count?: number | null
+          id?: string
+          is_upgraded?: boolean | null
+          left_pos?: string | null
+          level?: number | null
+          mid_pos?: string | null
+          package_type?: string | null
+          placement_id?: string | null
+          right_pos?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          downline_count?: number | null
+          id?: string
+          is_upgraded?: boolean | null
+          left_pos?: string | null
+          level?: number | null
+          mid_pos?: string | null
+          package_type?: string | null
+          placement_id?: string | null
+          right_pos?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       task_income: {
         Row: {
@@ -724,7 +868,10 @@ export type Database = {
           amount: number
           created_at: string
           description: string
+          from_user_id: string | null
           id: string
+          income_type: string | null
+          level_number: number | null
           reference_id: string | null
           reference_type: string | null
           status: string
@@ -734,7 +881,10 @@ export type Database = {
           amount: number
           created_at?: string
           description: string
+          from_user_id?: string | null
           id?: string
+          income_type?: string | null
+          level_number?: number | null
           reference_id?: string | null
           reference_type?: string | null
           status?: string
@@ -744,7 +894,10 @@ export type Database = {
           amount?: number
           created_at?: string
           description?: string
+          from_user_id?: string | null
           id?: string
+          income_type?: string | null
+          level_number?: number | null
           reference_id?: string | null
           reference_type?: string | null
           status?: string
