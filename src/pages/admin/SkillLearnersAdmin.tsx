@@ -7,8 +7,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
-import MoneyWorldSidebar from "@/components/admin/moneyworld/MoneyWorldSidebar";
-import MoneyWorldDashboard from "@/components/admin/moneyworld/MoneyWorldDashboard";
+import AdminSidebar from "@/components/admin/moneyworld/MoneyWorldSidebar";
+import AdminDashboard from "@/components/admin/moneyworld/MoneyWorldDashboard";
 import AgentListTable from "@/components/admin/moneyworld/AgentListTable";
 import IncomeManagement from "@/components/admin/moneyworld/IncomeManagement";
 import WalletManagement from "@/components/admin/moneyworld/WalletManagement";
@@ -299,7 +299,7 @@ const MoneyWorldAdmin = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "dashboard":
-        return <MoneyWorldDashboard stats={stats} onNavigate={setActiveTab} />;
+        return <AdminDashboard stats={stats} onNavigate={setActiveTab} />;
       case "agents":
         return <AgentListTable filter="all" />;
       case "active-agents":
@@ -347,7 +347,7 @@ const MoneyWorldAdmin = () => {
       case "delete-agent":
         return <AgentActions mode="delete" onRefresh={fetchStats} />;
       default:
-        return <MoneyWorldDashboard stats={stats} onNavigate={setActiveTab} />;
+        return <AdminDashboard stats={stats} onNavigate={setActiveTab} />;
     }
   };
 
@@ -392,7 +392,7 @@ const MoneyWorldAdmin = () => {
       )}
 
       {/* Sidebar */}
-      <MoneyWorldSidebar
+      <AdminSidebar
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
         activeTab={activeTab}

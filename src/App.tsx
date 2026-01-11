@@ -1,6 +1,6 @@
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
-import MoneyWorldAdmin from "@/pages/admin/MoneyWorldAdmin";
+import SkillLearnersAdmin from "@/pages/admin/SkillLearnersAdmin";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -29,7 +29,7 @@ const LeaderboardPage = lazy(() => import("./pages/affiliate/LeaderboardPage"));
 const AnalyticsPage = lazy(() => import("./pages/affiliate/AnalyticsPage"));
 const TasksPage = lazy(() => import("./pages/affiliate/TasksPage"));
 const ProfilePage = lazy(() => import("./pages/affiliate/ProfilePage"));
-const AdminPanel = lazy(() => import("./pages/admin/AdminPanel"));
+
 const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const AdminForgotPassword = lazy(() => import("./pages/AdminForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
@@ -148,7 +148,7 @@ const App = () => (
                   {/* Admin Routes */}
                   <Route path="/admin" element={
                     <ProtectedRoute>
-                      <AdminPanel />
+                      <SkillLearnersAdmin />
                     </ProtectedRoute>
                   } />
                   
