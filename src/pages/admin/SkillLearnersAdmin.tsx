@@ -24,6 +24,7 @@ import BankDetailsView from "@/components/admin/moneyworld/BankDetailsView";
 import MessagesManagement from "@/components/admin/moneyworld/MessagesManagement";
 import AdminProfile from "@/components/admin/moneyworld/AdminProfile";
 import PackagePurchaseApproval from "@/components/admin/moneyworld/PackagePurchaseApproval";
+import { IncomeSettings } from "@/components/admin/skilllearners/IncomeSettings";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,9 +40,12 @@ export type TabType =
   | "course-only-students"
   | "package-requests"
   | "course-requests"
+  | "income-settings"
   | "level-income"
   | "global-income"
   | "referral-income"
+  | "spillover-income"
+  | "revenue-share-income"
   | "other-income"
   | "deposit-requests"
   | "withdrawal-requests"
@@ -325,12 +329,18 @@ const SkillLearnersAdmin = () => {
         return <PackagePurchaseApproval onRefresh={fetchStats} />;
       case "course-requests":
         return <CourseRequestsApproval onRefresh={fetchStats} />;
+      case "income-settings":
+        return <IncomeSettings />;
       case "level-income":
         return <IncomeManagement type="level" />;
       case "global-income":
         return <IncomeManagement type="global" />;
       case "referral-income":
         return <IncomeManagement type="referral" />;
+      case "spillover-income":
+        return <IncomeManagement type="spillover" />;
+      case "revenue-share-income":
+        return <IncomeManagement type="revenue_share" />;
       case "other-income":
         return <IncomeManagement type="other" />;
       case "deposit-requests":
@@ -377,9 +387,12 @@ const SkillLearnersAdmin = () => {
       "course-only-students": "Course-Only Users",
       "package-requests": "Package Requests",
       "course-requests": "Course Requests",
+      "income-settings": "Income Settings",
       "level-income": "Level Income",
       "global-income": "Global Income",
       "referral-income": "Referral Income",
+      "spillover-income": "Spillover Income",
+      "revenue-share-income": "Revenue Share Income",
       "other-income": "Other Income",
       "deposit-requests": "Deposit Requests",
       "withdrawal-requests": "Withdrawal Requests",

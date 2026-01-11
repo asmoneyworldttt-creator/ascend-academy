@@ -111,9 +111,11 @@ const AdminSidebar = ({
       label: "Income",
       icon: TrendingUp,
       children: [
-        { id: "level-income", label: "Level Income", icon: TrendingUp },
-        { id: "global-income", label: "Global Income", icon: Globe },
+        { id: "income-settings", label: "Income Settings", icon: Settings },
         { id: "referral-income", label: "Referral Income", icon: Share2 },
+        { id: "level-income", label: "Level Income", icon: TrendingUp },
+        { id: "spillover-income", label: "Spillover Income", icon: Globe },
+        { id: "revenue-share-income", label: "Revenue Share", icon: Globe },
         { id: "other-income", label: "Other Income", icon: MoreHorizontal },
       ],
     },

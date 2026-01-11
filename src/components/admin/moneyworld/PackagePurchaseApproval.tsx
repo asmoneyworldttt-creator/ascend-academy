@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { exportToCSV, csvColumns } from "@/lib/csvExport";
+import { distributeAllIncomes } from "@/lib/incomeDistribution";
 
 interface PackagePurchaseApprovalProps {
   onRefresh: () => void;
@@ -82,7 +83,22 @@ const PackagePurchaseApproval = ({ onRefresh }: PackagePurchaseApprovalProps) =>
         })
         .eq("user_id", request.user_id);
 
-      toast({ title: "Package Approved", description: `User activated with ${request.package_name} package` });
+      // DISTRIBUTE ALL INCOMES (Referral, Level, Spillover, Revenue Share)
+      const incomeDistributed = await distributeAllIncomes(request.user_id, request.package_name);
+      
+      if (incomeDistributed) {
+        toast({ 
+          title: "Package Approved & Incomes Distributed", 
+          description: `User activated with ${request.package_name} package. All sponsor incomes credited.` 
+        });
+      } else {
+        toast({ 
+          title: "Package Approved", 
+          description: `User activated with ${request.package_name} package. Note: Some income distribution may have failed.`,
+          variant: "default"
+        });
+      }
+      
       setSelectedRequest(null);
       setAdminNotes("");
       fetchRequests();
