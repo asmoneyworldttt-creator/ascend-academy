@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { TabType } from "@/pages/admin/MoneyWorldAdmin";
+import type { TabType } from "@/pages/admin/SkillLearnersAdmin";
 
 interface DashboardStats {
   totalAgents: number;
