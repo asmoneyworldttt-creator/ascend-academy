@@ -64,7 +64,7 @@ const TaskCompletion = ({ onRefresh }: TaskCompletionProps) => {
     <div className="glass-card rounded-2xl overflow-hidden">
       <table className="w-full">
         <thead className="bg-muted/50 border-b"><tr>
-          <th className="text-left p-4 text-sm text-muted-foreground">Agent</th>
+          <th className="text-left p-4 text-sm text-muted-foreground">Student</th>
           <th className="text-left p-4 text-sm text-muted-foreground">Task</th>
           <th className="text-left p-4 text-sm text-muted-foreground">Amount</th>
           <th className="text-left p-4 text-sm text-muted-foreground">Status</th>
